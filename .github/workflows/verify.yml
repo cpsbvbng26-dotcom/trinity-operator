@@ -1,0 +1,24 @@
+name: 検査
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: 作用素の主張 22 項目
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy
+      - name: 誤変換とバッジ記法
+        run: python3 verification/check_text.py
+      - name: 検査
+        run: python3 check.py
+      - name: 実演が最後まで走るか
+        run: python3 demo.py
