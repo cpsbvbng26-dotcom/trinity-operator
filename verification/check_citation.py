@@ -92,6 +92,14 @@ for name, text in (("CITATION.cff", cff), ("README.md", readme)):
     check("%s が名乗る証書の件数が %d 項目と一致する" % (name, m),
           ("%d 項目" % m) in text)
 
+# 展望の検査の件数も同じように数える。
+r = int(os.popen("cd %s && python3 verification/check_roadmap.py 2>/dev/null"
+                 " | tail -1" % ROOT).read().split(" ")[0] or 0)
+check("check_roadmap.py が実際に通す件数を数えられる", r > 0, "%d 件" % r)
+for name, text in (("CITATION.cff", cff), ("README.md", readme)):
+    check("%s が名乗る展望の件数が %d 項目と一致する" % (name, r),
+          ("%d 項目" % r) in text)
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))
