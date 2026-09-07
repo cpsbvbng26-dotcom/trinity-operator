@@ -8,7 +8,7 @@ on:
 
 jobs:
   verify:
-    name: 作用素の主張 22 項目 / 引用情報 17 項目
+    name: 作用素の主張 22 項目 / 証書 51 項目 / 引用情報 26 項目
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +20,11 @@ jobs:
         run: python3 verification/check_text.py
       - name: 検査
         run: python3 check.py
+      - name: 縮小になる距離の証書
+        run: python3 verification/check_certificate.py
       - name: 引用情報が名乗る数値
         run: python3 verification/check_citation.py
       - name: 実演が最後まで走るか
         run: python3 demo.py
+      - name: 証書の実演が最後まで走るか
+        run: python3 certificate.py
