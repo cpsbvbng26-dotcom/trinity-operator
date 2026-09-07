@@ -1,0 +1,88 @@
+cff-version: 1.2.0
+title: trinity-operator — 論文が置いた仮定の外まで実装した作用素
+message: >-
+  このリポジトリを参照する場合は、以下の情報を用いてください。
+  対象としている三本の論文そのものを引用する場合は、references に挙げた DOI を用いてください。
+  なお、ここで示している事実は新しい数学ではありません。非正規行列の過渡的増幅も、
+  収束条件がスペクトル半径であることも、数値線形代数の標準的な事実です。
+type: software
+authors:
+  - family-names: Nemoto
+    given-names: Takuya
+    orcid: https://orcid.org/0009-0000-1406-0547
+repository-code: https://github.com/cpsbvbng26-dotcom/trinity-operator
+url: https://github.com/cpsbvbng26-dotcom/trinity-operator
+abstract: >-
+  Trinity-Infinity の三本が扱う作用素 x ← DQx + (I−D)p を、Q を巡回置換に、
+  混合係数を (0,1) に限らずに実装したもの。三本はいずれも作用素ノルム ‖DQ‖₂ < 1 を
+  収束の条件として置いているが、これは十分条件であって必要条件ではない。任意の初期値から
+  一意の不動点へ収束するための必要十分条件はスペクトル半径 ρ(DQ) < 1 である。
+  ρ ≤ ‖DQ‖₂ であり、等号は作用素が正規行列のとき、すなわち三本の設定そのもので成り立つため、
+  この区別は紙面に現れなかった。ρ < 1 ≤ ‖DQ‖₂ の領域では収束はするが、誤差はいったん
+  増えてから減る。Q = [[1,40],[0,1]]、a = (0.5,0.5) では ρ = 0.5、‖A‖₂ = 20.01 であり、
+  誤差は第 2 段で初期値の 11.8 倍に達したのち、第 40 段で 4.36×10⁻⁹ まで落ちる。
+  乱数種を固定した検査 22 項目を同梱している。
+keywords:
+  - contraction mapping
+  - Banach fixed-point theorem
+  - spectral radius
+  - operator norm
+  - non-normal matrices
+  - transient growth
+  - self-correction
+license: MIT
+date-released: 2026-09-06
+references:
+  - type: article
+    title: >-
+      The Trinity-Infinity Framework: A Conceptual Model with Illustrative Applications
+      in Game Theory, Mathematical Logic, and Mechanical Engineering (Revised Edition)
+    authors:
+      - family-names: Nemoto
+        given-names: Takuya
+        orcid: https://orcid.org/0009-0000-1406-0547
+    year: 2026
+    month: 8
+    doi: 10.5281/zenodo.22058624
+    notes: >-
+      Preprint. Not peer-reviewed. この実装が仮定を外している対象。
+      訂正の対象である 2025 年の初版は 10.5281/zenodo.17173703。
+  - type: article
+    title: >-
+      The Trinity-Infinity Framework, Series II: Extended Formalization and Further
+      Illustrative Applications (Revised Edition)
+    authors:
+      - family-names: Nemoto
+        given-names: Takuya
+        orcid: https://orcid.org/0009-0000-1406-0547
+    year: 2026
+    month: 8
+    doi: 10.5281/zenodo.22058777
+    notes: >-
+      Preprint. Not peer-reviewed. この設定では既に ρ = 0.471769、‖A‖₂ = 0.700000 と
+      両者が離れている。
+  - type: article
+    title: >-
+      The Trinity-Infinity Framework, Series III: Beyond Three — A Generalization
+      and Retrospective
+    authors:
+      - family-names: Nemoto
+        given-names: Takuya
+        orcid: https://orcid.org/0009-0000-1406-0547
+    year: 2026
+    month: 8
+    doi: 10.5281/zenodo.22058964
+    notes: >-
+      Preprint. Not peer-reviewed. 三要素であることが本質でないことを示した回。
+      この実装は、置換であることと等長であることも本質でないことを示す。
+  - type: software
+    title: trinity-infinity — 三本の系列と、その検証の記録
+    authors:
+      - family-names: Nemoto
+        given-names: Takuya
+        orcid: https://orcid.org/0009-0000-1406-0547
+    year: 2026
+    repository-code: https://github.com/cpsbvbng26-dotcom/trinity-infinity
+    notes: >-
+      三本の PDF と、紙面の数値を計算し直す 31 項目、定理を独立に実装し直す 13 項目。
+      撤回された主張と正誤は ERRATA.md にある。

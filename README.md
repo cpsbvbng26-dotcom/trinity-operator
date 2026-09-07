@@ -76,6 +76,7 @@ Series III は「三要素である必要はない」を示しました。**等�
 pip install numpy
 python3 demo.py     # 論文の再現と、仮定を外したときの挙動
 python3 check.py    # 22 項目の検査
+python3 verification/check_citation.py   # CITATION.cff が名乗る数値
 ```
 
 ```python
