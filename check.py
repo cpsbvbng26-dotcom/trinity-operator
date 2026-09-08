@@ -142,6 +142,52 @@ for label, Qx in (("ランダムな直交行列", np.linalg.qr(rng.standard_norm
     check(label + " でも収束する", np.abs(x - op.fixed_point()).max() < 1e-10,
           "ρ = %.4f  ‖A‖₂ = %.4f" % (op.spectral_radius, op.operator_norm))
 
+# ------------------------------------------- 論文の設定での閉じた式
+section("F. 置換の場合の閉じた式")
+
+# 論文は Q を置換に限っている。その範囲なら固有値も特異値も手で書ける。
+# 論文はこの構造を使わず、縮小定数として max aᵢ を挙げた。それは ‖A‖₂
+# ちょうどであって、収束率ではない。収束率は巡回ごとの幾何平均である。
+
+check("Series II で ρ が巡回内の幾何平均と一致する",
+      abs(s2.spectral_radius - s2.closed_form_radius) < 1e-12,
+      "ρ = %.12f / 幾何平均 = %.12f" % (s2.spectral_radius, s2.closed_form_radius))
+check("Series II で ‖A‖₂ が max aᵢ と一致する",
+      abs(s2.operator_norm - s2.closed_form_norm) < 1e-12,
+      "‖A‖₂ = %.12f / max aᵢ = %.12f" % (s2.operator_norm, s2.closed_form_norm))
+check("Series II では幾何平均が最大値より真に小さい",
+      s2.closed_form_radius < s2.closed_form_norm - 1e-9,
+      "%.6f < %.6f  比 %.4f 倍" % (s2.closed_form_radius, s2.closed_form_norm,
+                                    s2.closed_form_norm / s2.closed_form_radius))
+check("Series I では両者が一致する（a が一様だから）",
+      abs(s1.closed_form_radius - s1.closed_form_norm) < 1e-12,
+      "どちらも %.6f。**区別の存在しない設定から始めている**" % s1.closed_form_radius)
+
+# 巡回が一つとは限らない。置換一般で成り立つことを、乱数で確かめる。
+bad_r, bad_n, worst = [], [], 0.0
+for _ in range(200):
+    n = int(rng.integers(2, 8))
+    Qx = np.eye(n)[rng.permutation(n)]
+    a = rng.uniform(0.05, 0.95, n)
+    op = TrinityOperator(a, rng.random(n), Q=Qx)
+    dr = abs(op.spectral_radius - op.closed_form_radius)
+    dn = abs(op.operator_norm - op.closed_form_norm)
+    worst = max(worst, dr, dn)
+    if dr > 1e-10:
+        bad_r.append(dr)
+    if dn > 1e-10:
+        bad_n.append(dn)
+check("置換 200 通りで ρ が閉じた式と一致する", not bad_r,
+      "最大差 %.1e" % worst)
+check("置換 200 通りで ‖A‖₂ が max aᵢ と一致する", not bad_n,
+      "最大差 %.1e" % worst)
+
+# 置換でないものには、この式を当ててはならない。
+non_perm = TrinityOperator(0.6, rng.random(4),
+                           Q=np.linalg.qr(rng.standard_normal((4, 4)))[0])
+check("置換でない Q には閉じた式を返さない",
+      non_perm.closed_form_radius is None and non_perm.cycles is None)
+
 # ---------------------------------------------------------------- 結果
 print("\n" + "-" * 60)
 if failures:

@@ -47,6 +47,33 @@ def cyclic_shift(n):
     return Q
 
 
+def permutation_cycles(Q):
+    """Q が置換行列なら、その巡回を返す。置換でなければ None。
+
+    (Qx)ᵢ = x_σ(ᵢ) と読む。σ の巡回に分ける。
+    """
+    Q = np.asarray(Q, dtype=float)
+    n = Q.shape[0]
+    if Q.shape != (n, n):
+        return None
+    if not np.allclose(np.sort(Q, axis=1)[:, :-1], 0):
+        return None
+    if not np.allclose(np.max(Q, axis=1), 1) or not np.allclose(Q.sum(axis=0), 1):
+        return None
+    sigma = [int(np.argmax(Q[i])) for i in range(n)]
+    seen, out = set(), []
+    for i in range(n):
+        if i in seen:
+            continue
+        cycle, j = [], i
+        while j not in seen:
+            seen.add(j)
+            cycle.append(j)
+            j = sigma[j]
+        out.append(cycle)
+    return out
+
+
 class TrinityOperator:
     """x ← D Q x + (I − D) p。
 
@@ -109,6 +136,39 @@ class TrinityOperator:
     def is_normal(self):
         """A が正規行列か。このとき ρ = ‖A‖₂ で、両者の区別が消える。"""
         return bool(np.allclose(self.A @ self.A.T.conj(), self.A.T.conj() @ self.A))
+
+    # -------------------------------------------------- 論文の設定の閉じた式
+    #
+    # 論文は Q を置換に限っている。その範囲なら、固有値も特異値も手で書ける。
+    # **論文はこの構造を使っていない。**縮小定数として挙げたのは max aᵢ で、
+    # それは ‖A‖₂ ちょうどであって、収束率ではない。
+    #
+    #   ‖DQ‖₂ = maxᵢ |aᵢ|                     Q が直交なので特異値は |aᵢ| そのもの
+    #   ρ(DQ) = max_c (∏_{i∈c} |aᵢ|)^(1/|c|)  c は σ の巡回。巡回内の幾何平均
+    #
+    # 幾何平均 ≤ 最大値。等号は巡回の中の aᵢ がすべて等しいときだけ。
+    # Series I は aᵢ を一様なスカラに取っているので、そこで等号が立つ。
+    # **区別の存在しない設定から始めたため、区別が要ることが見えなかった。**
+
+    @property
+    def cycles(self):
+        """Q の巡回。Q が置換でなければ None。"""
+        return permutation_cycles(self.Q)
+
+    @property
+    def closed_form_norm(self):
+        """置換の場合の ‖A‖₂ = maxᵢ |aᵢ|。置換でなければ None。"""
+        if self.cycles is None:
+            return None
+        return float(np.max(np.abs(self.a)))
+
+    @property
+    def closed_form_radius(self):
+        """置換の場合の ρ(A)。巡回ごとの幾何平均の最大値。置換でなければ None。"""
+        cs = self.cycles
+        if cs is None:
+            return None
+        return float(max(np.prod(np.abs(self.a[c])) ** (1.0 / len(c)) for c in cs))
 
     # -------------------------------------------------------------- 不動点
     def fixed_point(self):

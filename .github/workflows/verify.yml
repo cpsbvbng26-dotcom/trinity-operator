@@ -8,7 +8,7 @@ on:
 
 jobs:
   verify:
-    name: 作用素 22 項目 / 証書 51 項目 / 展望 63 項目 / 引用情報 29 項目
+    name: 作用素 29 項目 / 証書 51 項目 / 展望 63 項目 / 引用情報 29 項目
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
