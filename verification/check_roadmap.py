@@ -242,6 +242,56 @@ check("輪を閉じた側は n に依らず a²⁰ を返す",
       all(abs(transient_profile(weighted_shift(n, a5, True), 20)[-1]
               - a5 ** 20) < 1e-9 for n in (3, 5, 10, 50)))
 
+# ------------------------------------------- 段 6 一般の影響行列
+section("段 6 —— 一般の影響行列と、巡回置換が届く範囲")
+
+sys.path.insert(0, os.path.join(ROOT, "roadmap"))
+import stage6_general_influence as s6  # noqa: E402
+
+# **一点の均衡では分離しない。**ここを「分離した」に書き換えられないようにする。
+rng6 = np.random.default_rng(s6.SEED)
+miss = 0
+for _ in range(300):
+    n = 4
+    W = s6.row_stochastic(rng6, n)
+    lam = rng6.uniform(0.05, 0.95, size=n)
+    p = rng6.normal(size=n)
+    x = s6.resolvent(W, lam) @ p
+    if not s6.pointwise_reachable(x, p, s6.cycles(n)):
+        miss += 1
+check("一点の必要条件は、一般の均衡をほぼ落とさない（300 件中 %d 件）" % miss,
+      miss == 0, str(miss))
+
+# 逆向き。巡回から作ったものは必ず通る。ここが 0 でなければ判定が壊れている。
+bad = 0
+for _ in range(300):
+    n = 4
+    sig = s6.cycles(n)
+    sg = sig[int(rng6.integers(len(sig)))]
+    a6 = rng6.uniform(0.05, 0.95, size=n)
+    p = rng6.normal(size=n)
+    x = s6.resolvent(s6.perm_matrix(sg), a6) @ p
+    check_ok = s6.pointwise_reachable(x, p, sig)
+    if not check_ok:
+        bad += 1
+check("巡回から作った均衡は、必ず必要条件を満たす", bad == 0, str(bad))
+
+# **次元。**ここが本体である。巡回 n、一般 n(n−1)。
+for n in (3, 4, 5, 6):
+    sigma = tuple((i + 1) % n for i in range(n))
+    a6 = rng6.uniform(0.2, 0.8, size=n)
+    rc = s6.jac_rank_cyclic(sigma, a6)
+    check("n=%d 巡回の像が %d 次元" % (n, n), rc == n, str(rc))
+    rg, _ = s6.jac_rank_general(rng6, n)
+    check("n=%d 一般の像が %d 次元" % (n, n * (n - 1)), rg == n * (n - 1), str(rg))
+    check("n=%d 巡回の像が一般より真に小さい" % n, rc < rg, "%d < %d" % (rc, rg))
+
+# 散文が名乗る比。
+doc6 = open(os.path.join(ROOT, "roadmap", "README.md"), encoding="utf-8").read()
+check("展望が比 1/(n−1) を名乗っている", "1/(n−1)" in doc6)
+check("展望が測度零だと書いている", "測度零" in doc6)
+check("展望が一点では分離しないと書いている", "一点の均衡では区別がつかない" in doc6)
+
 # ------------------------------------------------------------- 実演が走る
 section("実演が最後まで走るか")
 

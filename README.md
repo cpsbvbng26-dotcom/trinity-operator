@@ -209,7 +209,7 @@ python3 demo.py         # 論文の再現と、仮定を外したときの挙動
 python3 certificate.py  # 縮小になる距離を作って、上界が実際を覆うか見る
 python3 check.py        # 29 項目の検査
 python3 verification/check_certificate.py   # 証書の 51 項目
-python3 verification/check_roadmap.py       # 展望の 63 項目
+python3 verification/check_roadmap.py       # 展望の 81 項目
 python3 verification/check_citation.py      # CITATION.cff が名乗る数値
 ```
 
@@ -269,7 +269,7 @@ python3 verification/check_roadmap.py
 （`16ε(1+‖x*‖)(k+1)`）だけを明示して許し、**その項を使わずに済んだ段数も一緒に
 出す。** 反例では最後まで不要、正規行列では第 37 段から必要になる。
 
-**展望 63 項目。** 各段が名乗っている性質を計算し直す。厳密に決まること
+**展望 81 項目。** 各段が名乗っている性質を計算し直す。厳密に決まること
 （スペクトル半径、`E[A⊗A]`、冪零性、閉形式との一致）と、推定でしかないこと
 （リアプノフ指数、標本による `‖Df‖` の最大）と、決まらないこと（JSR がちょうど 1）を
 分けて扱い、**三つ目を「通った」と数えない。**
