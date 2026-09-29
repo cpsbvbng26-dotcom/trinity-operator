@@ -248,7 +248,9 @@ Trinity-Infinity の系列は「野心的な枠組みを証明とコードに通
 ## 教材
 
 [`lessons/`](lessons/) に、この作用素を題材にした自習用の教材を置いています。
-題は *One operator, five lessons* です。三篇が十分条件を必要条件のように扱った箇所を、
+題は *The Friedkin–Johnsen model with a cyclic influence matrix* です。
+この作用素が、影響行列を巡回置換に限った Friedkin–Johnsen モデルであることを、
+教材の入口に置きました。三篇が十分条件を必要条件のように扱った箇所を、
 一回ずつ直していく順路になっています。取り違えた本人が書いているので、各回の終わりに
 「どこを取り違えたか」を置きます。
 
