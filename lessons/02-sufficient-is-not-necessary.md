@@ -1,6 +1,6 @@
 # Lesson 2 — A sufficient condition is not a necessary one
 
-*One operator, five lessons.* Draft. The author has not yet reviewed this lesson.
+*The Friedkin–Johnsen model with a cyclic influence matrix — one operator, five lessons.* Draft. The author has not yet reviewed this lesson.
 
 **Time:** about 45 minutes.
 **You need:** eigenvalues, matrix norms, and enough Python to run a script.
@@ -33,6 +33,11 @@ eₖ₊₁ = A eₖ,     so     eₖ = Aᵏ e₀.
 ```
 
 Everything about convergence is therefore a question about the powers of `A`.
+
+This is the Friedkin–Johnsen model of opinion dynamics with the influence matrix `W`
+taken to be `Q`, the susceptibilities `Λ` taken to be `D`, and the initial opinions `u`
+taken to be `p` (see `lessons/README.md`). Nothing in this lesson depends on that
+reading, but it explains why the answers below were already known.
 
 ## Two conditions
 
@@ -126,6 +131,10 @@ worked example 1 shows. The identity `A³ = (a₁a₂a₃) I` that exposes this 
 derived independently by an automated reviewer. It is recorded as N9 in the errata of
 the `trinity-infinity` repository.
 
+The papers also did not recognise that they were studying a special case of a
+model published in 1990. Like any linear iteration, its convergence is governed by the
+spectral radius.
+
 The error is common and worth naming. **A proof that goes through a sufficient
 condition tells you that something happens. It does not tell you where the boundary
 is.**
@@ -159,8 +168,13 @@ is.**
 
 ## References
 
+- Friedkin, N. E., and Johnsen, E. C. (1990). Social influence and opinions. *Journal
+  of Mathematical Sociology*, 15(3–4), 193–206. doi:10.1080/0022250X.1990.9990069
 - Horn, R. A., and Johnson, C. R. (2013). *Matrix Analysis* (2nd ed.). Cambridge
   University Press. §5.6.
+- Proskurnikov, A. V., and Tempo, R. (2017). A tutorial on modeling and analysis of
+  dynamic social networks. Part I. *Annual Reviews in Control*, 43, 65–79.
+  doi:10.1016/j.arcontrol.2017.03.002
 - Varga, R. S. (2000). *Matrix Iterative Analysis* (2nd ed.). Springer.
 
 ## License and use of AI
