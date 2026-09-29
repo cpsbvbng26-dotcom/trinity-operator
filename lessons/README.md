@@ -25,7 +25,7 @@ offers is one concrete object on which the standard facts can be run and checked
 | 1 | Contractions and Banach's theorem: what the papers did | planned |
 | 2 | [A sufficient condition is not a necessary one](02-sufficient-is-not-necessary.md) | draft |
 | 3 | Permutations can be solved by hand: `(DQ)ⁿ = (∏aᵢ) I` | planned |
-| 4 | Non-normal matrices: errors that grow before they shrink | planned |
+| 4 | [Errors that grow before they shrink](04-errors-that-grow.md) | draft |
 | 5 | Switching: two stable maps whose alternation diverges | planned |
 
 ## How to use it
