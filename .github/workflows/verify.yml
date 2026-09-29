@@ -26,6 +26,8 @@ jobs:
         run: python3 verification/check_roadmap.py
       - name: 引用情報が名乗る数値
         run: python3 verification/check_citation.py
+      - name: 教材の頁が書く数値
+        run: python3 verification/check_lessons.py
       - name: 実演が最後まで走るか
         run: python3 demo.py
       - name: 証書の実演が最後まで走るか
