@@ -211,6 +211,7 @@ python3 check.py        # 29 項目の検査
 python3 verification/check_certificate.py   # 証書の 51 項目
 python3 verification/check_roadmap.py       # 展望の 81 項目
 python3 verification/check_citation.py      # CITATION.cff が名乗る数値
+python3 verification/check_lessons.py       # 教材の頁が書く数値
 ```
 
 ```python
@@ -243,6 +244,19 @@ print(cert.audit())            # 証書そのものを乱数で当たり直す
 Trinity-Infinity の系列は「野心的な枠組みを証明とコードに通したとき何が残るか」を
 記録したものです。これはその続きで、**残ったものが本当はどこまで成り立つのか**を
 測っています。
+
+## 教材
+
+[`lessons/`](lessons/) に、この作用素を題材にした自習用の教材を置いています。
+題は *One operator, five lessons* です。三篇が十分条件を必要条件のように扱った箇所を、
+一回ずつ直していく順路になっています。取り違えた本人が書いているので、各回の終わりに
+「どこを取り違えたか」を置きます。
+
+新しい数学ではありません。教科書にある事実を、一つの作用素で走らせて確かめる材料です。
+頁が書く数値は、各回の台本が出すものと一字一句で突き合わせています。
+
+教材の文章は CC BY 4.0、台本は MIT です。いま書いてあるのは第 2 回だけで、
+著者の確認はまだ済んでいません。
 
 ## 検証
 
