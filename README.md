@@ -212,6 +212,8 @@ python3 verification/check_certificate.py   # 証書の 51 項目
 python3 verification/check_roadmap.py       # 展望の 81 項目
 python3 verification/check_citation.py      # CITATION.cff が名乗る数値
 python3 verification/check_lessons.py       # 教材の頁が書く数値
+python3 standard.py                          # DeGroot と Friedkin–Johnsen を文献の記号で
+python3 verification/check_standard.py       # その古典的な事実を乱数の模型で当てる
 ```
 
 ```python
@@ -244,6 +246,24 @@ print(cert.audit())            # 証書そのものを乱数で当たり直す
 Trinity-Infinity の系列は「野心的な枠組みを証明とコードに通したとき何が残るか」を
 記録したものです。これはその続きで、**残ったものが本当はどこまで成り立つのか**を
 測っています。
+
+## 文献の記号で計算し直す
+
+`standard.py` は、意見動学の二つの標準模型を文献の側の記号で書き、手で証明できる
+古典的な事実を計算します。DeGroot（1974）の `x(k+1) = Wx(k)` と、Friedkin–Johnsen（1990）の
+`x(k+1) = ΛWx(k) + (I−Λ)u` です。
+
+三篇は自分の記号（D、Q、p）で考えていました。だから、既知の模型だと気づきませんでした。
+記号を文献に寄せると、三篇の作用素は W を巡回置換に限った Friedkin–Johnsen で、
+Λ = D、W = Q、u = p と読めます。
+
+確かめているのは三つです。DeGroot では、原始的な W のもとで意見が左ペロン・ベクトルで
+重み付けた平均に揃うこと。Friedkin–Johnsen では、均衡が `V u` で、
+`V = (I−ΛW)⁻¹(I−Λ)` が行確率行列になること。そして三篇の不動点が、
+W を巡回置換にした Friedkin–Johnsen の均衡と一致することです。
+
+`verification/check_standard.py` は、これらを乱数で作った模型に当てます。W の行和を崩すと
+V の行和も 1 でなくなることを、否定の対照として確かめています。新しい結果はありません。
 
 ## 教材
 
