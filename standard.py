@@ -21,6 +21,17 @@ u は各主体がもともと持っていた意見。標準形の書き方は Pr
        非負性はノイマン級数 Σ (ΛW)ᵏ (I − Λ) から出る。
     3. 両者の関係。Λ = I なら FJ は DeGroot そのもの。三篇の作用素は W を巡回置換に
        限った FJ で、Λ = D、W = Q、u = p と読める。
+    4. W が巡回置換なら、V は閉じた形で書ける。三篇の σ（主体 i が i − 1 を聞く）では
+
+           V[i, i−k] = λᵢ λᵢ₋₁ ⋯ λᵢ₋ₖ₊₁ (1 − λᵢ₋ₖ) / (1 − λ₁ λ₂ ⋯ λₙ)   （k = 0, …, n−1）
+
+       添字は mod n。(ΛW)ᵏ が一本の道の感受性の積になり、一周ごとに積 λ₁⋯λₙ が掛かる
+       ので、ノイマン級数が等比級数として足せる。主体 j の初期意見が主体 i に残る重みは、
+       j から i までの道の感受性の積で決まる。
+
+       この形は三篇には無い。検索した範囲の文献では、有向の巡回に限ってこの形を明示した
+       ものは見つけていない。見つけていないことは、無いことではない。等比級数を一度足せば
+       出る式であり、新しい結果とは言わない。
 
 NumPy のみ。乱数種は固定。
 """
@@ -29,7 +40,8 @@ import numpy as np
 
 from trinity import TrinityOperator, cyclic_shift
 
-__all__ = ["random_stochastic", "degroot_limit", "left_perron", "fj_influence", "fj_iterate"]
+__all__ = ["random_stochastic", "degroot_limit", "left_perron", "fj_influence", "fj_iterate",
+           "fj_cyclic_closed_form"]
 
 
 def random_stochastic(n, rng):
@@ -57,6 +69,21 @@ def fj_influence(W, lam):
     n = W.shape[0]
     L = np.diag(lam)
     return np.linalg.solve(np.eye(n) - L @ W, np.eye(n) - L)
+
+
+def fj_cyclic_closed_form(lam):
+    """W = cyclic_shift(n) のときの V を、逆行列を使わずに組む（上の 4.）。"""
+    lam = np.asarray(lam, dtype=float)
+    n = len(lam)
+    total = float(np.prod(lam))
+    V = np.zeros((n, n))
+    for i in range(n):
+        path = 1.0
+        for k in range(n):
+            j = (i - k) % n
+            V[i, j] = path * (1.0 - lam[j]) / (1.0 - total)
+            path *= lam[j]
+    return V
 
 
 def fj_iterate(W, lam, u, steps=2000):
@@ -93,3 +120,8 @@ if __name__ == "__main__":
     Vc = fj_influence(cyclic_shift(3), op.a)
     print("   FJ の V u      =", Vc @ op.p)
     print("   trinity の x*  =", op.fixed_point())
+
+    print("\n4. 巡回の場合の V の閉じた形")
+    Vf = fj_cyclic_closed_form(op.a)
+    print("   閉じた形の V =\n", Vf)
+    print("   逆行列との差 = %.1e" % float(np.abs(Vf - Vc).max()))

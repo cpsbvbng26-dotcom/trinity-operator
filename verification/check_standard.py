@@ -3,7 +3,8 @@
 
     python3 verification/check_standard.py
 
-DeGroot の合意値、FJ の均衡と影響行列 V の行確率性、三篇の作用素との一致。
+DeGroot の合意値、FJ の均衡と影響行列 V の行確率性、三篇の作用素との一致、
+巡回の場合の V の閉じた形。
 それぞれ 200 件の乱数の模型に当てる。乱数種は固定。
 
 通るだけでは信用しない。W の行和を崩した模型では V の行和が 1 にならないことも
@@ -17,8 +18,8 @@ import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-from standard import (degroot_limit, fj_influence, fj_iterate,  # noqa: E402
-                      left_perron, random_stochastic)
+from standard import (degroot_limit, fj_cyclic_closed_form, fj_influence,  # noqa: E402
+                      fj_iterate, left_perron, random_stochastic)
 from trinity import TrinityOperator, cyclic_shift  # noqa: E402
 
 SEED = 20260930
@@ -85,6 +86,20 @@ for _ in range(TRIALS):
     worst = max(worst, float(np.abs(fj_influence(cyclic_shift(n), a) @ p - op.fixed_point()).max()))
 check("三篇の不動点は、W = 巡回置換の FJ の均衡 V u と一致する（%d 件）" % TRIALS, worst < TOL,
       "最大の差 %.1e" % worst)
+
+print("\n4. 巡回の場合の閉じた形")
+worst = 0.0
+for _ in range(TRIALS):
+    n = int(rng.integers(2, 9))
+    lam = rng.uniform(0.0, 0.95, n)
+    worst = max(worst, float(np.abs(fj_cyclic_closed_form(lam) - fj_influence(cyclic_shift(n), lam)).max()))
+check("閉じた形の V が、逆行列で求めた V と一致する（%d 件）" % TRIALS, worst < TOL, "最大の差 %.1e" % worst)
+
+lam = rng.uniform(0.1, 0.9, 5)
+Vf = fj_cyclic_closed_form(lam)
+check("否定の対照：巡回の向きを逆にした W とは一致しない",
+      float(np.abs(Vf - fj_influence(cyclic_shift(5).T, lam)).max()) > 1e-3,
+      "最大の差 %.3f" % float(np.abs(Vf - fj_influence(cyclic_shift(5).T, lam)).max()))
 
 print("\n" + "-" * 58)
 if failures:
