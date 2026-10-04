@@ -212,6 +212,7 @@ python3 verification/check_certificate.py   # 証書の 51 項目
 python3 verification/check_roadmap.py       # 展望の 81 項目
 python3 verification/check_citation.py      # CITATION.cff が名乗る数値
 python3 verification/check_lessons.py       # 教材の頁が書く数値
+python3 verification/check_games.py         # 繰り返しゲームのノートの数値と命題
 python3 standard.py                          # DeGroot と Friedkin–Johnsen を文献の記号で
 python3 verification/check_standard.py       # その古典的な事実を乱数の模型で当てる
 ```
@@ -288,6 +289,26 @@ W が巡回置換のときは、V を逆行列なしで書けます。三篇の 
 
 教材の文章は CC BY 4.0、台本は MIT です。五回とも下書きがそろいましたが、
 著者の確認はまだ済んでいません。
+
+## 繰り返しゲーム
+
+[`games/`](games/README.md) に、この作用素と三篇の繰り返しゲームをつなぐノートを置いています。
+英語で書いています。
+
+巡回する均衡の道での継続価値は、`D = δI` とした作用素の不動点になります。
+均衡かどうかは、その不動点の成分ごとの不等式で決まります。
+式そのものは、割引価値の教科書の公式です。
+
+三人で D の役を巡回させる道は、`δ ≥ 1/φ` のときに限って均衡になります。
+Series II 第4節の例 `(2,4,2)` は、どの δ でも持続しません。
+`(2,4,2)` と `(3,3,3)` を結ぶ線分の上では、持続に要る δ の閾値を証明しています。
+
+ノートには予想も置いています。証明はしていません。
+公開の乱数を使わないとき、`1/φ < δ < 2/3` で持続できる利得の集合は長さが 0 になり、
+その次元は δ とともに 0 から 1 へ上がる、という予想です。根拠は数値の計算だけです。
+
+命題はどれも文献と照合していません。既知の演習である可能性があります。
+`verification/check_games.py` が、頁の数値を台本と突き合わせ、各命題を別の計算で確かめます。
 
 ## 検証
 

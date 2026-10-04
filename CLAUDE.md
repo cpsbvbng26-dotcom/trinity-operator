@@ -140,6 +140,7 @@ python3 check.py                           # 作用素 22 項目
 python3 verification/check_certificate.py  # 証書 51 項目
 python3 verification/check_roadmap.py      # 展望 63 項目
 python3 verification/check_citation.py     # 引用情報 29 項目
+python3 verification/check_games.py        # 繰り返しゲームのノート（games/）
 python3 demo.py && python3 certificate.py
 ```
 
@@ -149,3 +150,6 @@ python3 demo.py && python3 certificate.py
 
 `roadmap/` は展望であって成果ではない。**独自性は低いと README に書いてある。**
 そこを盛らない。
+
+`games/` は命題と予想を分けて書いている。**予想を「証明した」と書き換えない。**
+予想が解けたら、証明を足してから表の status を動かす。
