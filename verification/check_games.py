@@ -278,6 +278,11 @@ check("頁が黄金比の窓の予想を、名前つきで予想と名乗って�
 check("頁が文献と照合していないと書いている",
       "None of the propositions has been checked against the literature." in page)
 check("頁が Claude を著者にしていない", "Claude is not an author." in page)
+check("頁が名乗る貢献を、理論でない・未照合・第三者の公認なしの条件つきで書いている",
+      "This is not a theory. The proofs have not been checked against the literature, and no\nthird party has recognised them." in page
+      and "| a mathematical contribution as mathematical proof |" in page
+      and "| a mathematical contribution as a mathematical conjecture |" in page
+      and "| a contribution as a case study in the philosophy of science |" in page)
 check("頁が数学的意義を文献照合の条件つきで書き、科学哲学的意義を残している",
       "Everything in the first half of this section is conditional on the literature check." in page
       and "None of this makes the operator new, and none of it is a new theory." in page
