@@ -252,6 +252,42 @@ What it does is give the papers' juxtaposition of an operator and a repeated gam
 single equation. It replaces a false example with a proved family that passes through
 Series I's δ* = 1/2. It also leaves two questions that this note cannot answer.
 
+## What this means for mathematics, and for the philosophy of science
+
+Everything in the first half of this section is conditional on the literature check.
+If the same statements are found elsewhere, their mathematical significance belongs to
+that earlier work, and this note becomes a worked reading of it.
+
+**Mathematics.** The note offers an explicit example with four features.
+
+- One simple game shows three regimes as δ grows: two isolated points below `1/φ`, a set
+  conjectured to be full of holes inside the window, and the whole segment from `2/3`.
+  The boundaries are exact. Examples of fractal equilibrium sets that can be computed this
+  far by hand are useful as test cases for general theories such as Berg and Kitti (2014).
+- The discounting recursion, read backwards, is a pair of affine maps with a hole between
+  their ranges. That places this repeated game inside the study of interval maps with
+  holes. The note makes the translation explicit for one game.
+- Propositions 4 and 5 measure what a public randomization device adds in this game. With
+  it, every point from `1 − δ` upward can be sustained once δ ≥ 1/2. Without it, inside the
+  window, the conjecture says almost none can. The question of what public randomization
+  adds is a known theme in the theory of repeated games. The note gives exact thresholds
+  for one case.
+- The same polynomial `δ² + δ − 1` decides both the rotation threshold and the lower end
+  of the window. If that is not a coincidence, it points to a link between equilibrium
+  thresholds of rotation schemes and the point at which the value dynamics start to branch.
+
+None of this makes the operator new, and none of it is a new theory.
+
+**Philosophy of science.** The significance recorded elsewhere stays as it was. A triadic
+intuition was formalized, the number three dissolved, and a known model remained. That
+route is the case studied in Machine-mediated Rediscovery (SSRN
+`10.2139/ssrn.7537983`). This note adds one step to it. Pushing the rediscovered model
+further, into a setting the original papers had only placed beside it, produced a
+well-posed open question. A rediscovery that contributes nothing as a result can still
+lead to a question that is not yet answered. The note also keeps three states apart and
+has them checked by machine: known, proved but not yet counted, and conjectured. That
+bookkeeping is itself part of the case.
+
 ## If the conjecture is proved
 
 How far a proof would go depends on what the proof is.

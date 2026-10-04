@@ -278,6 +278,10 @@ check("頁が黄金比の窓の予想を、名前つきで予想と名乗って�
 check("頁が文献と照合していないと書いている",
       "None of the propositions has been checked against the literature." in page)
 check("頁が Claude を著者にしていない", "Claude is not an author." in page)
+check("頁が数学的意義を文献照合の条件つきで書き、科学哲学的意義を残している",
+      "Everything in the first half of this section is conditional on the literature check." in page
+      and "None of this makes the operator new, and none of it is a new theory." in page
+      and "10.2139/ssrn.7537983" in page)
 check("頁が、予想が解けても枠組みは新理論にならないと書き、1/φ の重なりを問いとして置いている",
       "The framework does not become a new theory." in page
       and "It is recorded as a question, not as a\nconjecture." in page)
