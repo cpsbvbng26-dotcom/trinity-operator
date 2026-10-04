@@ -317,6 +317,21 @@ does not know whether that is a coincidence. It is recorded as a question, not a
 conjecture. Explaining it would be the step from a computed example to a statement about
 structure.
 
+## Contributions claimed, and their conditions
+
+This is not a theory. The proofs have not been checked against the literature, and no
+third party has recognised them. Under those conditions, the following contributions are
+claimed.
+
+| contribution | content | condition |
+| --- | --- | --- |
+| a mathematical contribution as mathematical proof | Propositions 1–5, such as the threshold `1/φ` for the three-player rotation | not checked against the literature and not recognised by any third party; moves to zero if an earlier statement is found |
+| a mathematical contribution as a mathematical conjecture | the golden-window conjecture | the contribution of posing the question, not of answering it |
+| a contribution as a case study in the philosophy of science | the route of rediscovery (Machine-mediated Rediscovery, SSRN `10.2139/ssrn.7537983`) | passed SSRN's screening; not peer-reviewed |
+
+Claiming a contribution and having the field count it are different things. The field's
+count is in the next section.
+
 ## Zero, and not yet counted
 
 The contribution of the three Trinity-Infinity papers to mathematics is zero. That was
