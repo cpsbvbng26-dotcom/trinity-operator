@@ -1,6 +1,6 @@
 # Repeated games through the cyclic operator
 
-*A golden-ratio threshold, a proved family, and two conjectures.* Draft. The author has
+*A golden-ratio threshold, a proved family, and the golden-window conjecture.* Draft. The author has
 not yet reviewed this note.
 
 **Run:** `python3 games/games.py` from the root of this repository. Every number on this
@@ -17,8 +17,8 @@ the script disagree, and checks each proposition by a separate computation.
 | Proposition 3 | the example `(2,4,2)` printed in Series II §4 is never sustainable | proved |
 | Proposition 4 | with public randomization, `(2+t, 4−t, 2+t)` is sustainable exactly when δ ≥ max(1/2, 1 − t) | proved |
 | Proposition 5 | without randomization, the same holds for δ ≥ 2/3, and only two points survive for 1/2 ≤ δ < 1/φ | proved |
-| Conjecture 1 | for 1/φ < δ < 2/3, the sustainable set has length zero | **conjecture** |
-| Conjecture 2 | its dimension rises from 0 to 1 across that interval | **conjecture** |
+| Golden-window conjecture (a) | for 1/φ < δ < 2/3, the sustainable set has length zero | **conjecture** |
+| Golden-window conjecture (b) | its dimension rises from 0 to 1 across that interval | **conjecture** |
 
 A conjecture here means a statement that this note does not prove and has not found
 proved elsewhere. The evidence for each is numerical and is reported with it.
@@ -203,15 +203,19 @@ is (3). ∎
 The script searches 40 periods ahead on the grid `t = 0.01, …, 1`. It finds
 `{0.5, 1}` at δ = 0.5, `{0.55, 1}` at δ = 0.55, and `{0.6, 1}` at δ = 0.6.
 
-## Two conjectures
+## The golden-window conjecture
 
 Between `1/φ` and `2/3` both branches are available, but they leave a hole
 `(2 + δ, 4 − 2δ)` between them. A value that falls into the hole cannot be continued.
 The survivors form the set of points whose orbit never meets the hole.
 
-**Conjecture 1.** For 1/φ < δ < 2/3, `T_δ` has Lebesgue measure zero.
+The window is the interval from `1/φ` to `2/3`. Below it only two points survive, and above
+it the whole segment does (Proposition 5). The conjecture is about what happens inside. The
+name describes the statement. It is not named after a person.
 
-**Conjecture 2.** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` is strictly between
+**Golden-window conjecture (a).** For 1/φ < δ < 2/3, `T_δ` has Lebesgue measure zero.
+
+**Golden-window conjecture (b).** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` is strictly between
 0 and 1, is continuous and non-decreasing in δ, and tends to 0 as δ ↓ 1/φ and to 1 as
 δ ↑ 2/3.
 
@@ -229,13 +233,13 @@ number of intervals per period over the last five periods. The dimension estimat
 | 0.66 | 5896 | 2.32e-01 | 1.466 | 0.92 |
 
 In every row the growth rate is below `1/δ`, so the total length keeps shrinking. That
-is the content of Conjecture 1. The dimension column rises with δ, which is the content of
-Conjecture 2. Neither is a proof. The estimates come from a finite depth, and the limit
+is the content of part (a). The dimension column rises with δ, which is the content of
+part (b). Neither is a proof. The estimates come from a finite depth, and the limit
 at either end is extrapolated.
 
 Berg and Kitti (2014) study exactly this kind of object. They show that pure-strategy
 equilibrium payoff sets of discounted repeated games can be fractals, and measure them
-by Hausdorff dimension. Their methods may settle both conjectures for this game. That has
+by Hausdorff dimension. Their methods may settle both parts for this game. That has
 not been checked.
 
 ## What this does and does not say about Trinity-Infinity

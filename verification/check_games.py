@@ -10,7 +10,7 @@ NumPy のみ。乱数は使わない。
 2. 各命題を、台本とは別の計算で確かめる。台本の関数は使わない。
    台本が間違っていれば、頁と台本は一致したまま両方とも間違う。それを止める。
 
-予想（Conjecture 1・2）は証明しない。頁が根拠として書いていること
+予想（黄金比の窓の予想、Golden-window conjecture の (a)・(b)）は証明しない。頁が根拠として書いていること
 （成長率が 1/δ を下回る、次元の推定が δ とともに増える）だけを確かめる。
 """
 
@@ -271,9 +271,10 @@ check("どの行も成長率 < 1/δ（総長が縮む）",
 dims = [growth[d][1] for d in sorted(growth)]
 check("次元の推定が δ とともに増える", all(a < b for a, b in zip(dims, dims[1:])))
 check("次元の推定が 0 と 1 の間", all(0 < x < 1 for x in dims))
-check("頁が Conjecture を予想と名乗っている",
-      "**Conjecture 1.**" in page and "**Conjecture 2.**" in page
-      and page.count("| **conjecture** |") == 2)
+check("頁が黄金比の窓の予想を、名前つきで予想と名乗っている",
+      "**Golden-window conjecture (a).**" in page and "**Golden-window conjecture (b).**" in page
+      and page.count("| **conjecture** |") == 2
+      and "It is not named after a person." in page)
 check("頁が文献と照合していないと書いている",
       "None of the propositions has been checked against the literature." in page)
 check("頁が Claude を著者にしていない", "Claude is not an author." in page)
