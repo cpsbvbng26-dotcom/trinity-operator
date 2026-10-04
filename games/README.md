@@ -252,6 +252,35 @@ What it does is give the papers' juxtaposition of an operator and a repeated gam
 single equation. It replaces a false example with a proved family that passes through
 Series I's δ* = 1/2. It also leaves two questions that this note cannot answer.
 
+## If the conjecture is proved
+
+How far a proof would go depends on what the proof is.
+
+| proof | what it reaches | where it could go |
+| --- | --- | --- |
+| general results such as Berg and Kitti (2014) apply directly | a worked instance of a known theory; a section of a master's thesis | an update of this note, a short preprint |
+| parts (a) and (b) are proved with a new argument | one small paper | a specialist journal in dynamical systems or repeated games |
+| the dimension is found in closed form as a function of δ, and the double appearance of `1/φ` is explained | a full paper; the game could become a standard example | a specialist journal |
+
+Some things do not change. The operator remains a special case of the Friedkin–Johnsen
+model. What moves up is one statement about this game, this payoff table and this window.
+The framework does not become a new theory. If proved, the statement could be called the
+golden-window theorem. Whether that name is used depends on others citing it.
+
+The order of work would be this. First, check the literature, including Berg and Kitti
+(2014) and work on survivor sets of interval maps with holes, for a result that already
+settles the question. If none does, start with part (a). Showing that the surviving
+length shrinks by a fixed factor from period to period should be easier than part (b).
+Part (a) alone would be a short paper.
+
+### An open question: why 1/φ twice
+
+The threshold of the three-player rotation (Proposition 1) and the lower end of the
+window (Proposition 5) both come from the same polynomial `δ² + δ − 1`. This note
+does not know whether that is a coincidence. It is recorded as a question, not as a
+conjecture. Explaining it would be the step from a computed example to a statement about
+structure.
+
 ## Zero, and not yet counted
 
 The contribution of the three Trinity-Infinity papers to mathematics is zero. That was
