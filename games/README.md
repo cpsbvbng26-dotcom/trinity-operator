@@ -252,6 +252,30 @@ What it does is give the papers' juxtaposition of an operator and a repeated gam
 single equation. It replaces a false example with a proved family that passes through
 Series I's δ* = 1/2. It also leaves two questions that this note cannot answer.
 
+## Zero, and not yet counted
+
+The contribution of the three Trinity-Infinity papers to mathematics is zero. That was
+settled when the operator was identified. Everything in them is a known model or a
+textbook fact.
+
+The propositions in this note are in a different state. They are proved, but they have
+not been checked against the literature. Until they are, they are not counted as new
+results. That is not the same as zero. Zero means the check was made and nothing new was
+found. Not yet counted means the check has not been made.
+
+| | state | counted as |
+| --- | --- | --- |
+| the three papers | a special case of a known model | zero |
+| Propositions 1–5 | proved; literature not checked | not yet counted |
+| golden-window conjecture | not proved | a conjecture, not a result |
+
+Only a literature check can move the second row. If no earlier statement is found for the
+rotation thresholds, they become small new results. If one is found, the row moves to
+zero, and the earlier source is cited here. The search terms to start with are
+"rotation scheme", "golden ratio", "discount factor" and "three-player prisoner's
+dilemma". The environment this note was written in cannot reach the literature
+databases, so the check has not been made.
+
 ## References
 
 - Abreu, D. (1988). On the theory of infinitely repeated games with discounting.

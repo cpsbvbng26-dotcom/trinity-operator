@@ -278,6 +278,10 @@ check("頁が黄金比の窓の予想を、名前つきで予想と名乗って�
 check("頁が文献と照合していないと書いている",
       "None of the propositions has been checked against the literature." in page)
 check("頁が Claude を著者にしていない", "Claude is not an author." in page)
+check("頁が、三篇はゼロ、命題はまだ数えていない、と分けて書いている",
+      "| the three papers | a special case of a known model | zero |" in page
+      and "| Propositions 1–5 | proved; literature not checked | not yet counted |" in page
+      and "That is not the same as zero." in page)
 
 print("\n" + "-" * 58)
 if failures:
