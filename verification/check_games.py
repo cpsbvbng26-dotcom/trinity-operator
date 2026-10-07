@@ -259,6 +259,94 @@ check("二つの枝が [c, 3] を覆う条件 2 + δ ≥ 4 − 2δ は δ ≥ 2/
       all((2 + d >= 4 - 2 * d - 1e-12) == (d >= 2 / 3 - 1e-12)
           for d in [k / 1000 for k in range(500, 1000)]))
 
+# ------------------------------------------------------------ 命題 5 (3)
+print("\n命題 5 (3)（δ = 1/φ ちょうどでは可算無限）")
+d = phi_inv
+c = 2 + (1 - d) / d
+check("δ = 1/φ で c = 2 + δ", abs(c - (2 + d)) < 1e-12)
+
+
+def orbit_reaches_three(w, d, steps=80):
+    """3 は u = 3 の不動点。着いたら生き残る。丸めの誤差は 1/δ 倍ずつ育つので、そこで止める。"""
+    cc = 2 + (1 - d) / d
+    for _ in range(steps):
+        if abs(w - 3) < 1e-9:
+            return True
+        nxt = [(w - (1 - d) * u) / d for u in (2, 3)]
+        nxt = [x for x in nxt if cc - 1e-9 <= x <= 3 + 1e-9]
+        if not nxt:
+            return False
+        w = nxt[0]
+    return False
+
+
+ok_pts = all(orbit_reaches_three(3 - (3 - c) * d ** n, d) for n in range(12))
+check("点列 3 − (3 − c)δⁿ（n = 0〜11）がどれも 3 に着く", ok_pts)
+mid = [3 - (3 - c) * d ** (n + 0.5) for n in range(12)]
+check("点列の間の点（n + 1/2）はどれも生き残らない", not any(orbit_reaches_three(w, d) for w in mid))
+
+# ------------------------------------------------------------ 命題 6
+print("\n命題 6（窓の中で次元は正）")
+
+
+def check_window(d):
+    """台本の関数を使わずに、枝の区間と下界を当たり直す。"""
+    X = (2 * d - 1) / (d * (1 - d))
+    beta = 1 / d
+    if not (d * X < 1 < X):
+        return False, "δX < 1 < X が崩れる"
+    n0 = next(n for n in range(1000) if beta ** (n + 1) >= X / (X - 1))
+    prev = None
+    for n in range(n0, n0 + 40):
+        # x = 1 + ε と置いて ε のまま扱う。1 + ε から 1 を引くと桁が落ちる。
+        e_lo, e_hi = d ** (n + 1), X * d ** (n + 1)
+        if not (0 < e_lo < e_hi <= X - 1):
+            return False, "J_%d が [1, X] に入らない" % n
+        f = lambda e: beta ** (n + 1) * e
+        if abs(f(e_lo) - 1) > 1e-9 or abs(f(e_hi) - X) > 1e-9:
+            return False, "J_%d が [1, X] へ写らない" % n
+        for e in (e_lo, (e_lo + e_hi) / 2, e_hi):
+            for j in range(n):                     # 途中の値は穴に落ちない
+                if beta ** (j + 1) * e > d * X * (1 + 1e-12):
+                    return False, "途中で穴に入る"
+        if prev is not None and not (e_hi < prev[0]):
+            return False, "J_%d と J_%d が重なる" % (n, n - 1)
+        prev = (e_lo, e_hi)
+    # 下界 s を級数で（台本は閉じた式で解く）
+    lo_s, hi_s = 1e-9, 1.0
+    for _ in range(100):
+        sm = (lo_s + hi_s) / 2
+        total = sum(d ** ((n + 1) * sm) for n in range(n0, n0 + 20000))
+        lo_s, hi_s = (sm, hi_s) if total > 1 else (lo_s, sm)
+    return True, (n0, (lo_s + hi_s) / 2)
+
+
+bounds = {}
+ok6 = True
+for dd in (0.62, 0.63, 0.64, 0.65, 0.66):
+    good, info = check_window(dd)
+    if not good:
+        ok6 = False
+        print("    ", dd, info)
+    else:
+        bounds[dd] = info
+check("五つの δ で、枝の区間が [1, X] に入り、互いに素で、穴を通らない", ok6)
+gap_rows = {float(r.strip("|").split("|")[0]): [x.strip() for x in r.strip("|").split("|")]
+            for k, r in rows if k.startswith("gap_")}
+check("下界 s と n₀ を級数で求め直すと台本と合う",
+      all(abs(float(gap_rows[dd][6]) - s_) < 5e-4 and int(gap_rows[dd][5]) == n0
+          for dd, (n0, s_) in bounds.items()))
+check("下界はどれも正", all(s_ > 0 for _, s_ in bounds.values()))
+check("δ = 0.62 では、有限の深さの推定が下界を下回る（頁がそう書いている）",
+      float(gap_rows[0.62][4]) < float(gap_rows[0.62][6])
+      and "the finite-depth estimate is too low there" in page)
+
+# ------------------------------------------------------------ 1/φ が二度出る
+print("\n1/φ が二度出る")
+check("δ² = 1 − δ なら 1 − δ³ = 2δ²（δ = 1/φ）", abs((1 - phi_inv ** 3) - 2 * phi_inv ** 2) < 1e-12)
+check("頁が、これを予想ではなく問いとして置き、利得への依存を書いている",
+      "may depend on the defector's bonus being 2" in page)
+
 # ------------------------------------------------------------ 予想の根拠
 print("\n予想の根拠（証明ではない）")
 growth = {}
@@ -292,7 +380,7 @@ check("頁が、予想が解けても枠組みは新理論にならないと書�
       and "It is recorded as a question, not as a\nconjecture." in page)
 check("頁が、三篇はゼロ、命題はまだ数えていない、と分けて書いている",
       "| the three papers | a special case of a known model | zero |" in page
-      and "| Propositions 1–5 | proved; literature not checked | not yet counted |" in page
+      and "| Propositions 1–6 | proved; literature not checked | not yet counted |" in page
       and "That is not the same as zero." in page)
 
 print("\n" + "-" * 58)
