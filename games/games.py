@@ -124,6 +124,51 @@ def refine(delta, depth=DEPTH):
     return out
 
 
+def boundary_points(count=8, depth=60):
+    """At δ = 1/φ: the points 3 − (3 − c)δⁿ, n = 0 … count − 1, all continue for ever."""
+    delta = PHI_INV
+    c = c_of(delta)
+
+    def reaches_three(w):
+        # 3 is a fixed point of the branch u = 3, so reaching it means surviving for ever.
+        # Rounding error grows by 1/δ per period, so the orbit is followed only until then.
+        for _ in range(depth):
+            if abs(w - 3.0) < TOL:
+                return True
+            for u in (2.0, 3.0):
+                w2 = (w - (1 - delta) * u) / delta
+                if c - TOL <= w2 <= 3.0 + TOL:
+                    w = w2
+                    break
+            else:
+                return False
+        return False
+
+    pts = [3.0 - (3.0 - c) * delta ** n for n in range(count)]
+    return sum(1 for w in pts if reaches_three(w))
+
+
+def window_lower_bound(delta):
+    """Positive dimension inside the window (Proposition 6).
+
+    With x = (3 − w)/(1 − δ) the recursion is x = a + δx′, a ∈ {0, 1}, on [0, X] with
+    X = (2δ − 1)/(δ(1 − δ)) and the hole (δX, 1). For n ≥ n₀ the branch "1, then 0 n
+    times" maps [1 + δ^{n+1}, 1 + Xδ^{n+1}] onto [1, X] with ratio 1/δ^{n+1}. Those
+    intervals are disjoint, so their limit set has dimension s with
+    Σ_{n ≥ n₀} δ^{(n+1)s} = 1, i.e. δ^{(n₀+1)s} = 1 − δ^s.
+    """
+    X = (2 * delta - 1) / (delta * (1 - delta))
+    n0 = math.ceil(math.log(X / (X - 1)) / math.log(1 / delta)) - 1
+    lo, hi = 1e-12, 1.0
+    for _ in range(200):
+        s = (lo + hi) / 2
+        if delta ** ((n0 + 1) * s) - (1 - delta ** s) > 0:
+            lo = s
+        else:
+            hi = s
+    return X, n0, (lo + hi) / 2
+
+
 def dimension_estimate(delta):
     r = refine(delta)
     n_lo, n_hi = r[DEPTH - 6][0], r[DEPTH - 1][0]
@@ -152,8 +197,12 @@ def values():
 
     for delta in GAP:
         count, length, growth, dim = dimension_estimate(delta)
-        v["gap_%g" % delta] = "| %.2f | %d | %.2e | %.3f | %.2f |" % (
-            delta, count, length, growth, dim)
+        _, n0, lower = window_lower_bound(delta)
+        v["gap_%g" % delta] = "| %.2f | %d | %.2e | %.3f | %.2f | %d | %.3f |" % (
+            delta, count, length, growth, dim, n0, lower)
+    v["phi_points"] = "%d" % boundary_points()
+    v["phi_identity"] = "%.6f" % (1 - PHI_INV ** 3)
+    v["phi_identity_2"] = "%.6f" % (2 * PHI_INV ** 2)
     v["depth"] = "%d" % DEPTH
     return v
 
@@ -171,7 +220,8 @@ def main():
         print("  n = %d: %s   1/(n−2) = %.6f" % (n, v["delta%d" % n], 1 / (n - 2)))
     for delta in (0.5, 0.55, 0.6):
         print("Pure, δ = %g: t in %s" % (delta, v["pure_low_%g" % delta]))
-    print("Gap regime, depth %s:  δ | intervals | total length | growth | dimension"
+    print("δ = 1/φ: %s of the first 8 points 3 − (3 − c)δⁿ reach 3" % v["phi_points"])
+    print("Gap regime, depth %s:  δ | intervals | total length | growth | dimension | n0 | lower bound"
           % v["depth"])
     for delta in GAP:
         print("  " + v["gap_%g" % delta])
