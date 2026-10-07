@@ -16,9 +16,10 @@ the script disagree, and checks each proposition by a separate computation.
 | Proposition 2 | the n-player rotation threshold lies just below 1/(n − 2) | proved |
 | Proposition 3 | the example `(2,4,2)` printed in Series II §4 is never sustainable | proved |
 | Proposition 4 | with public randomization, `(2+t, 4−t, 2+t)` is sustainable exactly when δ ≥ max(1/2, 1 − t) | proved |
-| Proposition 5 | without randomization, the same holds for δ ≥ 2/3, and only two points survive for 1/2 ≤ δ < 1/φ | proved |
+| Proposition 5 | without randomization, the same holds for δ ≥ 2/3; only two points survive for 1/2 ≤ δ < 1/φ, and a countable set at δ = 1/φ | proved |
+| Proposition 6 | inside the window 1/φ < δ < 2/3, the sustainable set has positive Hausdorff dimension | proved |
 | Golden-window conjecture (a) | for 1/φ < δ < 2/3, the sustainable set has length zero | **conjecture** |
-| Golden-window conjecture (b) | its dimension rises from 0 to 1 across that interval | **conjecture** |
+| Golden-window conjecture (b) | its dimension is below 1, continuous and non-decreasing, and runs from 0 to 1 across the interval | **conjecture** |
 
 A conjecture here means a statement that this note does not prove and has not found
 proved elsewhere. The evidence for each is numerical and is reported with it.
@@ -189,19 +190,59 @@ This is the scalar operator `w = (1 − δ)u + δw′` run backwards. Write `T_�
 
 1. For δ < 1/2, `T_δ` is empty.
 2. For 1/2 ≤ δ < 1/φ, `T_δ = {δ, 1}`.
-3. For δ ≥ 2/3, `T_δ = [1 − δ, 1]`.
+3. At δ = 1/φ, `T_δ` is countably infinite.
+4. For δ ≥ 2/3, `T_δ = [1 − δ, 1]`.
 
 *Proof.* (1) is Proposition 4. From `w`, the branch `u = 2` stays in `[c, 3]` exactly for
 `w ≤ 2 + δ`, and `u = 3` exactly for `w ≥ 4 − 2δ`. The first range is non-empty exactly
 when `c ≤ 2 + δ`, that is `δ² + δ − 1 ≥ 0`. This is the polynomial of Proposition 1
 again. Below `1/φ` only `u = 3` is available, and it pushes every `w < 3` away from 3,
-so only `w = 3` survives. Starting values are then `2 + δ` and `3`. This is (2). For
-δ ≥ 2/3 the two ranges cover `[c, 3]`, so every value in it continues for ever. Read
-from `[3 − δ, 3]`, the same two branches reach `[c, 3]` from every starting value. This
-is (3). ∎
+so only `w = 3` survives. Starting values are then `2 + δ` and `3`. This is (2). At
+δ = 1/φ exactly, `c = 2 + δ`, so the branch `u = 2` is available only at `w = c`, and it
+sends `c` to 3. Every other value is pushed away from 3 by `u = 3`. The survivors are 3 and
+the points `3 − (3 − c)δⁿ`, which reach `c` after `n` periods. The starting values are their
+images under the two branches, a countably infinite set. This is (3). For δ ≥ 2/3 the two
+ranges cover `[c, 3]`, so every value in it continues for ever. Read from `[3 − δ, 3]`,
+the same two branches reach `[c, 3]` from every starting value. This is (4). ∎
 
 The script searches 40 periods ahead on the grid `t = 0.01, …, 1`. It finds
 `{0.5, 1}` at δ = 0.5, `{0.55, 1}` at δ = 0.55, and `{0.6, 1}` at δ = 0.6.
+At δ = 1/φ it follows the first eight points `3 − (3 − c)δⁿ`, and 8 of them reach 3.
+
+## Proposition 6 — positive dimension inside the window
+
+Change variables to `x = (3 − w)/(1 − δ)`. The recursion `w = (1 − δ)u + δw′` becomes
+
+```
+x = a + δx′,     a = 3 − u ∈ {0, 1},
+```
+
+on the interval `[0, X]` with `X = (2δ − 1)/(δ(1 − δ))`. Read backwards, `x′ = (x − a)/δ`.
+The branch `a = 0` keeps `x′` in `[0, X]` exactly when `x ≤ δX`, and `a = 1` exactly when
+`x ≥ 1`. This is an expansion in the non-integer base `β = 1/δ` with the hole `(δX, 1)`.
+Inside the window `δX < 1 < X`, and `β` lies between 3/2 and φ.
+
+**Proposition 6.** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` is at least the
+positive solution `s` of
+
+```
+δ^((n₀+1)s) = 1 − δ^s,     n₀ = the least n with δ^(−(n+1)) ≥ X/(X − 1).
+```
+
+In particular it is positive.
+
+*Proof.* Take `x` in `[1, X]`, apply `a = 1`, then `a = 0` for `n` periods. The result is
+`δ^(−(n+1))(x − 1)`. It lands in `[1, X]` exactly for `x` in
+`J_n = [1 + δ^(n+1), 1 + Xδ^(n+1)]`. Every intermediate value lies in `[0, δX]`, so the
+orbit never meets the hole. `J_n` lies inside `[1, X]` exactly when
+`δ^(−(n+1)) ≥ X/(X − 1)`, that is `n ≥ n₀`. `J_(n+1)` and `J_n` are disjoint because
+`Xδ < 1`. Each branch maps `J_n` onto `[1, X]` linearly with ratio `δ^(−(n+1))`. The limit
+set of the inverse maps is self-similar and satisfies the open set condition, so its
+dimension `s` solves `Σ_(n ≥ n₀) δ^((n+1)s) = 1`, which sums to the equation above. That
+set lies in the survivor set, and `T_δ` is a union of affine images of the survivor set, so
+its dimension is at least `s`. ∎
+
+The values of `n₀` and of the lower bound are the last two columns of the table below.
 
 ## The golden-window conjecture
 
@@ -209,38 +250,51 @@ Between `1/φ` and `2/3` both branches are available, but they leave a hole
 `(2 + δ, 4 − 2δ)` between them. A value that falls into the hole cannot be continued.
 The survivors form the set of points whose orbit never meets the hole.
 
-The window is the interval from `1/φ` to `2/3`. Below it only two points survive, and above
-it the whole segment does (Proposition 5). The conjecture is about what happens inside. The
-name describes the statement. It is not named after a person.
+The window is the interval from `1/φ` to `2/3`. Below it only two points survive, at `1/φ`
+itself a countable set does, and above it the whole segment does (Proposition 5). Inside it
+the set has positive dimension (Proposition 6). The conjecture is about the rest. The name
+describes the statement. It is not named after a person.
 
 **Golden-window conjecture (a).** For 1/φ < δ < 2/3, `T_δ` has Lebesgue measure zero.
 
-**Golden-window conjecture (b).** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` is strictly between
-0 and 1, is continuous and non-decreasing in δ, and tends to 0 as δ ↓ 1/φ and to 1 as
-δ ↑ 2/3.
+**Golden-window conjecture (b).** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` is
+less than 1, is continuous and non-decreasing in δ, and tends to 0 as δ ↓ 1/φ and to 1 as
+δ ↑ 2/3. That it is positive is Proposition 6.
 
 Evidence. The script refines `[c, 3]` for 22 periods. Below 2/3 the two branches have
 disjoint images, so the surviving intervals do not overlap. The growth rate is the
 number of intervals per period over the last five periods. The dimension estimate is
-`log(growth)/log(1/δ)`.
+`log(growth)/log(1/δ)`. The last two columns are Proposition 6.
 
-| δ | intervals | total length | growth | dimension |
-| --- | --- | --- | --- | --- |
-| 0.62 | 134 | 5.16e-04 | 1.199 | 0.38 |
-| 0.63 | 756 | 6.49e-03 | 1.325 | 0.61 |
-| 0.64 | 1728 | 2.64e-02 | 1.380 | 0.72 |
-| 0.65 | 3691 | 8.49e-02 | 1.427 | 0.83 |
-| 0.66 | 5896 | 2.32e-01 | 1.466 | 0.92 |
+| δ | intervals | total length | growth | dimension estimate | n₀ | lower bound |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0.62 | 134 | 5.16e-04 | 1.199 | 0.38 | 8 | 0.404 |
+| 0.63 | 756 | 6.49e-03 | 1.325 | 0.61 | 4 | 0.609 |
+| 0.64 | 1728 | 2.64e-02 | 1.380 | 0.72 | 3 | 0.722 |
+| 0.65 | 3691 | 8.49e-02 | 1.427 | 0.83 | 3 | 0.748 |
+| 0.66 | 5896 | 2.32e-01 | 1.466 | 0.92 | 2 | 0.920 |
 
 In every row the growth rate is below `1/δ`, so the total length keeps shrinking. That
-is the content of part (a). The dimension column rises with δ, which is the content of
+is the content of part (a). The dimension estimate rises with δ, which is the content of
 part (b). Neither is a proof. The estimates come from a finite depth, and the limit
-at either end is extrapolated.
+at either end is extrapolated. At δ = 0.62 the estimate 0.38 is below the proved lower
+bound 0.404, so the finite-depth estimate is too low there.
+
+Monotonicity is the least supported part. As δ changes, the base and the hole move
+together, and dimension functions of maps with holes often behave like a devil's
+staircase. Five values cannot settle it.
 
 Berg and Kitti (2014) study exactly this kind of object. They show that pure-strategy
 equilibrium payoff sets of discounted repeated games can be fractals, and measure them
 by Hausdorff dimension. Their methods may settle both parts for this game. That has
 not been checked.
+
+The change of variables above places the problem among expansions in non-integer bases
+and expanding maps with holes. Part (a) and the limits in part (b) may follow from
+standard results there. Three leads, recalled from memory and not checked: Glendinning
+and Sidorov (2001) on unique expansions in non-integer bases; Kalle, Kong, Langeveld and
+Li (around 2020) on the β-transformation with a hole; Urbański (1986) on the continuity
+of dimension for expanding maps with holes.
 
 ## What this does and does not say about Trinity-Infinity
 
@@ -261,7 +315,8 @@ that earlier work, and this note becomes a worked reading of it.
 **Mathematics.** The note offers an explicit example with four features.
 
 - One simple game shows three regimes as δ grows: two isolated points below `1/φ`, a set
-  conjectured to be full of holes inside the window, and the whole segment from `2/3`.
+  of positive dimension, conjectured to have length zero, inside the window, and the whole
+  segment from `2/3`.
   The boundaries are exact. Examples of fractal equilibrium sets that can be computed this
   far by hand are useful as test cases for general theories such as Berg and Kitti (2014).
 - The discounting recursion, read backwards, is a pair of affine maps with a hole between
@@ -317,6 +372,12 @@ does not know whether that is a coincidence. It is recorded as a question, not a
 conjecture. Explaining it would be the step from a computed example to a statement about
 structure.
 
+Algebraically the two conditions meet. When `δ² = 1 − δ`, also `1 − δ³ = 2δ²`, so the
+condition of Proposition 1, `2δ² ≥ 1 − δ³`, and that of Proposition 5, `δ² ≥ 1 − δ`,
+change sign at the same point. At δ = 1/φ both sides of the first equal 0.763932. This
+may depend on the defector's bonus being 2 in the payoff table. Changing the payoffs and
+checking whether the two thresholds separate would decide whether there is more to it.
+
 ## Contributions claimed, and their conditions
 
 This is not a theory. The proofs have not been checked against the literature, and no
@@ -325,7 +386,7 @@ claimed.
 
 | contribution | content | condition |
 | --- | --- | --- |
-| a mathematical contribution as mathematical proof | Propositions 1–5, such as the threshold `1/φ` for the three-player rotation | not checked against the literature and not recognised by any third party; moves to zero if an earlier statement is found |
+| a mathematical contribution as mathematical proof | Propositions 1–6, such as the threshold `1/φ` for the three-player rotation | not checked against the literature and not recognised by any third party; moves to zero if an earlier statement is found |
 | a mathematical contribution as a mathematical conjecture | the golden-window conjecture | the contribution of posing the question, not of answering it |
 | a contribution as a case study in the philosophy of science | the route of rediscovery (Machine-mediated Rediscovery, SSRN `10.2139/ssrn.7537983`) | passed SSRN's screening; not peer-reviewed |
 
@@ -346,14 +407,15 @@ found. Not yet counted means the check has not been made.
 | | state | counted as |
 | --- | --- | --- |
 | the three papers | a special case of a known model | zero |
-| Propositions 1–5 | proved; literature not checked | not yet counted |
+| Propositions 1–6 | proved; literature not checked | not yet counted |
 | golden-window conjecture | not proved | a conjecture, not a result |
 
 Only a literature check can move the second row. If no earlier statement is found for the
 rotation thresholds, they become small new results. If one is found, the row moves to
 zero, and the earlier source is cited here. The search terms to start with are
 "rotation scheme", "golden ratio", "discount factor" and "three-player prisoner's
-dilemma". The environment this note was written in cannot reach the literature
+dilemma". For Proposition 6 and the conjecture, "beta-expansion with a hole" and
+"open dynamical system" are likely to be faster. The environment this note was written in cannot reach the literature
 databases, so the check has not been made.
 
 ## References
