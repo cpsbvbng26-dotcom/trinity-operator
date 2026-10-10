@@ -18,6 +18,7 @@ the script disagree, and checks each proposition by a separate computation.
 | Proposition 4 | with public randomization, `(2+t, 4−t, 2+t)` is sustainable exactly when δ ≥ max(1/2, 1 − t) | proved |
 | Proposition 5 | without randomization, the same holds for δ ≥ 2/3; only two points survive for 1/2 ≤ δ < 1/φ, and a countable set at δ = 1/φ | proved |
 | Proposition 6 | inside the window 1/φ < δ < 2/3, the sustainable set has positive Hausdorff dimension | proved |
+| Proposition 7 | with benefit b and cost c, the rotation is possible exactly when cooperation is efficient, and always needs more patience than full cooperation | proved |
 | Golden-window conjecture (a) | for 1/φ < δ < 2/3, the sustainable set has length zero | **conjecture** |
 | Golden-window conjecture (b) | its dimension is below 1, continuous and non-decreasing, and runs from 0 to 1 across the interval | **conjecture** |
 
@@ -244,6 +245,54 @@ its dimension is at least `s`. ∎
 
 The values of `n₀` and of the lower bound are the last two columns of the table below.
 
+## Proposition 7 — general benefit and cost
+
+Replace the payoffs by a linear dilemma. A cooperator pays `c > 0` and gives `b > 0` to every
+co-player, so `πC(k) = bk − c` and `πD(k) = bk`. Up to the constant 2, `G_n` is the case
+`b = c = 1`. Write `r = c/b`. D is still a best reply to everything, the minmax payoff is 0,
+and all-D for ever is still the harshest punishment. In biological terms δ is read as the
+probability of meeting again.
+
+**Proposition 7.**
+
+1. The `n`-player rotation is a subgame-perfect equilibrium path for some δ < 1 exactly when
+   `r < n − 1`, that is, when cooperation is efficient: `(n − 1)b > c`. Then there is a unique
+   threshold `δ_n(r)`, and
+
+   ```
+   r/(n − 2) − (1 + r) r^(n−1)/(n − 2)ⁿ  <  δ_n(r)  <  r/(n − 2).
+   ```
+
+2. For three players, `δ_3(r) = (√(1 + 4r) − 1)/2`. At `r = 1` this is `1/φ`.
+3. `δ_n(r) > r/(n − 1)`, the threshold at which everyone cooperating in every period is an
+   equilibrium.
+
+*Proof.* Repeat Proposition 2 with these payoffs. The cooperator furthest from their own
+defection binds, and the condition becomes
+
+```
+g(δ) = (n − 2)δ − r + (1 + r)h(δ) ≥ 0,     h as in Proposition 2.
+```
+
+`g` is strictly increasing, with `g(0) = −r` and `g(1) = n − 2 − r + (1 + r)/n`. The last is
+positive exactly when `(n − 1)² > r(n − 1)`, that is `r < n − 1`. The bounds follow as in
+Proposition 2. This is (1). For `n = 3`, multiplying by `1 + δ + δ²` gives
+`(δ + 1)(δ² + δ − r) ≥ 0`. This is (2). Everyone cooperating is an equilibrium exactly when
+`b(n − 1) − c ≥ (1 − δ)b(n − 1)`, that is `δ ≥ r/(n − 1)`. At that δ, `g(δ) = (1 + r)h(δ) − δ`.
+Here `(1 + r)δ^(n−2) = δ^(n−2) + (n − 1)δ^(n−1)`, which is less than `1 + δ + … + δ^(n−1)`,
+because each of the `n − 2` terms `1, …, δ^(n−3)` exceeds `δ^(n−1)`. So `g < 0` there, and
+`δ_n(r)` is larger. This is (3). ∎
+
+The script finds `δ_3(r)` by bisection on Lemma 1. It gives 0.366025 at `r = 1/2` and
+0.822876 at `r = 3/2`, which agree with the closed form. At `r = 1` the rotation needs
+δ ≥ 0.618034, and everyone cooperating needs only δ ≥ 0.5.
+
+In this linear game, taking turns is never the easier way to cooperate. It needs more
+patience than everyone cooperating, and it pays less on average. So the game does not
+explain turn-taking. Turn-taking can only pay where the benefits are not linear, for
+instance where one contributor is enough and a second is wasted. Such games are not
+studied here. The literature on turn-taking has not been checked.
+
 ## The golden-window conjecture
 
 Between `1/φ` and `2/3` both branches are available, but they leave a hole
@@ -386,7 +435,7 @@ claimed.
 
 | contribution | content | condition |
 | --- | --- | --- |
-| a mathematical contribution as mathematical proof | Propositions 1–6, such as the threshold `1/φ` for the three-player rotation | not checked against the literature and not recognised by any third party; moves to zero if an earlier statement is found |
+| a mathematical contribution as mathematical proof | Propositions 1–7, such as the threshold `1/φ` for the three-player rotation | not checked against the literature and not recognised by any third party; moves to zero if an earlier statement is found |
 | a mathematical contribution as a mathematical conjecture | the golden-window conjecture | the contribution of posing the question, not of answering it |
 | a contribution as a case study in the philosophy of science | the route of rediscovery (Machine-mediated Rediscovery, SSRN `10.2139/ssrn.7537983`) | passed SSRN's screening; not peer-reviewed |
 
@@ -407,7 +456,7 @@ found. Not yet counted means the check has not been made.
 | | state | counted as |
 | --- | --- | --- |
 | the three papers | a special case of a known model | zero |
-| Propositions 1–6 | proved; literature not checked | not yet counted |
+| Propositions 1–7 | proved; literature not checked | not yet counted |
 | golden-window conjecture | not proved | a conjecture, not a result |
 
 Only a literature check can move the second row. If no earlier statement is found for the
