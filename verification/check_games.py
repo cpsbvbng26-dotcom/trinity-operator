@@ -341,6 +341,65 @@ check("δ = 0.62 では、有限の深さの推定が下界を下回る（頁が
       float(gap_rows[0.62][4]) < float(gap_rows[0.62][6])
       and "the finite-depth estimate is too low there" in page)
 
+# ------------------------------------------------------------ 命題 7
+print("\n命題 7（便益 b・費用 c に広げる）")
+
+
+def rot_bc_ok(n, delta, r):
+    """便益 1・費用 r。価値を有限和で直接出して、逸脱（n − 2 のあと 0）と比べる。"""
+    coop, defect = n - 2 - r, n - 1
+    S = 1 - delta ** n
+    for j in range(1, n):
+        V = (coop * S + (defect - coop) * (1 - delta) * delta ** j) / S
+        if V < (1 - delta) * (n - 2) - 1e-13:
+            return False
+    return True
+
+
+def bc_threshold(n, r):
+    if not rot_bc_ok(n, 1 - 1e-12, r):
+        return None
+    lo, hi = 0.0, 1 - 1e-12
+    for _ in range(90):
+        mid = (lo + hi) / 2
+        lo, hi = (lo, mid) if rot_bc_ok(n, mid, r) else (mid, hi)
+    return hi
+
+
+def g_exact(n, r, x):
+    """g(δ) = (n−2)δ − r + (1+r)δⁿ⁻¹/(1 + δ + … + δⁿ⁻¹) を有理数で。"""
+    return (n - 2) * x - r + (1 + r) * x ** (n - 1) / sum(x ** k for k in range(n))
+
+
+closed = lambda r: (math.sqrt(1 + 4 * r) - 1) / 2
+check("三人では δ_3(r) = (√(1+4r) − 1)/2（r = 0.1〜1.9 の 19 点）",
+      all(abs(bc_threshold(3, k / 10) - closed(k / 10)) < 1e-9 for k in range(1, 20)))
+check("r = 1 で 1/φ に戻る", abs(closed(1) - phi_inv) < 1e-12)
+feas_ok, harder_ok, bounds_ok = True, True, True
+for n in range(3, 13):
+    for r in [Fr(1, 10), Fr(1, 2), Fr(1), Fr(3, 2), Fr(n - 1) * Fr(9, 10), Fr(n - 1) * Fr(99, 100),
+              Fr(n - 1), Fr(n - 1) * Fr(101, 100)]:
+        t = bc_threshold(n, float(r))
+        if (t is not None) != (r < n - 1):
+            feas_ok = False
+        if t is None:
+            continue
+        # 全員の協力の閾値 r/(n−1) では g < 0（有理数で）。g は増加なので δ_n(r) はその上。
+        if not g_exact(n, r, r / (n - 1)) < 0 or not t > float(r) / (n - 1):
+            harder_ok = False
+        up = r / (n - 2)
+        lo = up - (1 + r) * r ** (n - 1) / Fr(n - 2) ** n
+        if up < 1 and not (g_exact(n, r, max(lo, Fr(0))) < 0 < g_exact(n, r, up)):
+            bounds_ok = False
+check("n = 3〜12 で、巡回が成り立つ δ < 1 があるのは r < n − 1 のときだけ", feas_ok)
+check("n = 3〜12 で、δ_n(r) は全員の協力の閾値 r/(n−1) より大きい（有理数で）", harder_ok)
+check("n = 3〜12 で、δ_n(r) が命題 7 の上下の界の間にある（有理数で）", bounds_ok)
+check("δ_3(0.5)・δ_3(1.5) が台本と合う",
+      "%.6f" % closed(0.5) == vals.get("bc3_r0.5") and "%.6f" % closed(1.5) == vals.get("bc3_r1.5"))
+check("頁が、この線形のゲームは交代の協力を説明しないと書いている",
+      "So the game does not\nexplain turn-taking." in page
+      and "The literature on turn-taking has not been checked." in page)
+
 # ------------------------------------------------------------ 1/φ が二度出る
 print("\n1/φ が二度出る")
 check("δ² = 1 − δ なら 1 − δ³ = 2δ²（δ = 1/φ）", abs((1 - phi_inv ** 3) - 2 * phi_inv ** 2) < 1e-12)
@@ -380,7 +439,7 @@ check("頁が、予想が解けても枠組みは新理論にならないと書�
       and "It is recorded as a question, not as a\nconjecture." in page)
 check("頁が、三篇はゼロ、命題はまだ数えていない、と分けて書いている",
       "| the three papers | a special case of a known model | zero |" in page
-      and "| Propositions 1–6 | proved; literature not checked | not yet counted |" in page
+      and "| Propositions 1–7 | proved; literature not checked | not yet counted |" in page
       and "That is not the same as zero." in page)
 
 print("\n" + "-" * 58)

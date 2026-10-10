@@ -73,6 +73,32 @@ def rotation_threshold(n):
     return hi
 
 
+# ------------------------------------------------ general benefit and cost
+def rotation_bc_ok(n, delta, r):
+    """Proposition 7. A cooperator pays r and gives 1 to every co-player.
+
+    Stage payoffs: cooperator n − 2 − r, defector n − 1, deviating cooperator n − 2.
+    The minmax payoff is 0.
+    """
+    p = np.full(n, n - 2.0 - r)
+    p[0] = n - 1.0
+    V = continuation_values(p, delta)
+    return all(V[k] >= (1 - delta) * (n - 2) - 1e-12 for k in range(1, n))
+
+
+def rotation_bc_threshold(n, r):
+    lo, hi = 0.0, 1.0 - 1e-12
+    if not rotation_bc_ok(n, hi, r):
+        return None
+    for _ in range(80):
+        mid = (lo + hi) / 2
+        if rotation_bc_ok(n, mid, r):
+            hi = mid
+        else:
+            lo = mid
+    return hi
+
+
 # ------------------------------------------------- the segment (2+t, 4−t, 2+t)
 def c_of(delta):
     """Smallest continuation value that keeps a cooperating player from deviating."""
@@ -200,6 +226,9 @@ def values():
         _, n0, lower = window_lower_bound(delta)
         v["gap_%g" % delta] = "| %.2f | %d | %.2e | %.3f | %.2f | %d | %.3f |" % (
             delta, count, length, growth, dim, n0, lower)
+    for r in (0.5, 1.5):
+        v["bc3_r%g" % r] = "%.6f" % rotation_bc_threshold(3, r)
+    v["bc_full3_r1"] = "%g" % (1 / 2)
     v["phi_points"] = "%d" % boundary_points()
     v["phi_identity"] = "%.6f" % (1 - PHI_INV ** 3)
     v["phi_identity_2"] = "%.6f" % (2 * PHI_INV ** 2)
@@ -220,6 +249,8 @@ def main():
         print("  n = %d: %s   1/(n−2) = %.6f" % (n, v["delta%d" % n], 1 / (n - 2)))
     for delta in (0.5, 0.55, 0.6):
         print("Pure, δ = %g: t in %s" % (delta, v["pure_low_%g" % delta]))
+    print("Benefit 1, cost r, three players: δ_3(0.5) = %s, δ_3(1.5) = %s; full cooperation at r = 1: δ ≥ %s"
+          % (v["bc3_r0.5"], v["bc3_r1.5"], v["bc_full3_r1"]))
     print("δ = 1/φ: %s of the first 8 points 3 − (3 − c)δⁿ reach 3" % v["phi_points"])
     print("Gap regime, depth %s:  δ | intervals | total length | growth | dimension | n0 | lower bound"
           % v["depth"])
