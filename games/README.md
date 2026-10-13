@@ -3,6 +3,10 @@
 *A golden-ratio threshold, a proved family, and the golden-window conjecture.* Draft. The author has
 not yet reviewed this note.
 
+**Preprint.** An English paper version of Propositions 1–7 and the conjecture is on figshare:
+[`10.6084/m9.figshare.34419198`](https://doi.org/10.6084/m9.figshare.34419198) (2026-10-13).
+The preprint is frozen. This page and its script remain the maintained version.
+
 **Run:** `python3 games/games.py` from the root of this repository. Every number on this
 page comes from that script. `python3 verification/check_games.py` fails if the page and
 the script disagree, and checks each proposition by a separate computation.
