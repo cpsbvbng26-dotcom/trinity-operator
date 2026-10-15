@@ -113,7 +113,7 @@ matrix, and the same argument quietly becomes an overestimate.
 - Horn, R. A., and Johnson, C. R. (2013). *Matrix Analysis* (2nd ed.). Cambridge
   University Press.
 
-## License and use of AI
+## License and use of language models
 
 This lesson text is licensed under CC BY 4.0. The code is MIT. See `lessons/README.md`.
 The lesson was drafted with Claude Code (Anthropic) at the author's request. The

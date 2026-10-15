@@ -161,7 +161,7 @@ often to change what you measure with, not what you claim.**
 - Trefethen, L. N., and Embree, M. (2005). *Spectra and Pseudospectra: The Behavior
   of Nonnormal Matrices and Operators*. Princeton University Press.
 
-## License and use of AI
+## License and use of language models
 
 This lesson text is licensed under CC BY 4.0. The code is MIT. See `lessons/README.md`.
 The lesson was drafted with Claude Code (Anthropic) at the author's request. The

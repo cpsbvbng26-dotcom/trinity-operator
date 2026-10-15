@@ -119,7 +119,7 @@ is "the right one" depends on the question being asked.**
 - Jungers, R. M. (2009). *The Joint Spectral Radius: Theory and Applications*.
   Springer.
 
-## License and use of AI
+## License and use of language models
 
 This lesson text is licensed under CC BY 4.0. The code is MIT. See `lessons/README.md`.
 The lesson was drafted with Claude Code (Anthropic) at the author's request. The

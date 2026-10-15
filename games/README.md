@@ -486,7 +486,7 @@ databases, so the check has not been made.
 - Nemoto, T. (2026). Trinity-Infinity Series I (revised). doi:10.5281/zenodo.22058624
 - Nemoto, T. (2026). Trinity-Infinity Series II (revised). doi:10.5281/zenodo.22058777
 
-## License and use of AI
+## License and use of language models
 
 This note is licensed under CC BY 4.0. The code is MIT. The note was drafted with
 Claude Code (Anthropic) at the author's request, including the propositions, their
