@@ -177,7 +177,7 @@ is.**
   doi:10.1016/j.arcontrol.2017.03.002
 - Varga, R. S. (2000). *Matrix Iterative Analysis* (2nd ed.). Springer.
 
-## License and use of AI
+## License and use of language models
 
 This lesson text is licensed under CC BY 4.0. The code is MIT. See `lessons/README.md`.
 The lesson was drafted with Claude Code (Anthropic) at the author's request. The

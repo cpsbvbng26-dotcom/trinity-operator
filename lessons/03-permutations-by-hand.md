@@ -131,7 +131,7 @@ problem can be solved exactly, a bound is the wrong thing to report.**
   dynamic social networks. Part I. *Annual Reviews in Control*, 43, 65–79.
   doi:10.1016/j.arcontrol.2017.03.002
 
-## License and use of AI
+## License and use of language models
 
 This lesson text is licensed under CC BY 4.0. The code is MIT. See `lessons/README.md`.
 The lesson was drafted with Claude Code (Anthropic) at the author's request. The

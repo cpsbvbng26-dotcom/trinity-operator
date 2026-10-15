@@ -71,7 +71,7 @@ directory) is licensed under the MIT License in the repository root.
   dynamic social networks. Part I. *Annual Reviews in Control*, 43, 65–79.
   doi:10.1016/j.arcontrol.2017.03.002
 
-## Use of AI
+## Use of language models
 
 The lessons are drafted with Claude Code (Anthropic) at the author's request. Every
 number is produced by code and checked mechanically. The author is responsible for the
