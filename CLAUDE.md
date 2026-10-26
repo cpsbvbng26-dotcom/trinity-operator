@@ -146,6 +146,7 @@ python3 verification/check_certificate.py  # 証書 51 項目
 python3 verification/check_roadmap.py      # 展望 63 項目
 python3 verification/check_citation.py     # 引用情報 29 項目
 python3 verification/check_games.py        # 繰り返しゲームのノート（games/）
+python3 verification/check_site.py         # 予想の英語サイト（site/）
 python3 demo.py && python3 certificate.py
 ```
 
@@ -159,3 +160,14 @@ python3 demo.py && python3 certificate.py
 `games/` は命題と予想（黄金比の窓の予想）を分けて書いている。**予想を「証明した」と書き換えない。**
 予想に人名を付けない。名前は中身を表すものにする。
 予想が解けたら、証明を足してから表の status を動かす。
+
+`site/` は golden-window.vercel.app の中身である。Vercel の `golden-window` プロジェクトが
+このディレクトリを根にして配る。**`site/index.html` は生成物で、手で直さない。**
+researcher-profile で次を回し、出力の `index.html` だけをここへ写す。
+
+```
+PROFILE_CONFIG=./golden-window.en.json PROFILE_OVERLAY=./golden-window.site.json \
+  PROFILE_OUT=<出力先> node build.js
+```
+
+`favicon.svg`・`robots.txt`・`sitemap.xml` は手で置いたもので、生成物ではない。

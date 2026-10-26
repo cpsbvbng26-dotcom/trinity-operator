@@ -213,6 +213,7 @@ python3 verification/check_roadmap.py       # 展望の 81 項目
 python3 verification/check_citation.py      # CITATION.cff が名乗る数値
 python3 verification/check_lessons.py       # 教材の頁が書く数値
 python3 verification/check_games.py         # 繰り返しゲームのノートの数値と命題
+python3 verification/check_site.py          # 予想の英語サイト（site/）
 python3 standard.py                          # DeGroot と Friedkin–Johnsen を文献の記号で
 python3 verification/check_standard.py       # その古典的な事実を乱数の模型で当てる
 ```
@@ -319,6 +320,12 @@ Series II 第4節の例 `(2,4,2)` は、どの δ でも持続しません。
 照合して先行が無ければ、小さいが新しい結果になります。先行が見つかればゼロに移し、
 その文献をノートに引きます。照合はまだしていません。
 `verification/check_games.py` が、頁の数値を台本と突き合わせ、各命題を別の計算で確かめます。
+
+予想だけを英語で載せたサイトを、[golden-window.vercel.app](https://golden-window.vercel.app/) に置いています。
+中身は [`site/`](site/) で、Vercel がこのディレクトリをそのまま配ります。
+`site/index.html` は生成物です。researcher-profile の英語の頁と同じ設定から作っており、本文はそちらと同じです。
+ロゴ（`site/favicon.svg`）は、窓の枠の中に、穴を挟んで二つに分かれる帯を三段重ねた図です。
+帯の比は図のためのもので、実際の写像の縮尺ではありません。
 
 ## 検証
 
