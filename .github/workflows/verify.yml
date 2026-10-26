@@ -32,6 +32,8 @@ jobs:
         run: python3 verification/check_standard.py
       - name: 繰り返しゲームのノートの数値と命題
         run: python3 verification/check_games.py
+      - name: 予想の英語サイト
+        run: python3 verification/check_site.py
       - name: 実演が最後まで走るか
         run: python3 demo.py
       - name: 証書の実演が最後まで走るか
