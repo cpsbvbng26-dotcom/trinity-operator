@@ -170,4 +170,6 @@ PROFILE_CONFIG=./golden-window.en.json PROFILE_OVERLAY=./golden-window.site.json
   PROFILE_OUT=<出力先> node build.js
 ```
 
-`favicon.svg`・`robots.txt`・`sitemap.xml` は手で置いたもので、生成物ではない。
+`favicon.svg`・`og.png`・`robots.txt`・`sitemap.xml` は手で置いたもので、生成物ではない。
+`og.png` は共有したときのカードの画像で、`favicon.svg` の角を丸めずに 600px の正方形で描いたもの。
+ロゴを変えたら、こちらも描き直す。

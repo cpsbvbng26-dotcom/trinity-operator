@@ -18,6 +18,7 @@ import io
 import json
 import os
 import re
+import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -84,6 +85,20 @@ check("ロゴが正方形で、一辺が 48 の倍数",
       bool(vb) and vb.group(1) == vb.group(2) and int(vb.group(1)) % 48 == 0,
       vb.group(0) if vb else "viewBox が無い")
 check("ロゴが外から何も読まない", "href" not in svg and "url(" not in svg)
+
+print("\n3b. 共有したときに出るロゴ")
+# SNS のカードは SVG を読まないので、PNG を絶対 URL で指す。
+# summary のカードは正方形の画像を小さく出す。X は一辺 144px 以上を求める。
+cards = re.findall(r'<meta name="twitter:card" content="([^"]+)">', html)
+check("カードの型が summary", cards == ["summary"], repr(cards))
+ogi = re.findall(r'<meta property="og:image" content="([^"]+)">', html)
+check("og:image が配信先の og.png を指す", ogi == [URL + "og.png"], repr(ogi))
+png = b""
+if os.path.exists(os.path.join(SITE, "og.png")):
+    png = io.open(os.path.join(SITE, "og.png"), "rb").read()
+size = struct.unpack(">II", png[16:24]) if png[:8] == b"\x89PNG\r\n\x1a\n" else (0, 0)
+check("og.png が正方形の PNG で、一辺が 144px 以上",
+      size[0] == size[1] and size[0] >= 144, "%d×%d" % size)
 
 print("\n4. 外へリクエストを出さない")
 csp = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]+)">', html)
