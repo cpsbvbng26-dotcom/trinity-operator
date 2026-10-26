@@ -321,7 +321,7 @@ Series II 第4節の例 `(2,4,2)` は、どの δ でも持続しません。
 その文献をノートに引きます。照合はまだしていません。
 `verification/check_games.py` が、頁の数値を台本と突き合わせ、各命題を別の計算で確かめます。
 
-予想だけを英語で載せたサイトを、[golden-window.vercel.app](https://golden-window.vercel.app/) に置いています。
+予想だけを英語で載せたサイトを、[golden-window-conjecture.vercel.app](https://golden-window-conjecture.vercel.app/) に置いています。
 中身は [`site/`](site/) で、Vercel がこのディレクトリをそのまま配ります。
 `site/index.html` は生成物です。researcher-profile の英語の頁と同じ設定から作っており、本文はそちらと同じです。
 ロゴ（`site/favicon.svg`）は、窓の枠の中に、穴を挟んで二つに分かれる帯を三段重ねた図です。

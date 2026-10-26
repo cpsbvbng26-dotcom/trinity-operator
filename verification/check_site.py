@@ -22,7 +22,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(ROOT, "site")
-URL = "https://golden-window.vercel.app/"
+URL = "https://golden-window-conjecture.vercel.app/"
 passed = 0
 failures = []
 

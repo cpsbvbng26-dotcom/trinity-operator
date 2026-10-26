@@ -161,7 +161,7 @@ python3 demo.py && python3 certificate.py
 予想に人名を付けない。名前は中身を表すものにする。
 予想が解けたら、証明を足してから表の status を動かす。
 
-`site/` は golden-window.vercel.app の中身である。Vercel の `golden-window` プロジェクトが
+`site/` は golden-window-conjecture.vercel.app の中身である。Vercel の `golden-window` プロジェクトが
 このディレクトリを根にして配る。**`site/index.html` は生成物で、手で直さない。**
 researcher-profile で次を回し、出力の `index.html` だけをここへ写す。
 
