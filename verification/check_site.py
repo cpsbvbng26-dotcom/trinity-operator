@@ -93,6 +93,9 @@ cards = re.findall(r'<meta name="twitter:card" content="([^"]+)">', html)
 check("カードの型が summary", cards == ["summary"], repr(cards))
 ogi = re.findall(r'<meta property="og:image" content="([^"]+)">', html)
 check("og:image が配信先の og.png を指す", ogi == [URL + "og.png"], repr(ogi))
+# X は og:image で補うと書いているが、補われずに画像が出なかった。明示する。
+twi = re.findall(r'<meta name="twitter:image" content="([^"]+)">', html)
+check("twitter:image が og:image と同じ", twi == ogi and bool(twi), repr(twi))
 png = b""
 if os.path.exists(os.path.join(SITE, "og.png")):
     png = io.open(os.path.join(SITE, "og.png"), "rb").read()
