@@ -79,7 +79,34 @@ print("\n3. 検索結果に出るロゴ")
 # Google は、トップページから rel="icon" で指された正方形の画像を使う。
 # 大きさは 48px の倍数を求める。SVG は viewBox で見る。
 icons = re.findall(r'<link rel="icon" href="([^"]+)"', html)
-check("rel=\"icon\" が favicon.svg を指す", icons == ["./favicon.svg"], repr(icons))
+check("rel=\"icon\" が favicon.svg と、その画素の版を指す",
+      icons == ["./favicon.svg", "./favicon.ico", "./favicon-192.png"], repr(icons))
+check("apple-touch-icon が apple-touch-icon.png を指す",
+      re.findall(r'<link rel="apple-touch-icon" href="([^"]+)"', html) == ["./apple-touch-icon.png"])
+
+
+def png_size(b):
+    if b[:8] != b"\x89PNG\r\n\x1a\n":
+        return None
+    return struct.unpack(">II", b[16:24])
+
+
+def raw(name):
+    p = os.path.join(SITE, name)
+    return io.open(p, "rb").read() if os.path.exists(p) else b""
+
+
+# SVG を読まない検索結果もあるので、同じロゴを画素にした版を並べる。
+ico = raw("favicon.ico")
+ico_sizes = []
+if ico[:4] == b"\x00\x00\x01\x00":
+    for i in range(struct.unpack("<H", ico[4:6])[0]):
+        size, off = struct.unpack("<II", ico[6 + 16 * i + 8:6 + 16 * i + 16])
+        ico_sizes.append(png_size(ico[off:off + size]))
+check("favicon.ico に 16・32・48 px のロゴが入っている",
+      ico_sizes == [(16, 16), (32, 32), (48, 48)], repr(ico_sizes))
+check("favicon-192.png が 192 × 192", png_size(raw("favicon-192.png")) == (192, 192))
+check("apple-touch-icon.png が 180 × 180", png_size(raw("apple-touch-icon.png")) == (180, 180))
 vb = re.search(r'viewBox="0 0 (\d+) (\d+)"', svg)
 check("ロゴが正方形で、一辺が 48 の倍数",
       bool(vb) and vb.group(1) == vb.group(2) and int(vb.group(1)) % 48 == 0,
