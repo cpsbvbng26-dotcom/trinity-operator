@@ -160,6 +160,24 @@ for phrase in ("It has not been proved.",
 check("論文の DOI へのリンクがある",
       'href="https://doi.org/10.6084/m9.figshare.34419198"' in html)
 
+print("\n6. <meta> では出せない安全のヘッダー")
+# frame-ancestors は <meta> の CSP では効かない。よその頁の枠に埋め込まれないように、Vercel にヘッダーで出させる。
+# ヘッダーの CSP は frame-ancestors だけを名乗る。読み込みを絞るのは、これまでどおり頁の <meta> である。
+try:
+    vcfg = json.loads(read("vercel.json"))
+except ValueError:
+    vcfg = {}
+allp = [h for h in vcfg.get("headers", []) if h.get("source") == "/(.*)"]
+hdr = {}
+for h in (allp[0].get("headers", []) if allp else []):
+    hdr.setdefault(h.get("key"), []).append(h.get("value"))
+check("vercel.json はヘッダーだけを持ち、すべての経路に付ける", list(vcfg.keys()) == ["headers"] and len(allp) == 1)
+check("枠への埋め込みを二通りで断る", hdr.get("Content-Security-Policy") == ["frame-ancestors 'none'"] and hdr.get("X-Frame-Options") == ["DENY"])
+check("型の推測をさせず、参照元を送らず、ブラウザの機能を求めず、窓を切り離し、HTTPS を覚えさせる",
+      hdr.get("X-Content-Type-Options") == ["nosniff"] and hdr.get("Referrer-Policy") == ["no-referrer"]
+      and "camera=()" in (hdr.get("Permissions-Policy") or [""])[0] and hdr.get("Cross-Origin-Opener-Policy") == ["same-origin"]
+      and re.match(r"max-age=\d{8,}", (hdr.get("Strict-Transport-Security") or [""])[0]) is not None)
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))
