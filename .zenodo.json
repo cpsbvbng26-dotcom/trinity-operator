@@ -1,0 +1,43 @@
+{
+  "title": "trinity-operator — 論文が置いた仮定の外まで実装した作用素",
+  "description": "<p>Trinity-Infinity の三本が扱う作用素 x ← DQx + (I−D)p を、Q を巡回置換に、混合係数を (0,1) に限らずに実装したものです。三本が収束の条件として置いた作用素ノルム ‖DQ‖₂ < 1 は十分条件であって必要条件ではなく、必要十分条件はスペクトル半径 ρ(DQ) < 1 です。ρ < 1 ≤ ‖DQ‖₂ の領域で壊れるバナッハの議論を、リアプノフ（Stein）方程式から作る重み付きノルムで組み直す構成も実装しています。いずれも既知の道具であり、新しい数学は含みません。</p><p>An implementation of the operator of the three Trinity-Infinity papers beyond their assumptions. The papers' norm condition is sufficient, not necessary; the spectral radius decides convergence. Known tools only; no new mathematics. The papers have their own DOIs, listed under related identifiers.</p>",
+  "upload_type": "software",
+  "license": "mit",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Nemoto, Takuya",
+      "orcid": "0009-0000-1406-0547"
+    }
+  ],
+  "keywords": [
+    "contraction mapping",
+    "Banach fixed-point theorem",
+    "spectral radius",
+    "operator norm",
+    "non-normal matrices",
+    "transient growth",
+    "Lyapunov equation",
+    "Stein equation",
+    "weighted norm",
+    "self-correction"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.22058624",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.22058777",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.22058964",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    }
+  ],
+  "notes": "The implementation, the checks and the README were written with Claude Code (Anthropic) at the author's request. Every number was obtained by running the code. The author is responsible for the claims. Claude is not an author. The code is MIT; the texts of the lessons are CC BY 4.0."
+}
