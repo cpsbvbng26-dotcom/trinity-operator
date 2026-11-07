@@ -100,6 +100,12 @@ for name, text in (("CITATION.cff", cff), ("README.md", readme)):
     check("%s が名乗る展望の件数が %d 項目と一致する" % (name, r),
           ("%d 項目" % r) in text)
 
+# Zenodo が版を出したときに与えた DOI（DataCite：24033459 が v1.0.0 で、24033458 の版である）。
+dois = ("10.5281/zenodo.24033459", "10.5281/zenodo.24033458")
+check("CITATION.cff と README が、版 1.0.0 の DOI とすべての版の DOI を挙げ、版の番号が 1.0.0 である",
+      all(('value: "%s"' % d) in cff and ("(https://doi.org/%s)" % d) in readme for d in dois)
+      and 'doi: "10.5281/zenodo.24033458"' in cff and 'version: "1.0.0"' in cff)
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))
