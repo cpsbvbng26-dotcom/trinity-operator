@@ -11,7 +11,7 @@ jobs:
     name: 作用素 29 項目 / 証書 51 項目 / 展望 81 項目 / 引用情報 30 項目
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
