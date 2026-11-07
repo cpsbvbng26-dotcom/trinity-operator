@@ -366,6 +366,9 @@ python3 verification/check_roadmap.py
 | --- | --- |
 | 論文と検証の保管庫 | [trinity-infinity](https://github.com/cpsbvbng26-dotcom/trinity-infinity) |
 | 論文本体 | 上の表の DOI |
+| このコードの保存版（Zenodo） | 版 1.0.0 は [10.5281/zenodo.24033459](https://doi.org/10.5281/zenodo.24033459)、すべての版は [10.5281/zenodo.24033458](https://doi.org/10.5281/zenodo.24033458) |
+
+このコードを挙げるときは、使った版の DOI を引きます。すべての版に共通する DOI は、いちばん新しい版を指します。
 
 PDF には手を入れていません。 ここにあるのは論文の外側の話です。
 
