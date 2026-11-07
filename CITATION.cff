@@ -51,7 +51,16 @@ keywords:
   - weighted norm
   - self-correction
 license: MIT
-date-released: 2026-09-06
+version: "1.0.0"
+date-released: "2026-11-07"
+doi: "10.5281/zenodo.24033458"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24033458"
+    description: すべての版。いちばん新しい版を指す
+  - type: doi
+    value: "10.5281/zenodo.24033459"
+    description: 版 1.0.0
 references:
   - type: article
     title: >-

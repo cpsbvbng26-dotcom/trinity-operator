@@ -144,7 +144,7 @@ python3 verification/check_text.py         # 誤変換
 python3 check.py                           # 作用素 22 項目
 python3 verification/check_certificate.py  # 証書 51 項目
 python3 verification/check_roadmap.py      # 展望 63 項目
-python3 verification/check_citation.py     # 引用情報 29 項目
+python3 verification/check_citation.py     # 引用情報 30 項目
 python3 verification/check_games.py        # 繰り返しゲームのノート（games/）
 python3 verification/check_site.py         # 予想の英語サイト（site/）
 python3 demo.py && python3 certificate.py
