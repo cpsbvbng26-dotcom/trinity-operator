@@ -171,7 +171,8 @@ allp = [h for h in vcfg.get("headers", []) if h.get("source") == "/(.*)"]
 hdr = {}
 for h in (allp[0].get("headers", []) if allp else []):
     hdr.setdefault(h.get("key"), []).append(h.get("value"))
-check("vercel.json はヘッダーだけを持ち、すべての経路に付ける", list(vcfg.keys()) == ["headers"] and len(allp) == 1)
+# 2026-11-08 から、main 以外の枝を配信しない決まりも持つ（無料の枠の一日の上限を作業の枝で使い切ったため）。
+check("vercel.json はヘッダーと main だけを配信する決まりを持ち、ヘッダーをすべての経路に付ける", list(vcfg.keys()) == ["headers", "git"] and len(allp) == 1 and vcfg["git"] == {"deploymentEnabled": {"**": False, "main": True}})
 check("枠への埋め込みを二通りで断る", hdr.get("Content-Security-Policy") == ["frame-ancestors 'none'"] and hdr.get("X-Frame-Options") == ["DENY"])
 check("型の推測をさせず、参照元を送らず、ブラウザの機能を求めず、窓を切り離し、HTTPS を覚えさせる",
       hdr.get("X-Content-Type-Options") == ["nosniff"] and hdr.get("Referrer-Policy") == ["no-referrer"]

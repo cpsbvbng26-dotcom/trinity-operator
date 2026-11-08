@@ -171,7 +171,7 @@ PROFILE_CONFIG=./golden-window.en.json PROFILE_OVERLAY=./golden-window.site.json
 ```
 
 `favicon.svg`・`og.png`・`robots.txt`・`sitemap.xml`・`vercel.json` は手で置いたもので、生成物ではない。
-`vercel.json` は安全のヘッダーだけを持つ（転送や書き換えは置かない）。
+`vercel.json` は安全のヘッダーと、`main` 以外の枝を配信しない決まりだけを持つ（転送や書き換えは置かない）。
 `og.png` は共有したときのカードの画像で、`favicon.svg` の角を丸めずに 600px の正方形で描いたもの。
 `favicon.ico`（16・32・48 px）・`favicon-192.png`・`apple-touch-icon.png`（180 px、角を丸めない）も
 同じロゴを画素にしたもので、手で置いてある。検索結果のアイコンに SVG を読まない場合のため。
