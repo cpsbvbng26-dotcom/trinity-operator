@@ -66,7 +66,7 @@ directory) is licensed under the MIT License in the repository root.
 ## References
 
 - Friedkin, N. E., and Johnsen, E. C. (1990). Social influence and opinions. *Journal
-  of Mathematical Sociology*, 15(3–4), 193–206. doi:10.1080/0022250X.1990.9990069
+  of Mathematical Sociology*, 15(3–4), 193–206 (the title page gives 193–205). doi:10.1080/0022250X.1990.9990069
 - Proskurnikov, A. V., and Tempo, R. (2017). A tutorial on modeling and analysis of
   dynamic social networks. Part I. *Annual Reviews in Control*, 43, 65–79.
   doi:10.1016/j.arcontrol.2017.03.002

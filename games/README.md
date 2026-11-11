@@ -1,7 +1,8 @@
 # Repeated games through the cyclic operator
 
-*A golden-ratio threshold, a proved family, and the golden-window conjecture.* Draft. The author has
-not yet reviewed this note.
+*A golden-ratio threshold, a proved family, and the golden-window conjecture.* Draft, first
+written on 2026-10-04, before the preprint below. The repository records no review of this
+note by the author.
 
 **Preprint.** An English paper version of Propositions 1–7 and the conjecture is on Figshare:
 [`10.6084/m9.figshare.34419198`](https://doi.org/10.6084/m9.figshare.34419198) (2026-10-13).
@@ -480,7 +481,7 @@ databases, so the check has not been made.
 - Berg, K., and Kitti, M. (2014). Fractal geometry of equilibrium payoffs in discounted
   supergames. *Fractals*, 22(4).
 - Friedkin, N. E., and Johnsen, E. C. (1990). Social influence and opinions. *Journal
-  of Mathematical Sociology*, 15(3–4), 193–206. doi:10.1080/0022250X.1990.9990069
+  of Mathematical Sociology*, 15(3–4), 193–206 (the title page gives 193–205). doi:10.1080/0022250X.1990.9990069
 - Fudenberg, D., and Maskin, E. (1986). The folk theorem in repeated games with
   discounting or with incomplete information. *Econometrica*, 54(3), 533–554.
 - Nemoto, T. (2026). Trinity-Infinity Series I (revised). doi:10.5281/zenodo.22058624

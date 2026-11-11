@@ -115,7 +115,7 @@ is "the right one" depends on the question being asked.**
 - Blondel, V. D., and Tsitsiklis, J. N. (2000). The boundedness of all products of a
   pair of matrices is undecidable. *Systems & Control Letters*, 41(2), 135–140.
 - Friedkin, N. E., and Johnsen, E. C. (1990). Social influence and opinions. *Journal
-  of Mathematical Sociology*, 15(3–4), 193–206. doi:10.1080/0022250X.1990.9990069
+  of Mathematical Sociology*, 15(3–4), 193–206 (the title page gives 193–205). doi:10.1080/0022250X.1990.9990069
 - Jungers, R. M. (2009). *The Joint Spectral Radius: Theory and Applications*.
   Springer.
 
