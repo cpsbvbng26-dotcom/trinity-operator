@@ -1,0 +1,52 @@
+# 不具合の報告の様式。再現の手順と環境を、欠かさず書いてもらう形にする。
+name: 不具合の報告 / Bug report
+description: 台本や検査が、書いてあるとおりに動かなかったとき / A script or check did not behave as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        注釈と出力は日本語ですが、報告は英語でもかまいません。
+        Comments and output are in Japanese; reports in English are welcome.
+  - type: textarea
+    id: what
+    attributes:
+      label: 起きたこと / What happened
+      description: 出力やエラーの全文を貼ります / Paste the full output or error
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現の手順 / Steps to reproduce
+      description: リポジトリの根から打ったコマンドを、順に並べます / The commands run from the repository root, in order
+      placeholder: |
+        python3 check.py
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待したこと / Expected behaviour
+      description: どの文書のどの記述と違ったか / Which statement in which document it contradicts
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: 版またはコミット / Version or commit
+      description: "例: 1.0.0、または git rev-parse HEAD の出力 / e.g. 1.0.0, or the output of git rev-parse HEAD"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境 / Environment
+      description: OS、Python の版、NumPy の版 / OS, Python version, NumPy version
+      placeholder: |
+        OS:
+        python3 --version:
+        python3 -c "import numpy; print(numpy.__version__)":
+    validations:
+      required: true

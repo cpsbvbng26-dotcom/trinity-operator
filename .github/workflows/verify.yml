@@ -34,6 +34,10 @@ jobs:
         run: python3 verification/check_games.py
       - name: 予想の英語サイト
         run: python3 verification/check_site.py
+      - name: 札・図・例・開いている問題・版と DOI・依存
+        run: python3 verification/check_docs.py
+      - name: 検査を壊して、落ちることを確かめる
+        run: python3 verification/check_guards.py
       - name: 実演が最後まで走るか
         run: python3 demo.py
       - name: 証書の実演が最後まで走るか

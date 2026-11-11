@@ -147,8 +147,17 @@ python3 verification/check_roadmap.py      # 展望 81 項目
 python3 verification/check_citation.py     # 引用情報 30 項目
 python3 verification/check_games.py        # 繰り返しゲームのノート（games/）
 python3 verification/check_site.py         # 予想の英語サイト（site/）
+python3 verification/check_docs.py         # 札・図・例・開いている問題・版と DOI・依存
+python3 verification/check_guards.py       # 検査を壊して、落ちることを確かめる
 python3 demo.py && python3 certificate.py
+python3 verification/run_all.py            # CI の並びを verify.yml から読んで全部回す
 ```
+
+`examples/one_minute.txt` は `examples/one_minute.py` の出力を写した生成物である。
+例を直したら `python3 examples/one_minute.py > examples/one_minute.txt` で作り直す。手で直さない。
+`check_guards.py` に壊し方を足したら、README が名乗る「N 通り」も直す。数えて突き合わせている。
+`games/OPEN-PROBLEM.md` はノートと展望から写した一枚である。写しにない主張を足さない。
+ラベルは `.github/workflows/labels.yml` が作る。頁の表と同じ名前にする。
 
 `check_certificate.py` には**倍精度の床**に対する明示的な許容がある
 （`16ε(1+‖x*‖)(k+1)`）。これは誤差の逃げ道ではなく、
