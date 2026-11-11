@@ -489,6 +489,6 @@ databases, so the check has not been made.
 
 ## License and use of language models
 
-This note is licensed under CC BY 4.0. The code is MIT. The note was drafted with
+This note is licensed under CC BY 4.0 ([LICENSE](LICENSE)). The code is MIT. The note was drafted with
 Claude Code (Anthropic) at the author's request, including the propositions, their
 proofs and the conjectures. The author is responsible for it. Claude is not an author.
