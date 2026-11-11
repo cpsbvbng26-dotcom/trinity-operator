@@ -37,6 +37,11 @@
       "identifier": "10.5281/zenodo.22058964",
       "relation": "isSupplementTo",
       "scheme": "doi"
+    },
+    {
+      "identifier": "10.6084/m9.figshare.34419198",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
     }
   ],
   "notes": "The implementation, the checks and the README were written with Claude Code (Anthropic) at the author's request. Every number was obtained by running the code. The author is responsible for the claims. Claude is not an author. The code is MIT; the texts of the lessons are CC BY 4.0."
