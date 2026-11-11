@@ -15,7 +15,8 @@ work of the first year, and this includes the golden-window conjecture.
 The three Trinity-Infinity papers are first-year undergraduate self-study, and they are
 frozen. The repeated-games note ([README.md](README.md)) was first written on 2026-10-04.
 That date falls in the author's second undergraduate year. The note is kept as a
-continuation of the three papers.
+continuation of the three papers. The golden-window conjecture is part of the
+Trinity-Infinity Framework: it works on the same stage game and the same cyclic operator.
 
 The object of the conjecture is the set `T_δ` defined in [OPEN-PROBLEM.md](OPEN-PROBLEM.md):
 the stage game `G_3` of Series I, Table 1, and the values of `t` for which
