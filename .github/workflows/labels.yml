@@ -1,0 +1,29 @@
+# 予想の解かれていない部分を、issue のラベルで分ける。
+# ラベルは MCP の道具からは作れないので、ここに定義を置き、GitHub の側で作らせる。
+# 定義を変えて main に入れると走る。手で走らせることもできる。
+# 名前と説明は games/OPEN-PROBLEM.md の表と同じにする（verification/check_docs.py が見る）。
+name: ラベル
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/labels.yml']
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  labels:
+    name: 開いている部分のラベルと、不具合のラベルをそろえる
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh label create "conjecture (a)" --color 7a5c00 --description "Golden-window conjecture (a)" --force
+          gh label create "conjecture (b)" --color 7a5c00 --description "Golden-window conjecture (b)" --force
+          gh label create "why 1/φ twice" --color 3d5a80 --description "An open question: why 1/φ twice" --force
+          gh label create "literature check" --color 2f6f4e --description "The literature check" --force
+          gh label create "bug" --color b60205 --description "不具合の報告" --force
