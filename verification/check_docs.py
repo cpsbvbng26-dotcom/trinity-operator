@@ -3,7 +3,8 @@
 
     python3 verification/check_docs.py
 
-台本を走らせるのは examples/one_minute.py だけで、そこで NumPy を使う。
+台本を走らせるのは examples/one_minute.py と、隣の trinity-infinity の
+independent_check.py と claims_audit.py だけで、そこで NumPy を使う。
 ほかは文書と設定を読むだけである。
 
 見るもの。
@@ -18,6 +19,15 @@
   7. 全部の台本が、標準ライブラリと NumPy と、このリポジトリの台本しか読まないか。
   8. README の版と DOI の表が、CITATION.cff と合うか。
   9. verification/ の検査が、すべて CI に載っているか。
+ 10. games/LICENSE が lessons/LICENSE と同じ CC BY 4.0 で、README とノートがそれを指すか。
+ 11. games/SCOPE.md と SCOPE.ja.md（予想を続ける範囲）が、決めごと 15 の一文を引き、
+     開いている部分のラベルと同じ表を持つか。
+ 12. SECURITY.md と、誤りの知らせの様式（erratum のラベル）。
+ 13. ワークフローが一番上で権限を絞り、外部のアクションをコミットの値で固定しているか。
+ 14. 保存版の要旨の日本語と英語が、同じ数の文で並ぶか。キーワードが引用情報と同じか。
+ 15. README の言語モデルの開示の表（道具・使ったところ・確かめた人）。
+ 16. 散文が名乗る件数。CITATION.cff が名乗る trinity-infinity の件数は、隣の
+     trinity-infinity の検査を回して数える（場所は環境変数 TRINITY_INFINITY でも渡せる）。
 """
 
 import ast
@@ -188,8 +198,9 @@ made = re.findall(r'gh label create "([^"]+)" --color [0-9a-f]{6} --description 
                   LABELS)
 listed = re.findall(r"^\| `([^`]+)` \| ([^|]+?) \|$", OPEN, re.M)
 check("ラベルの表がある", len(listed) > 0, "%d 行" % len(listed))
-check("頁のラベルが、ワークフローが作るラベル（bug を除く）と同じ",
-      sorted(listed) == sorted(x for x in made if x[0] != "bug"),
+NOT_OPEN = ("bug", "erratum")   # 様式が付けるラベル。開いている部分ではない
+check("頁のラベルが、ワークフローが作るラベル（bug と erratum を除く）と同じ",
+      sorted(listed) == sorted(x for x in made if x[0] not in NOT_OPEN),
       "頁 %s / 作る %s" % (sorted(n for n, _ in listed), sorted(n for n, _ in made)))
 for name, part in listed:
     check("ラベル「%s」の開いた部分が頁の太字の見出しにある" % name,
@@ -210,7 +221,7 @@ print("\n7. 台本が読み込むもの")
 local = set()
 pyfiles = []
 for dirpath, dirnames, filenames in os.walk(ROOT):
-    dirnames[:] = [d for d in dirnames if d not in (".git", "__pycache__", "site")]
+    dirnames[:] = [d for d in dirnames if d not in (".git", "__pycache__", "site", "_sibling")]
     for f in filenames:
         if f.endswith(".py"):
             local.add(f[:-3])
@@ -240,6 +251,12 @@ for rel_path in ("verification/check_text.py", "verification/check_site.py"):
           rel_path not in numpy_users and ("`%s`" % rel_path) in README)
 check("README が依存は NumPy の一つだけだと書いている",
       "依存は NumPy の一つだけで、ほかは Python の標準ライブラリで動きます。" in README)
+pips = re.findall(r"run:\s*pip install ([^\n]+)", VERIFY)
+check("CI が入れるのは NumPy だけ", pips == ["numpy"], repr(pips))
+manifests = [f for f in ("requirements.txt", "pyproject.toml", "setup.py", "setup.cfg", "Pipfile",
+                         "package.json", "environment.yml") if os.path.exists(os.path.join(ROOT, f))]
+check("依存を書き足す場所（requirements.txt・package.json など）を置いていない", not manifests,
+      ", ".join(manifests))
 
 # ------------------------------------------------------------ 8. 版と DOI
 print("\n8. 版と DOI の表")
@@ -272,6 +289,191 @@ scripts = ["check.py"] + sorted("verification/" + f for f in os.listdir(os.path.
                                if f.startswith("check_") and f.endswith(".py"))
 for s in scripts:
     check("%s を CI が回す" % s, s in ci)
+
+# ------------------------------------------------------------ 10. games/ のライセンス
+print("\n10. games/ のライセンス")
+
+
+def raw(rel):
+    path = os.path.join(ROOT, rel)
+    return io.open(path, "rb").read() if os.path.exists(path) else b""
+
+
+check("games/LICENSE が lessons/LICENSE と一字一句同じ（CC BY 4.0）",
+      raw("games/LICENSE") != b"" and raw("games/LICENSE") == raw("lessons/LICENSE")
+      and raw("games/LICENSE").startswith(b"Creative Commons Attribution 4.0 International"))
+check("README のライセンスの表が games/LICENSE を指している",
+      "| [`games/`](games/) の文章 | CC BY 4.0 | [`games/LICENSE`](games/LICENSE)。" in README)
+check("ノートの末尾が LICENSE を指している",
+      "This note is licensed under CC BY 4.0 ([LICENSE](LICENSE))." in NOTE)
+
+# ------------------------------------------------------------ 11. 続ける範囲
+print("\n11. 黄金比の窓の予想を続ける範囲（決めごと 15）")
+SCOPE_EN = read(os.path.join("games", "SCOPE.md"))
+SCOPE_JA = read(os.path.join("games", "SCOPE.ja.md"))
+CLAUDE = read("CLAUDE.md")
+rule15 = re.search(r"^\s*(学部二年次以降に進めるのは[^\n]*。)$", CLAUDE, re.M)
+check("CLAUDE.md の決めごと 15 から、続きを限る一文を読める", rule15 is not None)
+for name, text in (("SCOPE.md", SCOPE_EN), ("SCOPE.ja.md", SCOPE_JA)):
+    check("%s が決めごと 15 の一文を一字一句引いている" % name,
+          rule15 is not None and ("\n> %s\n" % rule15.group(1)) in text)
+    rows = re.findall(r"^\| `([^`]+)` \| ([^|]+?) \| [^|]+ \|$", text, re.M)
+    check("%s の続きの表が、開いている部分のラベルと同じ並び" % name,
+          rows == listed, "表 %s / 頁 %s" % ([r[0] for r in rows], [r[0] for r in listed]))
+    check("%s が OPEN-PROBLEM.md とノートを指している" % name,
+          "](OPEN-PROBLEM.md)" in text and "](README.md)" in text)
+    check("%s が、ノートを書き始めた日をノートと同じに書いている" % name,
+          "2026-10-04" in text and "first\nwritten on 2026-10-04" in NOTE)
+    check("%s が、展望の段 2 の黄金比の例を新しい主題の側に置いている" % name,
+          ("stage 2" in text or "段 2" in text) and "γ = 1/φ" in text)
+    check("%s が LICENSE を指している" % name, "[LICENSE](LICENSE)" in text)
+q_en = re.findall(r"^\d\. ", SCOPE_EN.split("## A test for unclear cases")[-1].split("\n## ")[0], re.M)
+q_ja = re.findall(r"^\d\. ", SCOPE_JA.split("## 迷ったときの見分け方")[-1].split("\n## ")[0], re.M)
+check("見分け方の問いが、日本語の「二つ」と英語の「Two」のとおり二つずつ",
+      len(q_en) == 2 and len(q_ja) == 2 and "問いは二つです。" in SCOPE_JA
+      and "Two questions decide it." in SCOPE_EN, "%d・%d" % (len(q_ja), len(q_en)))
+check("SCOPE.ja.md が言語モデルを著作者にしていない", "言語モデルは著作者ではありません。" in SCOPE_JA)
+check("SCOPE.md が Claude を著者にしていない", "Claude is not an\nauthor." in SCOPE_EN)
+check("README が日本語と英語の両方の範囲の頁を指している",
+      "(games/SCOPE.ja.md)" in README and "(games/SCOPE.md)" in README)
+
+# ------------------------------------------------------------ 12. 安全の窓口と、誤りの知らせ
+print("\n12. 安全の窓口（SECURITY.md）と、誤りの知らせの様式")
+SECURITY = read("SECURITY.md") if os.path.exists(os.path.join(ROOT, "SECURITY.md")) else ""
+check("SECURITY.md があり、日本語と英語の欄を持つ",
+      SECURITY.startswith("# 安全の問題の知らせ方 / Reporting a security issue\n")
+      and "\n## 日本語\n" in SECURITY and "\n## English\n" in SECURITY)
+check("SECURITY.md が、非公開の報告の入口と答えの目安を書いている",
+      "Report a vulnerability" in SECURITY and "7 日以内" in SECURITY and "within 7 days" in SECURITY)
+ERR_PATH = os.path.join(".github", "ISSUE_TEMPLATE", "error-report.yml")
+ERR = read(ERR_PATH) if os.path.exists(os.path.join(ROOT, ERR_PATH)) else ""
+check("誤りの知らせの様式があり、erratum のラベルを付ける", "labels: [erratum]" in ERR)
+check("erratum のラベルをワークフローが作る", any(n == "erratum" for n, _ in made))
+for field in ("where", "printed", "correct", "basis", "found_by"):
+    mf = re.search(r"id: %s\n(.*?)(?=\n  - type:|\Z)" % field, ERR, re.S)
+    check("誤りの知らせの欄 %s があって必須" % field, mf is not None and "required: true" in mf.group(1))
+check("誤りの知らせの様式が、安全の問題を SECURITY.md へ回している", "SECURITY.md" in ERR)
+
+# ------------------------------------------------------------ 13. ワークフロー
+print("\n13. ワークフローの権限と、外部のアクションの固定")
+WF_DIR = os.path.join(ROOT, ".github", "workflows")
+for f in sorted(os.listdir(WF_DIR)):
+    if not f.endswith((".yml", ".yaml")):
+        continue
+    wf = read(os.path.join(".github", "workflows", f))
+    top = re.search(r"^permissions:\n((?:  \S[^\n]*\n)+)", wf, re.M)
+    perms = dict(re.findall(r"^  ([a-z-]+):\s*(\S+)", top.group(1), re.M)) if top else {}
+    check("%s が一番上で permissions を決めている" % f, bool(perms), repr(perms))
+    want = {"labels.yml": {"issues": "write"}}.get(f, {"contents": "read"})
+    check("%s の権限が %s だけ" % (f, want), perms == want, repr(perms))
+    check("%s は仕事の単位で権限を広げていない" % f,
+          not re.search(r"^    permissions:", wf, re.M) and "write-all" not in wf)
+    uses = re.findall(r"uses:\s*(\S+)([^\n]*)", wf)
+    bad = [u + c for u, c in uses
+           if not u.startswith("./")
+           and not (re.match(r"^[\w.-]+/[\w.-]+@[0-9a-f]{40}$", u) and re.match(r"^ # v\d", c))]
+    check("%s の外部のアクションが、すべてコミットの値と版の注釈で固定されている（%d 個）" % (f, len(uses)),
+          not bad, "; ".join(bad))
+
+# ------------------------------------------------------------ 14. 要旨と語
+print("\n14. 保存版の要旨（日本語と英語）と、キーワード")
+
+
+def paras(html):
+    return re.findall(r"<p>(.*?)</p>", html, re.S)
+
+
+def is_ja(t):
+    return re.search(r"[぀-ヿ]", t) is not None
+
+
+def math_tokens(t):
+    return sorted(set(x for x in re.findall(r"[^\s　-ヿ一-鿿（）、。]+", t)
+                      if re.search(r"[‖ρκγ←≤]", x)))
+
+
+desc = ZENODO.get("description", "")
+ja_p = [p for p in paras(desc) if is_ja(p)]
+en_p = [p for p in paras(desc) if not is_ja(p)]
+check("要旨の段落が日本語と英語で同じ数", len(ja_p) == len(en_p) and ja_p, "%d・%d" % (len(ja_p), len(en_p)))
+for i, (j, e) in enumerate(zip(ja_p, en_p), 1):
+    nj = len([x for x in j.split("。") if x.strip()])
+    ne = len([x for x in re.split(r"(?<=[.!?])\s+", e.strip()) if x.strip()])
+    check("要旨の第 %d 段落の文の数が日本語と英語で同じ" % i, nj == ne, "%d・%d" % (nj, ne))
+    miss = [t for t in math_tokens(j) if t not in e]
+    check("要旨の第 %d 段落の式が英語の側にもある" % i, not miss, " ".join(miss))
+kw_block = re.search(r"^keywords:\n((?:  - [^\n]+\n)+)", CFF, re.M)
+cff_kw = re.findall(r"^  - (.+)$", kw_block.group(1), re.M) if kw_block else []
+check("CITATION.cff と .zenodo.json のキーワードが同じ並び",
+      cff_kw and cff_kw == ZENODO.get("keywords"), "%d 語" % len(cff_kw))
+
+# ------------------------------------------------------------ 15. 言語モデルの開示の表
+print("\n15. 言語モデルの開示の表")
+head = "| 道具 | 使ったところ | 確かめた人 |\n| --- | --- | --- |\n"
+i = README.find(head)
+disc = re.findall(r"^\| ([^|]+?) \| ([^|]+?) \| ([^|]+?) \|$", README[i + len(head):].split("\n\n")[0], re.M) \
+    if i >= 0 else []
+check("README の「言語モデルの利用」に、道具・使ったところ・確かめた人の表がある",
+      i > README.find("## 言語モデルの利用") > 0 and len(disc) > 0, "%d 行" % len(disc))
+check("表の道具が、どれも作り手を括弧で添えている",
+      all(re.search(r"（[A-Za-z]+）$", r[0]) for r in disc), ", ".join(r[0] for r in disc))
+check("表の行が、教材とノートの確認の状態を、それぞれの頁と同じに書いている",
+      any("lessons/" in r[1] and "まだ済んでいない" in r[2] for r in disc)
+      and "著者の確認はまだ済んでいません。" in README
+      and any("games/" in r[1] and "記録に無い" in r[2] for r in disc)
+      and "The repository records no review" in NOTE)
+check("README と保存版の記録が言語モデルを著者にしていない",
+      "言語モデルは著作者ではありません。" in README and "Claude is not an author." in ZENODO.get("notes", ""))
+
+# ------------------------------------------------------------ 16. 散文の件数
+print("\n16. 散文が名乗る件数（決めごと 5）")
+INFINITY = os.environ.get("TRINITY_INFINITY") or os.path.join(os.path.dirname(ROOT), "trinity-infinity")
+have_inf = os.path.exists(os.path.join(INFINITY, "verification", "claims_audit.py"))
+check("trinity-infinity の写しが隣にある（環境変数 TRINITY_INFINITY でも渡せる）", have_inf, INFINITY)
+if have_inf:
+    def sibling(script, pattern):
+        out = subprocess.run([sys.executable, os.path.join("verification", script)], cwd=INFINITY,
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.decode("utf-8", "replace")
+        mm = re.search(pattern, out)
+        return int(mm.group(1)) if mm else None
+    # 正規表現は、横断の検査（cpsbvbng26-dotcom の ecosystem.json）と同じもの。
+    printed = sibling("claims_audit.py", r"(\d+) 項目 —— MATCH")
+    theorems = sibling("independent_check.py", r"(\d+) checks, \d+ passed")
+    said = re.search(r"紙面の数値を計算し直す (\d+) 項目、定理を独立に実装し直す (\d+) 項目。", CFF)
+    check("CITATION.cff が名乗る trinity-infinity の件数が、実際に回した件数と合う",
+          said is not None and printed and theorems
+          and (int(said.group(1)), int(said.group(2))) == (printed, theorems),
+          "名乗り %s / 実際 %s・%s" % (said.groups() if said else None, printed, theorems))
+ci_name = re.search(r"name: 作用素 (\d+) 項目 / 証書 (\d+) 項目 / 展望 (\d+) 項目 / 引用情報 (\d+) 項目", VERIFY)
+claude_n = [re.search(r"%s\s+# %s (\d+) 項目" % (re.escape(cmd), label), CLAUDE)
+            for cmd, label in (("python3 check.py", "作用素"),
+                               ("python3 verification/check_certificate.py", "証書"),
+                               ("python3 verification/check_roadmap.py", "展望"),
+                               ("python3 verification/check_citation.py", "引用情報"))]
+check("CLAUDE.md の一覧が名乗る四つの件数が、CI の仕事の名前と同じ",
+      ci_name is not None and all(claude_n)
+      and [m.group(1) for m in claude_n] == list(ci_name.groups()),
+      "CLAUDE.md %s / CI %s" % ([m.group(1) if m else None for m in claude_n],
+                                list(ci_name.groups()) if ci_name else None))
+CHECK_PY = read("check.py")
+loop = re.search(r"for _ in range\((\d+)\):\n(?:.*\n){0,12}?check\(\"置換 (\d+) 通りで ρ が閉じた式と一致する\"",
+                 CHECK_PY)
+said = re.search(r"置換 (\d+) 通りで NumPy の固有値", README)
+check("README の「置換 N 通り」が check.py の回す数と合う",
+      loop is not None and said is not None and loop.group(1) == loop.group(2) == said.group(1),
+      "README %s / check.py %s" % (said.group(1) if said else None, loop.groups() if loop else None))
+trials = re.search(r"^TRIALS = (\d+)$", read(os.path.join("verification", "check_standard.py")), re.M)
+said = re.search(r"逆行列で求めた V と (\d+) 件で突き合わせています。", README)
+check("README の「V と N 件」が check_standard.py の TRIALS と合う",
+      trials is not None and said is not None and trials.group(1) == said.group(1),
+      "README %s / TRIALS %s" % (said.group(1) if said else None, trials.group(1) if trials else None))
+S6 = read(os.path.join("roadmap", "stage6_general_influence.py"))
+t6 = re.search(r"trials = (\d+)\n\s+pointwise = \[\]\n\s+for n in \(([^)]*)\):", S6)
+total = int(t6.group(1)) * len([x for x in t6.group(2).split(",") if x.strip()]) if t6 else None
+said = re.findall(r"(\d+) 件(?:に当てました|で 0 件)", ROADMAP)
+check("展望の README の「均衡 N 件」が、段 6 の台本の回す数（標本 × n の数）と合う",
+      total is not None and len(said) == 2 and all(int(x) == total for x in said),
+      "名乗り %s / 台本 %s" % (said, total))
 
 print("\n" + "-" * 58)
 if failures:

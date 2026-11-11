@@ -16,8 +16,9 @@ convergence. Known tools only; no new mathematics.
 printed messages of the scripts and this README are in Japanese. The numbers the scripts
 print and their pass or fail exit codes do not depend on the language. The repeated-games
 note ([`games/README.md`](games/README.md)), its open problem page
-([`games/OPEN-PROBLEM.md`](games/OPEN-PROBLEM.md)) and the lessons
-([`lessons/`](lessons/)) are written in English.
+([`games/OPEN-PROBLEM.md`](games/OPEN-PROBLEM.md)), the scope of continuing it
+([`games/SCOPE.md`](games/SCOPE.md)) and the lessons ([`lessons/`](lessons/)) are written in
+English.
 
 **Try it.** `pip install numpy`, then `python3 examples/one_minute.py`. The expected output
 is [`examples/one_minute.txt`](examples/one_minute.txt). `python3 verification/run_all.py`
@@ -277,7 +278,8 @@ python3 verification/check_games.py         # 繰り返しゲームのノート�
 python3 verification/check_site.py          # 予想の英語サイト（site/）
 python3 standard.py                          # DeGroot と Friedkin–Johnsen を文献の記号で
 python3 verification/check_standard.py       # その古典的な事実を乱数の模型で当てる
-python3 verification/check_docs.py           # 札・図・例・開いている問題・版と DOI・依存
+python3 verification/check_secrets.py        # 秘密情報と個人の連絡先
+python3 verification/check_docs.py           # 札・図・例・開いている問題・版と DOI・依存・様式・件数（要: 隣の trinity-infinity）
 python3 verification/check_guards.py         # 検査を壊して、落ちることを確かめる
 ```
 
@@ -390,6 +392,10 @@ Series II 第4節の例 `(2,4,2)` は、どの δ でも持続しません。
 英語で書いています。数値で調べた範囲と、反例の探索が記録に無いことも、そこに書きました。
 開いている部分には、issue のラベルを一つずつ割り当てています。
 
+この予想をどこまで続けてよいかは、[`games/SCOPE.ja.md`](games/SCOPE.ja.md) に書きました（英語の版は [`games/SCOPE.md`](games/SCOPE.md)）。
+決めごと 15 は、学部二年次以降の仕事を、学部一年次の成果の続きか修正に限っています。
+その頁は、何が続きに入り、何が新しい主題になるかを分けています。
+
 予想だけを英語で載せたサイトを、[golden-window-conjecture.vercel.app](https://golden-window-conjecture.vercel.app/) に置いています。
 中身は [`site/`](site/) で、Vercel がこのディレクトリをそのまま配ります。
 `site/index.html` は生成物です。researcher-profile の英語の頁と同じ設定から作っており、本文はそちらと同じです。
@@ -430,8 +436,8 @@ python3 verification/check_roadmap.py
 乱数種は固定してあるので、何度実行しても同じ数値が出ます。
 
 検査が空振りしていないことは、`verification/check_guards.py` が確かめます。
-通る状態の写しを 26 通りに壊し、26 通りとも落ちることを見ます。
-壊すのは、台本の式、頁の数値、使わないと決めた語、札、関連識別子、図の語などです。
+通る状態の写しを 40 通りに壊し、40 通りとも落ちることを見ます。
+壊すのは、台本の式、頁の数値、使わないと決めた語、札、関連識別子、図の語、ワークフローの固定と権限、様式、要旨、サイトの拡大と配色などです。
 この数は `check_guards.py` が自分の壊し方を数えて、ここと突き合わせています。
 
 ## 関係
@@ -467,7 +473,7 @@ PDF には手を入れていません。 ここにあるのは論文の外側の
 | --- | --- | --- |
 | 全体（次の行以降を除く） | MIT | ルートの [LICENSE](LICENSE) |
 | [`lessons/`](lessons/) の文章 | CC BY 4.0 | [`lessons/LICENSE`](lessons/LICENSE)。台本は MIT と [`lessons/README.md`](lessons/README.md) が書いている |
-| [`games/README.md`](games/README.md) のノート | CC BY 4.0 | ノートの末尾の一文。`games/` に LICENSE ファイルは無い |
+| [`games/`](games/) の文章 | CC BY 4.0 | [`games/LICENSE`](games/LICENSE)。台本の `games.py` は MIT |
 | [`site/`](site/) の頁 | CC BY 4.0 | 頁の末尾の表示。`site/` に LICENSE ファイルは無い |
 
 ## 言語モデルの利用
@@ -475,6 +481,14 @@ PDF には手を入れていません。 ここにあるのは論文の外側の
 このリポジトリの実装・検査・README は Claude Code（Anthropic）を用いて作成し、
 実行しました。数値はすべて実行して得たものです。主張の責任は著者にあります。
 言語モデルは著作者ではありません。
+
+使った道具と、確かめた人を表にします。
+
+| 道具 | 使ったところ | 確かめた人 |
+| --- | --- | --- |
+| Claude Code（Anthropic） | 実装・検査・README | 機械の検査（CI）。主張の責任は著者が負う |
+| Claude Code（Anthropic） | 教材（[`lessons/`](lessons/)）の下書き | 機械の検査（CI）。著者の確認はまだ済んでいない |
+| Claude Code（Anthropic） | 繰り返しゲームのノート（[`games/`](games/)）の命題・証明・予想の下書き | 機械の検査（CI）。著者の確認は記録に無い |
 
 ## 著者
 

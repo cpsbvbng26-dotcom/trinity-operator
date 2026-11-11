@@ -30,6 +30,9 @@ python3 check.py                           # 作用素
 python3 verification/check_certificate.py  # 証書
 python3 verification/check_roadmap.py      # 展望
 python3 verification/check_citation.py     # 引用情報
+python3 verification/check_secrets.py      # 秘密情報と個人の連絡先
+python3 verification/check_docs.py         # 札・様式・件数（要: 隣の trinity-infinity）
+python3 verification/run_all.py            # CI が回すものを全部
 ```
 
 通ってから出す。乱数を使う検査は種を固定してある。

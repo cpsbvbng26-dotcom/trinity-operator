@@ -36,9 +36,15 @@ def check(label, cond, detail=""):
         print("  FAIL  " + label + (("  " + detail) if detail else ""))
 
 
+# check_docs.py は隣の trinity-infinity を回して件数を数える。写しは一時ディレクトリに
+# あって隣を持たないので、元の場所の隣を環境変数で渡す。
+ENV = dict(os.environ)
+ENV.setdefault("TRINITY_INFINITY", os.path.join(os.path.dirname(ROOT), "trinity-infinity"))
+
+
 def run(where, script):
     """終了コードと、FAIL の行を返す。check_text.py は FAIL の行を出さず、見つけた件を並べる。"""
-    proc = subprocess.run([sys.executable, script], cwd=where,
+    proc = subprocess.run([sys.executable, script], cwd=where, env=ENV,
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     out = proc.stdout.decode("utf-8", "replace")
     return proc.returncode, [l.strip() for l in out.split("\n")
@@ -79,7 +85,7 @@ print("\n1. 壊していない状態")
 for script in ("check.py", "verification/check_certificate.py", "verification/check_text.py",
                "verification/check_games.py", "verification/check_lessons.py",
                "verification/check_site.py", "verification/check_standard.py",
-               "verification/check_docs.py"):
+               "verification/check_docs.py", "verification/check_secrets.py"):
     code, fails = run(ROOT, script)
     check("そのままなら %s が通る" % script, code == 0 and not fails,
           fails[0] if fails else "")
@@ -166,6 +172,44 @@ case("版と DOI の表の、版 1.0.0 の番号を変える", "README.md",
 case("CI から check_docs.py を外す", ".github/workflows/verify.yml",
      "run: python3 verification/check_docs.py", "run: echo skipped",
      "verification/check_docs.py")
+
+print("\n8b. 百本ノック四で足した検査を壊す")
+case("games/LICENSE の末尾を一語変える", "games/LICENSE",
+     "Creative Commons may be contacted at creativecommons.org.",
+     "Creative Commons may be contacted at creativecommons.net.", "verification/check_docs.py")
+case("CITATION.cff の trinity-infinity の件数を古い 31 に戻す", "CITATION.cff",
+     "紙面の数値を計算し直す 32 項目", "紙面の数値を計算し直す 31 項目", "verification/check_docs.py")
+case("CLAUDE.md の一覧の、作用素の件数だけを変える", "CLAUDE.md",
+     "# 作用素 29 項目", "# 作用素 28 項目", "verification/check_docs.py")
+case("続ける範囲の頁から、開いている部分を一行落とす", "games/SCOPE.ja.md",
+     "| `conjecture (b)` | Golden-window conjecture (b) | `T_δ` の次元についての証明か反例（単調性を含む） |\n", "",
+     "verification/check_docs.py")
+case("続ける範囲の頁が引く決めごと 15 の一文を変える", "games/SCOPE.md",
+     "> 学部二年次以降に進めるのは、学部一年次の成果の続きか修正に限る",
+     "> 学部二年次以降に進めるのは、学部一年次の成果の続きに限る", "verification/check_docs.py")
+case("CI の checkout を版の名前に戻す（コミットの値で固定しない）", ".github/workflows/verify.yml",
+     "- uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7",
+     "- uses: actions/setup-python@v7", "verification/check_docs.py")
+case("CI に書き込みの権限を渡す", ".github/workflows/verify.yml",
+     "permissions:\n  contents: read", "permissions:\n  contents: write", "verification/check_docs.py")
+case("CI に NumPy のほかのパッケージを入れさせる", ".github/workflows/verify.yml",
+     "run: pip install numpy", "run: pip install numpy scipy", "verification/check_docs.py")
+case("誤りの知らせの様式で、根拠を必須から外す", ".github/ISSUE_TEMPLATE/error-report.yml",
+     "a reference that others can check\n    validations:\n      required: true",
+     "a reference that others can check\n    validations:\n      required: false", "verification/check_docs.py")
+case("保存版の英語の要旨から、文を一つ落とす", ".zenodo.json",
+     " All of these are known tools, and no new mathematics is included.", "",
+     "verification/check_docs.py")
+case("開示の表の見出しを変える", "README.md",
+     "| 道具 | 使ったところ | 確かめた人 |", "| 道具 | 使ったところ | 確認 |", "verification/check_docs.py")
+case("README に、許していないメールアドレスを混ぜる", "README.md",
+     "## 著者\n", "## 著者\n\nsomeone" + "@" + "example.org\n", "verification/check_secrets.py")
+case("サイトの viewport で拡大を止める", "site/index.html",
+     'content="width=device-width, initial-scale=1.0"',
+     'content="width=device-width, initial-scale=1.0, maximum-scale=1"', "verification/check_site.py")
+case("サイトの暗い側の切り替えで、淡い文字の色を地に近づける", "site/index.html",
+     "\n  --faint: #81818b;", "\n  --faint: #3a3a40;",
+     "verification/check_site.py")
 
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:

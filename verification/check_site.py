@@ -179,6 +179,97 @@ check("型の推測をさせず、参照元を送らず、ブラウザの機能�
       and "camera=()" in (hdr.get("Permissions-Policy") or [""])[0] and hdr.get("Cross-Origin-Opener-Policy") == ["same-origin"]
       and re.match(r"max-age=\d{8,}", (hdr.get("Strict-Transport-Security") or [""])[0]) is not None)
 
+# ここから下は、全サイトで揃える読みやすさの決め（百本ノック四の 321〜328）。
+# site/index.html は生成物なので、落ちたら researcher-profile の生成もとを直して作り直す。
+css = "\n".join(styles)
+
+print("\n7. 文字を大きくしても、狭い画面でも崩れない（200% と 360px）")
+vp = re.findall(r'<meta name="viewport" content="([^"]+)">', html)
+check("viewport が一つで、拡大を止めていない",
+      len(vp) == 1 and "width=device-width" in vp[0]
+      and "user-scalable=no" not in vp[0].replace(" ", "") and "maximum-scale" not in vp[0], repr(vp))
+px_font = re.findall(r"font-size:\s*[\d.]+px", css)
+check("文字の大きさを px で決めていない（ブラウザの文字の拡大が効く）", not px_font, ", ".join(px_font[:3]))
+px_width = [w for w in re.findall(r"(?<![-\w])(?:min-)?width:\s*([\d.]+)px", css) if float(w) > 320]
+check("幅を 320px を超える px で決めていない", not px_width, ", ".join(px_width[:3]))
+check("表が頁を押し広げず、自分の中で横へ流れる",
+      re.search(r"\.prose table\s*\{[^}]*max-width:\s*100%[^}]*overflow-x:\s*auto", css) is not None)
+svgs = re.findall(r"<svg\b[^>]*>", html)
+wide_svg = [s for s in svgs if re.search(r'\bwidth="(\d+)"', s) and int(re.search(r'\bwidth="(\d+)"', s).group(1)) > 320]
+check("図（svg）が viewBox で縮み、320px を超える幅を属性で持たない",
+      all("viewBox=" in s for s in svgs) and not wide_svg, "%d 個" % len(svgs))
+check("狭い画面でナビを折り返す決めがある",
+      re.search(r"@media \(max-width: 30rem\)\s*\{\s*\.head-row\s*\{\s*flex-wrap:\s*wrap", css) is not None)
+
+print("\n8. 色の対比（WCAG 2.1、本文 4.5:1）")
+
+
+def lum(hexv):
+    h = hexv.lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    rgb = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    rgb = [c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4 for c in rgb]
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
+
+
+def ratio(a, b):
+    la, lb = lum(a), lum(b)
+    return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+
+def tokens(block):
+    return dict(re.findall(r"--([a-z-]+):\s*(#[0-9a-fA-F]{3,6})\s*;", block))
+
+
+light = re.search(r":root\s*\{(.*?)\}", css, re.S)
+dark = re.search(r':root\[data-theme="dark"\]\s*\{(.*?)\}', css, re.S)
+auto = re.search(r'@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{(.*?)\}', css, re.S)
+themes = [("ライト", tokens(light.group(1)) if light else {}),
+          ("ダーク", tokens(dark.group(1)) if dark else {})]
+for name, t in themes:
+    for base in ("bg", "card"):
+        for tok in ("text", "muted", "faint", "accent"):
+            if t.get(base) and t.get(tok):
+                r = ratio(t[tok], t[base])
+                check("%s --%s / --%s が 4.5:1 以上" % (name, tok, base), r >= 4.5, "%.2f:1" % r)
+check("配色の定義がライトとダークの両方にある（本文の四色と地の色）",
+      all(t.get("bg") and t.get("text") and t.get("muted") and t.get("faint") and t.get("accent") for _, t in themes))
+
+print("\n9. ダークテーマ")
+check("切り替えのボタンがある", 'id="themeToggle"' in html and 'aria-label="Toggle theme"' in html)
+check("JS が動かなくても、OS の設定で暗い側が出る", auto is not None)
+check("OS の設定で出る暗い側が、切り替えの暗い側と同じ色",
+      auto is not None and dark is not None and tokens(auto.group(1)) == tokens(dark.group(1)))
+check("ブラウザの枠の色を、明るい側と暗い側で一つずつ渡している",
+      len(re.findall(r'<meta name="theme-color" content="#[0-9a-f]{6}" media="\(prefers-color-scheme: (?:light|dark)\)">', html)) == 2)
+
+print("\n10. 画像の代替テキスト")
+imgs = re.findall(r"<img\b[^>]*>", html)
+check("<img> がどれも alt を持つ", all(re.search(r'\balt="', i) for i in imgs), "%d 個" % len(imgs))
+check("意味を持つ図（role=img の svg）がどれも aria-label で中身を言う",
+      all(re.search(r'aria-label="[^"]{12,}"', s) for s in svgs if 'role="img"' in s))
+check("それ以外の svg は読み上げから外している",
+      all('aria-hidden="true"' in s for s in svgs if 'role="img"' not in s))
+
+print("\n11. 頁の重さ")
+WEIGHT_CAP = 100 * 1024      # 頁と、頁が読む画像（アイコンとカード）を合わせた上限
+weight = sum(os.path.getsize(os.path.join(SITE, f)) for f in
+             ("index.html", "favicon.svg", "favicon.ico", "favicon-192.png", "apple-touch-icon.png", "og.png")
+             if os.path.exists(os.path.join(SITE, f)))
+check("頁と画像を合わせて %d KB 以下" % (WEIGHT_CAP // 1024), 0 < weight <= WEIGHT_CAP, "%d バイト" % weight)
+
+print("\n12. 言語の切り替えと、頁の下の欄")
+nav = re.search(r'<nav class="nav">(.*?)</nav>', html, re.S)
+links = re.findall(r'<a href="([^"]+)">([^<]+)</a>', nav.group(1)) if nav else []
+check("ナビの最後の行き先が、日本語の頁への切り替え（テーマのボタンの直前）",
+      bool(links) and links[-1] == ("https://cpsbvbng26-dotcom.vercel.app/notes/golden-window.html", "日本語")
+      and nav.group(1).rstrip().endswith("</button>"), repr(links[-1:]))
+foot = re.search(r"<footer>(.*?)</footer>", html, re.S)
+foot = foot.group(1) if foot else ""
+check("頁の下の欄が、運営者の名とライセンスを書いている", "© 2026 Takuya Nemoto" in foot and "CC BY 4.0" in foot)
+check("研究の系列のサイトは、創作の系列へつながない", "nusquama" not in html.lower())
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))

@@ -113,5 +113,5 @@ references:
     year: 2026
     repository-code: https://github.com/cpsbvbng26-dotcom/trinity-infinity
     notes: >-
-      三本の PDF と、紙面の数値を計算し直す 31 項目、定理を独立に実装し直す 13 項目。
+      三本の PDF と、紙面の数値を計算し直す 32 項目、定理を独立に実装し直す 15 項目。
       撤回された主張と正誤は ERRATA.md にある。
