@@ -124,7 +124,7 @@ problem can be solved exactly, a bound is the wrong thing to report.**
 ## References
 
 - Friedkin, N. E., and Johnsen, E. C. (1990). Social influence and opinions. *Journal
-  of Mathematical Sociology*, 15(3–4), 193–206. doi:10.1080/0022250X.1990.9990069
+  of Mathematical Sociology*, 15(3–4), 193–206 (the title page gives 193–205). doi:10.1080/0022250X.1990.9990069
 - Horn, R. A., and Johnson, C. R. (2013). *Matrix Analysis* (2nd ed.). Cambridge
   University Press.
 - Proskurnikov, A. V., and Tempo, R. (2017). A tutorial on modeling and analysis of

@@ -481,7 +481,7 @@ databases, so the check has not been made.
 - Berg, K., and Kitti, M. (2014). Fractal geometry of equilibrium payoffs in discounted
   supergames. *Fractals*, 22(4).
 - Friedkin, N. E., and Johnsen, E. C. (1990). Social influence and opinions. *Journal
-  of Mathematical Sociology*, 15(3–4), 193–206. doi:10.1080/0022250X.1990.9990069
+  of Mathematical Sociology*, 15(3–4), 193–206 (the title page gives 193–205). doi:10.1080/0022250X.1990.9990069
 - Fudenberg, D., and Maskin, E. (1986). The folk theorem in repeated games with
   discounting or with incomplete information. *Econometrica*, 54(3), 533–554.
 - Nemoto, T. (2026). Trinity-Infinity Series I (revised). doi:10.5281/zenodo.22058624
