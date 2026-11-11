@@ -95,7 +95,25 @@ for name, text in (("CITATION.cff", cff), ("README.md", readme)):
 # 展望の検査の件数も同じように数える。
 r = int(os.popen("cd %s && python3 verification/check_roadmap.py 2>/dev/null"
                  " | tail -1" % ROOT).read().split(" ")[0] or 0)
-check("check_roadmap.py が実際に通す件数を数えられる", r > 0, "%d 件" % r)
+
+# 展望の README も三つの件数を名乗っている。ここは一度 22 + 51 + 63 のまま
+# 古くなっていた（実際は 29 + 51 + 81）。段 0 の二つ・まとめの和・実行例を、
+# 実際の件数と突き合わせる。検査の数を増やすと、その数を写している
+# 他のリポジトリまで動くので、件数を数える検査の条件に含めて一つで当たる。
+import re  # noqa: E402
+road = io.open(os.path.join(ROOT, "roadmap", "README.md"), encoding="utf-8").read()
+road_want = [
+    (r"`check\.py`（(\d+) 項目）と `verification/check_certificate\.py`（(\d+) 項目）",
+     [(str(n), str(m))]),
+    (r"現在 (\d+) \+ (\d+) \+ (\d+) = (\d+) 項目",
+     [(str(n), str(m), str(r), str(n + m + r))]),
+    (r"python3 verification/check_roadmap\.py\s+# (\d+) 項目", [str(r)]),
+]
+road_bad = ["%s → %s" % (pat[:24], re.findall(pat, road))
+            for pat, want in road_want if re.findall(pat, road) != want]
+check("check_roadmap.py が実際に通す件数を数えられ、展望の README が名乗る件数"
+      "（段 0・まとめの和・実行例）が実際と合う",
+      r > 0 and not road_bad, "%d 件" % r + ("  ずれ: " + " / ".join(road_bad) if road_bad else ""))
 for name, text in (("CITATION.cff", cff), ("README.md", readme)):
     check("%s が名乗る展望の件数が %d 項目と一致する" % (name, r),
           ("%d 項目" % r) in text)
