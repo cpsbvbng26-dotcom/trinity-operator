@@ -378,7 +378,16 @@ PDF には手を入れていません。 ここにあるのは論文の外側の
 
 ## ライセンス
 
-© 2026 根本卓哉（Takuya Nemoto）— [MIT](LICENSE)
+© 2026 根本卓哉（Takuya Nemoto）
+
+ライセンスは、置き場所ごとに次のとおりです。
+
+| 対象 | ライセンス | 書いてある場所 |
+| --- | --- | --- |
+| 全体（次の行以降を除く） | MIT | ルートの [LICENSE](LICENSE) |
+| [`lessons/`](lessons/) の文章 | CC BY 4.0 | [`lessons/LICENSE`](lessons/LICENSE)。台本は MIT と [`lessons/README.md`](lessons/README.md) が書いている |
+| [`games/README.md`](games/README.md) のノート | CC BY 4.0 | ノートの末尾の一文。`games/` に LICENSE ファイルは無い |
+| [`site/`](site/) の頁 | CC BY 4.0 | 頁の末尾の表示。`site/` に LICENSE ファイルは無い |
 
 ## 言語モデルの利用
 
