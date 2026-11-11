@@ -6,18 +6,32 @@ on:
   pull_request:
   workflow_dispatch:
 
+# 読むだけで足りる。書き込みの権限は渡さない。
+permissions:
+  contents: read
+
 jobs:
   verify:
     name: 作用素 29 項目 / 証書 51 項目 / 展望 81 項目 / 引用情報 30 項目
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      # 外部のアクションは、コミットの値で固定する。版の名前は注釈に残す。
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: '3.12'
       - run: pip install numpy
       - name: 誤変換とバッジ記法
         run: python3 verification/check_text.py
+      - name: 秘密情報と個人の連絡先
+        run: python3 verification/check_secrets.py
+      # CITATION.cff が名乗る trinity-infinity の件数は、その検査を回して数える。
+      # 写しはリポジトリの外（隣）へ移す。誤変換・秘密情報・依存の検査が写しの中まで走らないように。
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: cpsbvbng26-dotcom/trinity-infinity
+          path: _sibling/trinity-infinity
+      - run: mv _sibling/trinity-infinity ../trinity-infinity && rmdir _sibling
       - name: 検査
         run: python3 check.py
       - name: 縮小になる距離の証書
@@ -34,7 +48,7 @@ jobs:
         run: python3 verification/check_games.py
       - name: 予想の英語サイト
         run: python3 verification/check_site.py
-      - name: 札・図・例・開いている問題・版と DOI・依存
+      - name: 札・図・例・開いている問題・版と DOI・依存・様式・件数
         run: python3 verification/check_docs.py
       - name: 検査を壊して、落ちることを確かめる
         run: python3 verification/check_guards.py
