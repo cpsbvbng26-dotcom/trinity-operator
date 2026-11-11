@@ -147,7 +147,8 @@ python3 verification/check_roadmap.py      # 展望 81 項目
 python3 verification/check_citation.py     # 引用情報 30 項目
 python3 verification/check_games.py        # 繰り返しゲームのノート（games/）
 python3 verification/check_site.py         # 予想の英語サイト（site/）
-python3 verification/check_docs.py         # 札・図・例・開いている問題・版と DOI・依存
+python3 verification/check_secrets.py      # 秘密情報と個人の連絡先
+python3 verification/check_docs.py         # 札・図・例・開いている問題・版と DOI・依存・様式・件数（要: 隣の trinity-infinity）
 python3 verification/check_guards.py       # 検査を壊して、落ちることを確かめる
 python3 demo.py && python3 certificate.py
 python3 verification/run_all.py            # CI の並びを verify.yml から読んで全部回す
@@ -158,6 +159,11 @@ python3 verification/run_all.py            # CI の並びを verify.yml から�
 `check_guards.py` に壊し方を足したら、README が名乗る「N 通り」も直す。数えて突き合わせている。
 `games/OPEN-PROBLEM.md` はノートと展望から写した一枚である。写しにない主張を足さない。
 ラベルは `.github/workflows/labels.yml` が作る。頁の表と同じ名前にする。
+`games/LICENSE` は `lessons/LICENSE` と一字一句同じ CC BY 4.0 である。`games/` の文章に掛かり、`games.py` は MIT。
+`games/SCOPE.md` と `games/SCOPE.ja.md` は、決めごと 15 のもとで予想を続ける範囲である。
+開いている部分を足したら、ラベル・OPEN-PROBLEM.md の表・この二枚の表を一緒に直す。
+`SECURITY.md` と `.github/ISSUE_TEMPLATE/error-report.yml` は 10 リポジトリで一字一句同じにしてある（cpsbvbng26-dotcom が正）。
+CI は `trinity-infinity` を checkout してリポジトリの外（隣）へ移し、`check_docs.py` がその件数を数える。
 
 `check_certificate.py` には**倍精度の床**に対する明示的な許容がある
 （`16ε(1+‖x*‖)(k+1)`）。これは誤差の逃げ道ではなく、
