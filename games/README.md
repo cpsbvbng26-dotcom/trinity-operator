@@ -1,7 +1,8 @@
 # Repeated games through the cyclic operator
 
-*A golden-ratio threshold, a proved family, and the golden-window conjecture.* Draft. The author has
-not yet reviewed this note.
+*A golden-ratio threshold, a proved family, and the golden-window conjecture.* Draft, first
+written on 2026-10-04, before the preprint below. The repository records no review of this
+note by the author.
 
 **Preprint.** An English paper version of Propositions 1–7 and the conjecture is on Figshare:
 [`10.6084/m9.figshare.34419198`](https://doi.org/10.6084/m9.figshare.34419198) (2026-10-13).
