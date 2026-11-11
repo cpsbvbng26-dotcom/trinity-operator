@@ -1,5 +1,33 @@
 # trinity-operator
 
+種類：ソフトウェア　状態：改訂中
+
+<details>
+<summary><b>In English</b> — what this is, and a note on the Japanese comments</summary>
+
+Type: Software · Status: In revision
+
+**What this is.** An implementation of the operator `x ← DQx + (I − D)p` of the three
+Trinity-Infinity papers, beyond the assumptions the papers made. The papers' norm condition
+`‖DQ‖₂ < 1` is sufficient, not necessary; the spectral radius `ρ(DQ) < 1` decides
+convergence. Known tools only; no new mathematics.
+
+**Language of the code.** Identifiers are in English. Code comments, docstrings, the
+printed messages of the scripts and this README are in Japanese. The numbers the scripts
+print and their pass or fail exit codes do not depend on the language. The repeated-games
+note ([`games/README.md`](games/README.md)), its open problem page
+([`games/OPEN-PROBLEM.md`](games/OPEN-PROBLEM.md)) and the lessons
+([`lessons/`](lessons/)) are written in English.
+
+**Try it.** `pip install numpy`, then `python3 examples/one_minute.py`. The expected output
+is [`examples/one_minute.txt`](examples/one_minute.txt). `python3 verification/run_all.py`
+runs every check that CI runs. NumPy is the only dependency outside the standard library.
+
+**Bug reports.** The issue form asks for the steps to reproduce and the environment, in
+Japanese or English.
+
+</details>
+
 Trinity-Infinity の三本が扱っている作用素を、論文が置いた仮定の外まで実装したもので
 あります。
 
@@ -205,8 +233,39 @@ python3 roadmap/stage6_general_influence.py  # 一般の影響行列。落ちる
 
 ## 使い方
 
+[`examples/`](examples/) に、一分で試せる例を置いています。
+
 ```
 pip install numpy
+python3 examples/one_minute.py   # 出力は examples/one_minute.txt と同じになる
+python3 verification/run_all.py  # CI が回す検査を、一度に全部
+```
+
+依存は NumPy の一つだけで、ほかは Python の標準ライブラリで動きます。
+`verification/check_text.py` と `verification/check_site.py` は、NumPy も使いません。
+`verification/check_docs.py` が、全部の台本の `import` を見ています。
+標準ライブラリと NumPy と、このリポジトリの中の台本のほかを読み込めば落ちます。
+
+### 何を渡すと何が返るか
+
+```mermaid
+flowchart LR
+  a["混合率 a（blend）<br>0.5, 0.7, 0.3"] --> op["TrinityOperator"]
+  p["基準点 p（anchor）<br>1, 0, 0.5"] --> op
+  Q["影響行列 Q<br>省くと巡回置換"] --> op
+  op --> r["spectral_radius<br>ρ(A) = 0.471769"]
+  op --> n["operator_norm<br>‖A‖₂ = 0.700000"]
+  op --> f["fixed_point()<br>(0.754190, 0.527933, 0.508380)"]
+  op --> c["report()<br>正規行列か、収束するか、過渡的増幅"]
+  op --> cert["certify(op)<br>縮小になる距離と、誤差の上界"]
+```
+
+図の数値は、[`examples/one_minute.py`](examples/one_minute.py) の一つめの例が出したものです。
+`verification/check_docs.py` が、図の数値が例の出力にあるかを見ています。
+
+以下は、検査と台本を一本ずつ回すときの並びです。
+
+```
 python3 demo.py         # 論文の再現と、仮定を外したときの挙動
 python3 certificate.py  # 縮小になる距離を作って、上界が実際を覆うか見る
 python3 check.py        # 29 項目の検査
@@ -218,6 +277,8 @@ python3 verification/check_games.py         # 繰り返しゲームのノート�
 python3 verification/check_site.py          # 予想の英語サイト（site/）
 python3 standard.py                          # DeGroot と Friedkin–Johnsen を文献の記号で
 python3 verification/check_standard.py       # その古典的な事実を乱数の模型で当てる
+python3 verification/check_docs.py           # 札・図・例・開いている問題・版と DOI・依存
+python3 verification/check_guards.py         # 検査を壊して、落ちることを確かめる
 ```
 
 ```python
@@ -325,6 +386,10 @@ Series II 第4節の例 `(2,4,2)` は、どの δ でも持続しません。
 その文献をノートに引きます。照合はまだしていません。
 `verification/check_games.py` が、頁の数値を台本と突き合わせ、各命題を別の計算で確かめます。
 
+証明済みの範囲と開いている範囲を、[`games/OPEN-PROBLEM.md`](games/OPEN-PROBLEM.md) の一枚にまとめました。
+英語で書いています。数値で調べた範囲と、反例の探索が記録に無いことも、そこに書きました。
+開いている部分には、issue のラベルを一つずつ割り当てています。
+
 予想だけを英語で載せたサイトを、[golden-window-conjecture.vercel.app](https://golden-window-conjecture.vercel.app/) に置いています。
 中身は [`site/`](site/) で、Vercel がこのディレクトリをそのまま配ります。
 `site/index.html` は生成物です。researcher-profile の英語の頁と同じ設定から作っており、本文はそちらと同じです。
@@ -364,6 +429,11 @@ python3 verification/check_roadmap.py
 
 乱数種は固定してあるので、何度実行しても同じ数値が出ます。
 
+検査が空振りしていないことは、`verification/check_guards.py` が確かめます。
+通る状態の写しを 26 通りに壊し、26 通りとも落ちることを見ます。
+壊すのは、台本の式、頁の数値、使わないと決めた語、札、関連識別子、図の語などです。
+この数は `check_guards.py` が自分の壊し方を数えて、ここと突き合わせています。
+
 ## 関係
 
 | | |
@@ -373,6 +443,17 @@ python3 verification/check_roadmap.py
 | このコードの保存版（Zenodo） | 版 1.0.0 は [10.5281/zenodo.24033459](https://doi.org/10.5281/zenodo.24033459)、すべての版は [10.5281/zenodo.24033458](https://doi.org/10.5281/zenodo.24033458) |
 
 このコードを挙げるときは、使った版の DOI を引きます。すべての版に共通する DOI は、いちばん新しい版を指します。
+
+### 版と DOI
+
+| 版 | 日付 | DOI | 変わったこと |
+| --- | --- | --- | --- |
+| すべての版 | | [10.5281/zenodo.24033458](https://doi.org/10.5281/zenodo.24033458) | いちばん新しい版を指す |
+| 1.0.0 | 2026-11-07 | [10.5281/zenodo.24033459](https://doi.org/10.5281/zenodo.24033459) | 記録にある版はこれだけで、変更履歴はまだありません |
+
+版を出すのも DOI を受け取るのも、著者が Zenodo で行います。
+新しい版が出たら、この表に一行足し、`CITATION.cff` の版と日付も直します。
+`verification/check_docs.py` が、表と `CITATION.cff` を突き合わせています。
 
 PDF には手を入れていません。 ここにあるのは論文の外側の話です。
 
