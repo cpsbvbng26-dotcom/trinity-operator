@@ -1,7 +1,7 @@
 # Preregistration draft: a confirmatory scan of the golden-window conjecture
 
-Status: draft, not registered. The registration on OSF was stopped on 2026-11-12, and
-nothing has been filed. While it is unregistered the text can change, and the confirmatory
+Status: draft, not registered. The author stopped the registration on OSF on 2026-11-12,
+and nothing has been filed. While it is unregistered the text can change, and the confirmatory
 grid below is not run. No registration DOI exists yet. None is written here that the author
 has not given.
 
