@@ -31,6 +31,8 @@ independent_check.py と claims_audit.py だけで、そこで NumPy を使う�
  17. 黄金比の窓の予想の事前登録の下書き（games/PREREGISTRATION.md）。確かめの格子と深さが
      games/scan.py の定数と同じか、探索の格子と重ならないか、登録前に結果を置いていないか。
      README と続ける範囲の頁が書く、広げた走査の数も、ここで台本と突き合わせる。
+ 18. README の「区別が効く場面」の反例が、置換でも行確率でもないと書いているか。
+     その行列が本当にそうであるかを、README の図から読んだ成分で確かめる。
 """
 
 import ast
@@ -569,6 +571,21 @@ check("README と下書きが、登録は著者が 2026-11-12 に止めたと止
       draft and "OSF への登録は、2026-11-12 に著者が止めました。登録していないので、その格子はまだ回していません。" in README
       and "The author stopped the registration on OSF on 2026-11-12,\nand nothing has been filed." in PRE
       and "## Filing" not in PRE)
+
+# ------------------------------------------------------------ 18. 反例の行列の種類
+print("\n18. 区別が効く場面の反例は、意見の模型の外にある")
+# 2026-11-12 に足した。反例の Q は行確率でないので、Friedkin–Johnsen の意見の読みは当たらない。
+# README がそう書いていることと、図の Q が本当に置換でも行確率でもないことの両方を見る。
+_m = re.search(r"Q = \[\[(\d+), (\d+)\], \[(\d+), (\d+)\]\],  a = \(0\.5, 0\.5\)", README)
+_q = [[int(_m.group(1)), int(_m.group(2))], [int(_m.group(3)), int(_m.group(4))]] if _m else None
+# 置換行列も行確率行列も、どの行の和も 1 である。和が 1 でない行が一つあれば、どちらでもない。
+check("README の反例の Q は、置換行列でも行確率行列でもない",
+      _q is not None and any(sum(r) != 1 for r in _q),
+      "行の和 %s" % ([sum(r) for r in _q] if _q else "読めない"))
+check("README が、反例を一般のアフィン反復の例とし、Friedkin–Johnsen の意見の読みが当たらないと書いている",
+      "この `Q` は置換行列でも、行確率行列でもありません。" in README
+      and "だからこの例は、一般のアフィン反復 `x ← Ax + b` の例です。" in README
+      and "Friedkin–Johnsen の意見の読み（`W` が行確率で、`Λ` の対角が `[0,1]` にある）は、この例には当たりません。" in README)
 
 print("\n" + "-" * 58)
 if failures:
