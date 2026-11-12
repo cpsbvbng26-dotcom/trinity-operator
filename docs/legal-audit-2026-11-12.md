@@ -47,6 +47,19 @@ Sophaxis の取り寄せの仕事を走らせて e-Gov から取り寄せ、cpsb
 | --- | --- | --- | --- | --- | --- |
 | site/ を配る Vercel の計画 | Vercel の Fair use Guidelines、Vercel の利用規約 第4節 | Hobby は個人の非営利の利用に限る | Vercel の API はチームを一つ、プロジェクトを四つ返した。計画の名は返さない。2026-06-01 から 2026-11-12 までの請求を引くと `costs_not_found` が返った。docs/canonical-sources.md（cpsbvbng26-dotcom）は、このサイトを Hobby と記録している | 問題なし | Hobby に当たるとして扱う。頁に支払い・販売の広告・広告は無い |
 
+## 2026-11-12 の続き：二度目の見落とし
+
+同じ日に、読むだけの点検を、さらに別の手でもう一度行いました。
+上の節が見落としていたものが見つかりました。
+前の行は、そのとき何を確かめたかの記録なので、消していません。
+法令の文は、cpsbvbng26-dotcom の `verification/statutes.json` に写した取り寄せた文から引きます。
+10 のリポジトリに同じものを置く文書の点検は、[cpsbvbng26-dotcom の記録](https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/blob/main/docs/legal-audit-2026-11-12.md)の同じ見出しの節にもあります。
+
+| 箇所 | 法令と条 | 要件 | 事実 | 判定 | 対応 |
+| --- | --- | --- | --- | --- | --- |
+| SECURITY.md | 民法第709条 | 取り寄せた文は「故意又は過失によって他人の権利又は法律上保護される利益を侵害した者は、これによって生じた損害を賠償する責任を負う」と定める。無い窓口を約して、頼った人に損を生じさせないこと | SECURITY.md は、安全の問題を GitHub の非公開の報告で受けると約していた。GitHub の API は、2026-11-12 に、このリポジトリの非公開の報告を `enabled: false` と返した。これはリポジトリの設定であり、Claude の持つ道具では変えられない | 誤り | 運営者の ORCID の記録にあるメールアドレスで受けると書き直し、GitHub の非公開の報告は有効になっていないと、確かめた日と一緒に書いた。写しは 10 のリポジトリと deposit-check で一字一句同じで、cpsbvbng26-dotcom の `check_ecosystem.js` の 12j が中身を確かめる。2026-11-12 に Claude が決めました。在る窓口は、免責事項がすでに使っている一つだけだからです |
+| `verification/check_docs.py` の SECURITY.md の検査 | 民法第709条 | 同上 | 検査は「Report a vulnerability」の語があることを求めていた。無い入口を求める検査だった | 誤り | 検査を、ORCID の記録のメールと、非公開の報告が有効でないことを求め、「Report a vulnerability」が戻れば落ちる向きに替えた。もとの SECURITY.md に戻して、落ちることを確かめた。2026-11-12 に Claude が決めました。検査が求める文を、在る窓口の文に移すためです |
+
 ## 調べた法令
 
 - 著作権法（第2条、第21条、第23条）
