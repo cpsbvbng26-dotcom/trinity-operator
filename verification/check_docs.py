@@ -28,6 +28,9 @@ independent_check.py と claims_audit.py だけで、そこで NumPy を使う�
  15. README の言語モデルの開示の表（道具・使ったところ・確かめた人）。
  16. 散文が名乗る件数。CITATION.cff が名乗る trinity-infinity の件数は、隣の
      trinity-infinity の検査を回して数える（場所は環境変数 TRINITY_INFINITY でも渡せる）。
+ 17. 黄金比の窓の予想の事前登録の下書き（games/PREREGISTRATION.md）。確かめの格子と深さが
+     games/scan.py の定数と同じか、探索の格子と重ならないか、登録前に結果を置いていないか。
+     README と続ける範囲の頁が書く、広げた走査の数も、ここで台本と突き合わせる。
 """
 
 import ast
@@ -187,9 +190,43 @@ if depth and gap and pure and low:
     step = 1 / int(low.group(2))
     check("頁の窓の下の探索が台本と同じ（δ = %s、%s 段先）" % (lows, pure.group(1)),
           "δ = %s; grid t = %g, …, 1; %s periods ahead" % (lows, step, pure.group(1)) in OPEN)
-    check("頁が、記録にない深さとして台本の深さを挙げている",
-          "no depth beyond %s periods" % depth.group(1) in OPEN)
-check("頁が、反例の探索は記録に無いと書いている", "No search for counterexamples is recorded." in OPEN)
+
+# 広げた走査（games/scan.py）。範囲は台本の定数から読む。頁には台本の範囲だけを書く。
+SCAN_PY = read(os.path.join("games", "scan.py"))
+m_scan = re.search(r"^SCAN = tuple\(\(k, (\d+)\) for k in range\((\d+), (\d+)\)\)$", SCAN_PY, re.M)
+m_sdepth = re.search(r"^SCAN_DEPTH = (\d+)$", SCAN_PY, re.M)
+m_last = re.search(r"^LAST = (\d+) ", SCAN_PY, re.M)
+m_conf = re.search(r"^CONFIRM = tuple\(\(2 \* k \+ 1, (\d+)\) for k in range\((\d+), (\d+)\)\) \+ tuple\(\n"
+                   r"\s+\(k, (\d+)\) for k in \(([\d, ]+)\)\)$", SCAN_PY, re.M)
+m_cdepth = re.search(r"^CONFIRM_DEPTH = (\d+)$", SCAN_PY, re.M)
+check("走査の台本から SCAN・SCAN_DEPTH・LAST・CONFIRM・CONFIRM_DEPTH を読める",
+      bool(m_scan and m_sdepth and m_last and m_conf and m_cdepth))
+from fractions import Fraction  # noqa: E402
+if m_scan and m_sdepth and m_last and m_conf and m_cdepth:
+    sq, k0, k1 = (int(x) for x in m_scan.groups())
+    scan_grid = [Fraction(k, sq) for k in range(k0, k1)]
+    scan_depth = int(m_sdepth.group(1))
+    last = int(m_last.group(1))
+    cq, c0, c1, pq = (int(x) for x in m_conf.groups()[:4])
+    probes = [Fraction(int(x), pq) for x in m_conf.group(5).split(",")]
+    mids = [Fraction(2 * k + 1, cq) for k in range(c0, c1)]
+    conf_grid = mids + probes
+    conf_depth = int(m_cdepth.group(1))
+    dec = len(str(sq)) - 1
+    fmt = lambda x, n=dec: "%.*f" % (n, x)  # noqa: E731
+    check("頁の広げた走査の範囲が台本と同じ（δ = %s〜%s、%d 通り、深さ %d）"
+          % (fmt(scan_grid[0]), fmt(scan_grid[-1]), len(scan_grid), scan_depth),
+          "| wider scan of the window, 2026-11-12 | δ = %s, %s, …, %s, %d values; depth %d periods; exact counts |"
+          % (fmt(scan_grid[0]), fmt(scan_grid[1]), fmt(scan_grid[-1]), len(scan_grid), scan_depth) in OPEN)
+    check("頁が、記録にない深さとして走査の深さを挙げている",
+          "no depth beyond %d periods" % scan_depth in OPEN)
+    check("頁が、広げた走査を最初の反例の探索と書き、その数を台本と同じに書いている",
+          "The wider scan is the first recorded search for counterexamples. At each of its %d values"
+          % len(scan_grid) in OPEN
+          and "The wider scan shows the same on all %d rows" % len(scan_grid) in OPEN
+          and "nor can the %d values of the wider scan" % len(scan_grid) in flat(OPEN))
+    check("頁が、確かめの格子はまだ回していないと書いている",
+          "That grid has not been run." in OPEN and "That grid has not been run." in NOTE)
 check("頁が、学部一年次の系列の続きだと書いている",
       "first-year undergraduate self-study" in OPEN and "It does not start a new theme." in OPEN)
 check("頁が Claude を著者にしていない", "Claude is not an\nauthor." in OPEN)
@@ -474,6 +511,62 @@ said = re.findall(r"(\d+) 件(?:に当てました|で 0 件)", ROADMAP)
 check("展望の README の「均衡 N 件」が、段 6 の台本の回す数（標本 × n の数）と合う",
       total is not None and len(said) == 2 and all(int(x) == total for x in said),
       "名乗り %s / 台本 %s" % (said, total))
+
+# ------------------------------------------------------------ 17. 事前登録の下書き
+print("\n17. 黄金比の窓の予想の、事前登録の下書き（games/PREREGISTRATION.md）")
+PRE_PATH = os.path.join("games", "PREREGISTRATION.md")
+PRE = read(PRE_PATH) if os.path.exists(os.path.join(ROOT, PRE_PATH)) else ""
+SCOPE_EN_F, SCOPE_JA_F, NOTE_F = flat(SCOPE_EN), flat(SCOPE_JA), flat(NOTE)
+PRE_F = flat(PRE)
+draft = "Status: draft, not registered." in PRE
+check("下書きがあり、まだ登録していないと冒頭で名乗っている",
+      PRE.startswith("# Preregistration draft:") and draft)
+check("下書きが、利用者から受け取っていない登録の DOI を書いていない",
+      "10.17605" not in PRE and "osf.io/" not in PRE.lower()
+      and "No registration DOI exists yet." in PRE)
+check("登録前は、確かめの格子の結果を置いていない（games/scan-confirmatory.txt が無い）",
+      not (draft and os.path.exists(os.path.join(ROOT, "games", "scan-confirmatory.txt"))))
+if m_scan and m_sdepth and m_last and m_conf and m_cdepth:
+    check("確かめの格子が探索の格子と一つも重ならない",
+          not set(conf_grid) & set(scan_grid), "%d 通りと %d 通り" % (len(conf_grid), len(scan_grid)))
+    golden = Fraction(6180339887, 10 ** 10)          # 1/φ = 0.6180339887…（下から）
+    check("確かめの格子が、どれも窓（1/φ と 2/3 の間）の中にある",
+          all(golden + Fraction(1, 10 ** 10) < x < Fraction(2, 3) for x in conf_grid))
+    check("下書きが、確かめの格子の数と深さを台本と同じに書いている（%d 通り、深さ %d）"
+          % (len(conf_grid), conf_depth),
+          "The confirmatory grid has %d values of δ:" % len(conf_grid) in PRE
+          and "the %d midpoints of the exploratory grid, δ = (2k + 1)/%d for k = %d, …, %d, that is %s, %s, …, %s;"
+          % (len(mids), cq, c0, c1 - 1, fmt(mids[0], 4), fmt(mids[1], 4), fmt(mids[-1], 4)) in PRE_F
+          and "probes near the ends of the window, δ = %s and %s." % (
+              ", ".join(fmt(x, 4) for x in probes[:-1]), fmt(probes[-1], 4)) in PRE_F
+          and "and the depth as `CONFIRM_DEPTH`, which is %d." % conf_depth in PRE_F
+          and "at depth %d. The growth is the number of surviving intervals per period over the last %d periods."
+          % (conf_depth, last) in PRE_F
+          and "`log N/(%d log(1/δ))`" % conf_depth in PRE)
+    check("探りの数が台本と同じ（six）", len(probes) == 6 and "six probes near the ends" in PRE)
+    check("下書きが、探索の格子を台本と同じに書いている",
+          "It used %d values of δ, from %s to %s at step 0.001, and a depth of %d periods."
+          % (len(scan_grid), fmt(scan_grid[0]), fmt(scan_grid[-1]), scan_depth) in PRE_F)
+    check("README が、広げた走査の範囲と深さを台本と同じに書いている",
+          "窓の中の δ を %s から %s まで 0.001 刻みの %d 通りに増やし、細分の深さを %d 段にしました"
+          % (fmt(scan_grid[0]), fmt(scan_grid[-1]), len(scan_grid), scan_depth) in README)
+    check("続ける範囲の頁が、最初の走査の数を台本と同じに書いている",
+          "δ は %d 通り、深さは %d 段で" % (len(scan_grid), scan_depth) in SCOPE_JA
+          and "with %d values of δ and a depth of %d periods" % (len(scan_grid), scan_depth) in SCOPE_EN_F)
+check("下書きに、三つの仮説と、予想に反するとみなす結果の表がある",
+      all("- **H%d**" % i in PRE for i in (1, 2, 3))
+      and len(re.findall(r"^\| [^|]+ \| [^|]+ \(H[123]\) \|$", PRE, re.M)) == 4)
+check("下書きが、一致しても証明とは呼ばないと書いている",
+      "It is not reported as a proof." in PRE and "Agreement on the confirmatory grid will be" in PRE)
+check("下書きが、どの結果でもノートと開いている問題の頁に載せると書いている",
+      "whatever they show" in PRE_F and "(README.md)" in PRE and "(OPEN-PROBLEM.md)" in PRE)
+check("下書きが LICENSE を指し、Claude を著者にしていない",
+      "([LICENSE](LICENSE))" in PRE and "Claude is not an\nauthor." in PRE)
+check("README・ノート・開いている問題の頁が、下書きを指している",
+      "(games/PREREGISTRATION.md)" in README and "(PREREGISTRATION.md)" in NOTE
+      and "(PREREGISTRATION.md)" in OPEN)
+check("README が、登録は著者が行い、まだ登録していないと書いている（下書きの冒頭と同じ状態）",
+      draft and "登録するのは著者です。まだ登録していないので、その格子はまだ回していません。" in README)
 
 print("\n" + "-" * 58)
 if failures:

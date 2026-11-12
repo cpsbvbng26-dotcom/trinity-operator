@@ -211,6 +211,32 @@ case("サイトの暗い側の切り替えで、淡い文字の色を地に近�
      "\n  --faint: #81818b;", "\n  --faint: #3a3a40;",
      "verification/check_site.py")
 
+print("\n8c. 百本ノック五で足した検査を壊す（黄金比の窓の予想の、広げた走査と事前登録の下書き）")
+case("走査の出力の写しで、区間の数を一つずらす", "games/scan.txt",
+     "| 0.619 | 461 |", "| 0.619 | 462 |", "verification/check_games.py")
+# 切り捨てそのものを外すと区間が 2³⁰ 個に増え、記憶が尽きる。端を一目盛りだけずらす。
+case("走査の台本で、最初の区間の上端 3 を一目盛りだけ下げる", "games/scan.py",
+     "ivs = [(q + p, 3 * p)]", "ivs = [(q + p, 3 * p - 1)]", "verification/check_games.py")
+case("ノートの、総長が縮む行の数を変える", "games/README.md",
+     "Growth is below `1/δ` in 48 of 48 rows", "Growth is below `1/δ` in 47 of 48 rows",
+     "verification/check_games.py")
+case("ノートから、走査は証明ではないという一文を消す", "games/README.md",
+     "None of this is a proof. A grid of 48 values", "A grid of 48 values",
+     "verification/check_games.py")
+case("開いている問題の頁で、走査の深さを台本と違えて書く", "games/OPEN-PROBLEM.md",
+     "depth 30 periods; exact counts", "depth 32 periods; exact counts", "verification/check_docs.py")
+case("事前登録の下書きで、確かめの深さを台本と違えて書く", "games/PREREGISTRATION.md",
+     "which is 32.", "which is 34.", "verification/check_docs.py")
+case("事前登録の下書きから、まだ登録していないという冒頭の一文を消す", "games/PREREGISTRATION.md",
+     "Status: draft, not registered. ", "", "verification/check_docs.py")
+case("走査の台本で、確かめの格子の端の探りを探索の格子と重ねる", "games/scan.py",
+     "for k in (6181, 6182, 6183, 6664, 6665, 6666))", "for k in (6181, 6182, 6183, 6664, 6665, 6660))",
+     "verification/check_docs.py")
+case("README の、広げた走査の δ の数を変える", "README.md",
+     "0.001 刻みの 48 通りに増やし", "0.001 刻みの 47 通りに増やし", "verification/check_docs.py")
+case("続ける範囲の頁の、最初の走査の深さを変える", "games/SCOPE.ja.md",
+     "深さは 30 段で", "深さは 22 段で", "verification/check_docs.py")
+
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
     BREAKS = len(re.findall(r"^case\(", fh.read(), re.M))

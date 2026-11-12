@@ -5,10 +5,12 @@
 
 NumPy のみ。乱数は使わない。
 
-二つのことを見る。
+三つのことを見る。
 1. 頁が書いている数値が、games/games.py --values の出す数値と一字一句合うか。
 2. 各命題を、台本とは別の計算で確かめる。台本の関数は使わない。
    台本が間違っていれば、頁と台本は一致したまま両方とも間違う。それを止める。
+3. games/scan.py の広げた走査。games/scan.txt が台本の出力と同じか。区間の数を、台本とは
+   別の座標と浮動小数点で数え直して同じになるか。ノートが書く走査の値が台本と同じか。
 
 予想（黄金比の窓の予想、Golden-window conjecture の (a)・(b)）は証明しない。頁が根拠として書いていること
 （成長率が 1/δ を下回る、次元の推定が δ とともに増える）だけを確かめる。
@@ -17,6 +19,7 @@ NumPy のみ。乱数は使わない。
 import itertools
 import math
 import os
+import re
 import subprocess
 import sys
 from fractions import Fraction as Fr
@@ -441,6 +444,122 @@ check("頁が、三篇はゼロ、命題はまだ数えていない、と分け�
       "| the three papers | a special case of a known model | zero |" in page
       and "| Propositions 1–7 | proved; literature not checked | not yet counted |" in page
       and "That is not the same as zero." in page)
+
+# ------------------------------------------------------------ 広げた走査
+print("\n広げた走査（games/scan.py。証拠であって証明ではない）")
+# 台本は一度だけ回す（深さ 30 で 48 通り。数秒かかる）。表と値は同じ計算から出る。
+sys.path.insert(0, os.path.join(ROOT, "games"))
+import scan as scan_mod  # noqa: E402
+import games as games_mod  # noqa: E402
+
+scan_lines, sv = scan_mod.exploratory()
+scan_txt = open(os.path.join(ROOT, "games", "scan.txt"), encoding="utf-8").read()
+check("games/scan.txt が台本の出力と一字一句同じ（生成物）", scan_mod.render(scan_lines, sv) == scan_txt)
+check("走査の台本が値を出す", len(sv) > 0, "%d 個" % len(sv))
+
+scan_rows = []
+for line in scan_txt.splitlines():
+    cells = [x.strip() for x in line.strip("|").split("|")]
+    if line.startswith("| 0.") and len(cells) == 10:
+        scan_rows.append(cells)
+check("走査の表が台本の名乗る行数だけある", str(len(scan_rows)) == sv.get("scan_rows"),
+      "%d 行" % len(scan_rows))
+
+
+def x_counts(d, depth):
+    """台本とは別の計算。x = (3 − w)/(1 − δ) の座標で、浮動小数点で数える。
+
+    台本は w の座標で、端点を整数に持って数える。座標も算術も違う二つが同じ数を出すか見る。
+    x = a + δx′（a ∈ {0, 1}）を [0, X] の中で前へ写し、[0, X] からはみ出す分を切る。
+    """
+    X = (2 * d - 1) / (d * (1 - d))
+    ivs = [(0.0, X)]
+    out = []
+    for _ in range(depth):
+        nxt = []
+        for a, b in ivs:
+            for s in (0.0, 1.0):
+                lo, hi = max(s + d * a, 0.0), min(s + d * b, X)
+                if lo <= hi + 1e-12:
+                    nxt.append((lo, hi))
+        ivs = nxt
+        out.append(len(ivs))
+    return out
+
+
+depth_s = int(sv.get("scan_depth", "0"))
+mine = {}
+for cells in scan_rows:
+    d = float(cells[0])
+    c = x_counts(d, depth_s)
+    mine[d] = c
+same = all(str(mine[float(cells[0])][-1]) == cells[1] for cells in scan_rows)
+check("区間の数を、別の座標と浮動小数点で数え直すと、%d 行すべてで表と同じ" % len(scan_rows), same)
+grid = sorted(mine)
+step_ok = len(grid) > 1 and all(abs((b - a) - 0.001) < 1e-9 for a, b in zip(grid, grid[1:]))
+check("走査の δ が窓の中にあり、0.001 刻みで並ぶ",
+      step_ok and phi_inv < grid[0] and grid[-1] < 2 / 3, "%s〜%s" % (grid[0], grid[-1]))
+
+LAST_S = 5
+g = {d: (mine[d][-1] / mine[d][-1 - LAST_S]) ** (1 / LAST_S) for d in grid}
+dimest = [math.log(g[d]) / math.log(1 / d) for d in grid]
+upper = [math.log(mine[d][-1]) / (depth_s * math.log(1 / d)) for d in grid]
+shrink = sum(1 for d in grid if g[d] < 1 / d)
+check("数え直した数で、総長が縮む行（成長率 < 1/δ）の数が台本と同じ",
+      "%d of %d" % (shrink, len(grid)) == sv.get("scan_shrink"), sv.get("scan_shrink", ""))
+check("数え直した数で、成長率 × δ の最大が台本と同じ",
+      "%.3f" % max(g[d] * d for d in grid) == sv.get("scan_max_growth_delta"))
+check("数え直した数で、次元の推定が下がる箇所の数が台本と同じ",
+      "%d" % sum(1 for a, b in zip(dimest, dimest[1:]) if b < a) == sv.get("scan_decreases"))
+check("数え直した数で、次元の推定の両端が台本と同じ",
+      "%.2f" % dimest[0] == sv.get("scan_dim_first") and "%.2f" % dimest[-1] == sv.get("scan_dim_last"))
+below1 = [d for d, u in zip(grid, upper) if u < 1]
+check("数え直した数で、上からの推定が 1 を下回る行の数と、その範囲が台本と同じ",
+      "%d of %d" % (len(below1), len(grid)) == sv.get("scan_upper_below_one")
+      and below1 == grid[:len(below1)] and "%.3f" % below1[-1] == sv.get("scan_upper_below_one_to"))
+
+
+def lower_closed(d):
+    """命題 6 の下界。n₀ は定義どおり最小の n を探し、s は閉じた式を二分法で解く。"""
+    X = (2 * d - 1) / (d * (1 - d))
+    n0 = next(n for n in range(1000) if (1 / d) ** (n + 1) >= X / (X - 1))
+    lo_s, hi_s = 1e-12, 1.0
+    for _ in range(100):
+        sm = (lo_s + hi_s) / 2
+        lo_s, hi_s = (sm, hi_s) if d ** ((n0 + 1) * sm) > 1 - d ** sm else (lo_s, sm)
+    return n0, (lo_s + hi_s) / 2
+
+
+lows = {d: lower_closed(d) for d in grid}
+check("表の n₀ と下界の列が、命題 6 を解き直した値と合う",
+      all(int(cells[8]) == lows[float(cells[0])][0] and abs(float(cells[9]) - lows[float(cells[0])][1]) < 5e-4
+          for cells in scan_rows))
+check("数え直した推定が命題 6 の下界を下回る行の数が、台本と同じ",
+      "%d" % sum(1 for d, e in zip(grid, dimest) if e < lows[d][1]) == sv.get("scan_below_lower"))
+
+agree = all([n for n, _ in games_mod.refine(dd)] == scan_mod.refine_exact(round(dd * 100), 100, games_mod.DEPTH)[0]
+            for dd in games_mod.GAP)
+check("整数で数えた区間の数が、games.py の浮動小数点の細分（深さ 22、五つの δ）と同じ", agree)
+
+flat_note = re.sub(r"\s+", " ", page)
+quotes = [
+    "It takes δ = %s, …, %s, which is %s values at step 0.001" % (sv["scan_first"], sv["scan_last"], sv["scan_rows"]),
+    "and refines for %s periods." % sv["scan_depth"],
+    "Growth is below `1/δ` in %s rows" % sv["scan_shrink"],
+    "The largest value of growth × δ is %s, at δ = %s." % (sv["scan_max_growth_delta"], sv["scan_max_growth_delta_at"]),
+    "The scan counts %s decreases." % sv["scan_decreases"],
+    "The estimate runs from %s at the first δ to %s at the last." % (sv["scan_dim_first"], sv["scan_dim_last"]),
+    "In %s rows the estimate is below the lower bound of Proposition 6" % sv["scan_below_lower"],
+    "It is below 1 in %s rows, for every δ up to %s." % (sv["scan_upper_below_one"], sv["scan_upper_below_one_to"]),
+    "Five values cannot settle it, and the %s values of the wider scan below cannot either." % sv["scan_rows"],
+    "A grid of %s values cannot rule out a δ between its points" % sv["scan_rows"],
+]
+for q in quotes:
+    check("ノートに走査の値がある：%s" % q[:48], q in flat_note)
+check("走査の範囲が上から続いている（「every δ up to」と書ける）", sv.get("scan_upper_contiguous") == "yes")
+check("ノートが、走査は証明ではないと書き、上からの推定を根拠としてだけ扱っている",
+      "None of this is a proof." in flat_note
+      and "so the column is reported as evidence only." in flat_note)
 
 print("\n" + "-" * 58)
 if failures:

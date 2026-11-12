@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Every number printed in games/README.md.
+"""Every number printed in games/README.md, except the wider scan (games/scan.py).
 
     python3 games/games.py          # the computations, as a reader runs them
     python3 games/games.py --values # the quoted values, one per line (for the check)
