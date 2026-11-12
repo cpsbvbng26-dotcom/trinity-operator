@@ -593,6 +593,50 @@ check("README が、反例を一般のアフィン反復の例とし、Friedkin�
       and "だからこの例は、一般のアフィン反復 `x ← Ax + b` の例です。" in README
       and "Friedkin–Johnsen の意見の読み（`W` が行確率で、`Λ` の対角が `[0,1]` にある）は、この例には当たりません。" in README)
 
+# ワークフローと GitHub の規約（2026-11-13）。GitHub の利用規約は I 節で追加製品の規約を取り込み、その Actions の節は、
+# GitHub の実行環境での使い方を、リポジトリのソフトウェアのプロジェクトの制作・検査・配備・公開に限る。ワークフローを足すときは、
+# 点検の記録の「八度目の見落とし」の表に行を足して判定する。行の無いワークフローも、無いワークフローの行も落とす。
+_EIGHTH = "\n## 2026-11-12 の続き：八度目の見落とし\n"
+_PURPOSE = ("If using GitHub-hosted runners, any other activity unrelated to the production, testing, deployment, "
+            "or publication of the software project associated with the repository where GitHub Actions are used.")
+
+
+def _workflow_problems(text, names):
+    i = text.find(_EIGHTH)
+    if i < 0:
+        return ["記録に八度目の見落としの節が無い"]
+    j = text.find("\n## ", i + len(_EIGHTH))
+    sec = text[i: j if j >= 0 else len(text)]
+    rows = [l[2:-2].split(" | ") for l in sec.splitlines() if l.startswith("| ") and not l.startswith(("| 箇所 |", "| --- |"))]
+    bad = []
+    for r in rows:
+        if len(r) != 6 or r[4] not in ("誤り", "根拠不足", "漏れ", "表現", "問題なし"):
+            bad.append("表の形：" + r[0][:30])
+        elif r[4] != "問題なし" and "2026-11-13 に Claude が決めました。" not in r[5]:
+            bad.append("決めた者の無い行：" + r[0][:30])
+    named = [m.group(1) for r in rows for m in [re.match(r"`\.github/workflows/([^`]+)`", r[0])] if m]
+    bad += ["行の無いワークフロー：" + n for n in names if n not in named]
+    bad += ["無いワークフローの行：" + n for n in named if n not in names]
+    if "「" + _PURPOSE + "」" not in sec:
+        bad.append("Actions の節の文を引いていない")
+    return bad
+
+
+_AUDIT = os.path.join(ROOT, "docs", "legal-audit-2026-11-12.md")
+_AT = open(_AUDIT, encoding="utf-8").read() if os.path.isfile(_AUDIT) else ""
+_WF = sorted(f for f in os.listdir(os.path.join(ROOT, ".github", "workflows")) if f.endswith((".yml", ".yaml")))
+_wp = _workflow_problems(_AT, _WF)
+check("ワークフロー（%d 本）が、どれも点検の記録の表に行を持ち、GitHub の追加製品の規約に照らして判定してある" % len(_WF), not _wp, ", ".join(_wp))
+_broken = [
+    _workflow_problems(_AT, _WF + ["newsletter.yml"]),
+    _workflow_problems(_AT, _WF[1:]),
+    _workflow_problems(re.sub(r"\n\| `\.github/workflows/" + re.escape(_WF[0]) + r"`[^\n]*", "", _AT), _WF),
+    _workflow_problems(_AT.replace("publication of the software project", "promotion of the software project"), _WF),
+    _workflow_problems(_AT.replace(_EIGHTH, "\n## 八度目\n"), _WF),
+]
+check("壊して確かめる：新しいワークフロー・外したワークフロー・表から外した行・引いた文の一語・節の見出しのどれでも落ちる（%d / %d）"
+      % (sum(1 for b in _broken if b), len(_broken)), all(_broken))
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))
