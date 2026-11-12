@@ -44,30 +44,36 @@ literature check can move them. The environment the note was written in cannot r
 literature databases, so the check has not been made.
 
 Monotonicity is the least supported part of (b). The note says that five values cannot
-settle it, and that dimension functions of maps with holes often behave like a devil's
-staircase.
+settle it, nor can the 48 values of the wider scan, and that dimension functions of maps
+with holes often behave like a devil's staircase.
 
 ## What was computed, and what was not
 
-The evidence for both parts is numerical. The ranges below are the ones the script
-`games/games.py` uses. The numbers on this page are checked against that script by
-`verification/check_docs.py`.
+The evidence for both parts is numerical. The ranges below are the ones the scripts
+`games/games.py` and `games/scan.py` use. The numbers on this page are checked against
+those scripts by `verification/check_docs.py`.
 
 | computation | parameters | recorded in |
 | --- | --- | --- |
 | refinement of the surviving intervals | δ = 0.62, 0.63, 0.64, 0.65, 0.66; depth 22 periods | `GAP` and `DEPTH` in `games/games.py` |
 | pure-strategy search below the window | δ = 0.5, 0.55, 0.6; grid t = 0.01, …, 1; 40 periods ahead | `pure_ok` and `values` in `games/games.py` |
+| wider scan of the window, 2026-11-12 | δ = 0.619, 0.620, …, 0.666, 48 values; depth 30 periods; exact counts | `SCAN` and `SCAN_DEPTH` in `games/scan.py` |
 
-No search for counterexamples is recorded. The refinement measures the five values of δ
-in its table. It was not run as a search for a δ at which the total length stops shrinking,
-or at which the dimension estimate falls. No δ inside the window other than those five, and
-no depth beyond 22 periods, is recorded. The pure-strategy search lies below the window, so
-it does not test either part of the conjecture.
+The wider scan is the first recorded search for counterexamples. At each of its 48 values
+it looks for a δ at which the total length stops shrinking, and between neighbouring values
+it looks for a fall in the dimension estimate. It found neither. No δ between its grid
+points, and no depth beyond 30 periods, is recorded. A grid cannot exclude a δ between its
+points. The pure-strategy search lies below the window, so it does not test either part of
+the conjecture.
+
+A second grid is fixed in advance in the draft [preregistration](PREREGISTRATION.md),
+together with what would count against the conjecture on it. That grid has not been run.
 
 The note reports what the five rows show. In every row the growth rate is below `1/δ`, so
 the total length keeps shrinking. The dimension estimate rises with δ. At δ = 0.62 the
 estimate 0.38 is below the proved lower bound 0.404, so the finite-depth estimate is too low
-there. Neither observation is a proof.
+there. The wider scan shows the same on all 48 rows: the total length shrinks in 48 of 48,
+and the dimension estimate has 0 decreases. Neither observation is a proof.
 
 ## Where a proof might start
 
