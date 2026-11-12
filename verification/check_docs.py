@@ -565,8 +565,10 @@ check("下書きが LICENSE を指し、Claude を著者にしていない",
 check("README・ノート・開いている問題の頁が、下書きを指している",
       "(games/PREREGISTRATION.md)" in README and "(PREREGISTRATION.md)" in NOTE
       and "(PREREGISTRATION.md)" in OPEN)
-check("README が、登録は著者が行い、まだ登録していないと書いている（下書きの冒頭と同じ状態）",
-      draft and "登録するのは著者です。まだ登録していないので、その格子はまだ回していません。" in README)
+check("README と下書きが、登録を 2026-11-12 に止め、まだ登録していないと書き、著者への手順を置いていない（下書きの冒頭と同じ状態）",
+      draft and "OSF への登録は、2026-11-12 に止めました。登録していないので、その格子はまだ回していません。" in README
+      and "The registration on OSF was stopped on 2026-11-12, and\nnothing has been filed." in PRE
+      and "## Filing" not in PRE)
 
 print("\n" + "-" * 58)
 if failures:
