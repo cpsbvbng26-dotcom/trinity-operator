@@ -491,6 +491,8 @@ PDF には手を入れていません。ここにあるのは論文の外側の�
 | [`games/`](games/) の文章 | CC BY 4.0 | [`games/LICENSE`](games/LICENSE)。台本の `games.py` は MIT |
 | [`site/`](site/) の頁 | CC BY 4.0 | 頁の末尾の表示。`site/` に LICENSE ファイルは無い |
 
+このリポジトリが引き、または引用を確かめるために置いている他人の文は、CC BY 4.0 でも MIT でも許諾しておらず、それぞれの権利者のものです。
+
 ## 言語モデルの利用
 
 このリポジトリの実装・検査・README は Claude Code（Anthropic）を用いて作成し、
