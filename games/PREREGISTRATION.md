@@ -1,8 +1,9 @@
 # Preregistration draft: a confirmatory scan of the golden-window conjecture
 
-Status: draft, not registered. The author files it on OSF. Until then the text can change,
-and the confirmatory grid below must not be run. No registration DOI exists yet. None is
-written here until the author gives it.
+Status: draft, not registered. The author stopped the registration on OSF on 2026-11-12,
+and nothing has been filed. While it is unregistered the text can change, and the confirmatory
+grid below is not run. No registration DOI exists yet. None is written here that the author
+has not given.
 
 This text follows the sections of the OSF Preregistration template, in order, so that each
 section can be pasted into the matching part of the form. It continues the repeated-games note
@@ -127,17 +128,6 @@ whatever they show. Any deviation from this plan is listed there next to the res
 
 Software. Python 3, the standard library, and NumPy for the lower bound of Proposition 6, which
 comes from `games/games.py`. The interval counts use integers only.
-
-## Filing (for the author)
-
-These steps are for the author. They are not part of the registration.
-
-1. Open OSF Registries and start a new registration with the OSF Preregistration template.
-   Attach it to the OSF project that holds this repository, if one exists.
-2. Paste each section above into the matching part of the form. Name the commit of this repository
-   at the time of filing.
-3. Submit the registration. Until it is approved, do not run the confirmatory grid.
-4. Once OSF gives the registration a DOI, write it on this page and change the status line.
 
 ## License and use of language models
 
