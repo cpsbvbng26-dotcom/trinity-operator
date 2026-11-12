@@ -9,8 +9,9 @@ note by the author.
 The preprint is frozen. This page and its script remain the maintained version.
 
 **Run:** `python3 games/games.py` from the root of this repository. Every number on this
-page comes from that script. `python3 verification/check_games.py` fails if the page and
-the script disagree, and checks each proposition by a separate computation.
+page comes from that script, except the wider scan of the window, which comes from
+`python3 games/scan.py`. `python3 verification/check_games.py` fails if the page and
+the scripts disagree, and checks each proposition by a separate computation.
 
 ## Status
 
@@ -336,7 +337,8 @@ bound 0.404, so the finite-depth estimate is too low there.
 
 Monotonicity is the least supported part. As δ changes, the base and the hole move
 together, and dimension functions of maps with holes often behave like a devil's
-staircase. Five values cannot settle it.
+staircase. Five values cannot settle it, and the 48 values of the wider scan below cannot
+either.
 
 Berg and Kitti (2014) study exactly this kind of object. They show that pure-strategy
 equilibrium payoff sets of discounted repeated games can be fractals, and measure them
@@ -349,6 +351,34 @@ standard results there. Three leads, recalled from memory and not checked: Glend
 and Sidorov (2001) on unique expansions in non-integer bases; Kalle, Kong, Langeveld and
 Li (around 2020) on the β-transformation with a hole; Urbański (1986) on the continuity
 of dimension for expanding maps with holes.
+
+### A wider scan
+
+The scan was run on 2026-11-12 with `python3 games/scan.py`. Its output is
+[`scan.txt`](scan.txt). It takes δ = 0.619, …, 0.666, which is 48 values at step 0.001
+across the whole window, and refines for 30 periods. The interval counts are exact,
+because δ is a fraction and every endpoint is kept as an integer. A separate floating-point
+computation in the check gives the same counts.
+
+- Growth is below `1/δ` in 48 of 48 rows, so the total length keeps shrinking at every δ
+  scanned. The largest value of growth × δ is 0.997, at δ = 0.666. Close to 2/3 the
+  shrinking is slow, and the depth matters most there.
+- The dimension estimate never falls from one δ to the next. The scan counts 0 decreases.
+  The estimate runs from 0.39 at the first δ to 0.99 at the last.
+- In 16 rows the estimate is below the lower bound of Proposition 6, so the finite-depth
+  estimate is too low there. This is the same effect as at δ = 0.62 in the table above.
+- The upper estimate is `log N/(n log(1/δ))` for `N` intervals at depth `n`. It is below 1
+  in 45 of 48 rows, for every δ up to 0.663.
+
+A standard covering argument may make the upper estimate an upper bound for the dimension
+at each δ scanned. That argument is not written out here and has not been checked, so the
+column is reported as evidence only. Even if it holds, it says nothing about the values of
+δ between the grid points.
+
+None of this is a proof. A grid of 48 values cannot rule out a δ between its points at which
+the length stops shrinking, and a finite depth cannot fix a dimension. A second grid, and
+what would count against the conjecture on it, is fixed in advance in the draft
+[preregistration](PREREGISTRATION.md). That grid has not been run.
 
 ## What this does and does not say about Trinity-Infinity
 
