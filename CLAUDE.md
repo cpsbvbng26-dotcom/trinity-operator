@@ -156,6 +156,10 @@ python3 verification/run_all.py            # CI の並びを verify.yml から�
 
 `examples/one_minute.txt` は `examples/one_minute.py` の出力を写した生成物である。
 例を直したら `python3 examples/one_minute.py > examples/one_minute.txt` で作り直す。手で直さない。
+`games/scan.txt` は `games/scan.py` の出力を写した生成物である。走査を直したら
+`python3 games/scan.py > games/scan.txt` で作り直す。手で直さない。
+`games/PREREGISTRATION.md` は OSF の事前登録の下書きで、登録は利用者が行う。
+登録が済むまで `python3 games/scan.py --confirmatory` を回さない。結果を見てから計画を直せば、事前登録ではなくなる。
 `check_guards.py` に壊し方を足したら、README が名乗る「N 通り」も直す。数えて突き合わせている。
 `games/OPEN-PROBLEM.md` はノートと展望から写した一枚である。写しにない主張を足さない。
 ラベルは `.github/workflows/labels.yml` が作る。頁の表と同じ名前にする。
