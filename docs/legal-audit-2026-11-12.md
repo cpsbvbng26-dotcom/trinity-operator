@@ -107,6 +107,27 @@ GitHub Pages が枝から頁を配るときに GitHub が動かす仕事と、De
 
 弁護士は、この節を見ていません。
 
+## 2026-11-12 の続き：十一度目の見落とし
+
+読むだけの点検を、十一度目に別の手で行いました。
+直した日は、日本時間で 2026-11-13 です。
+前の行は、そのとき何を確かめたかの記録なので、消していません。
+同じ日に、Vercel の Fair Use Guidelines の頁から「Commercial usage」の節が消えていたことが分かりました。
+上の表の Vercel の行は、その節の商用の例に照らしていました。
+Sophaxis の `sources.yml` で取り寄せ直しました。実行は 43338777855 で、結果は Sophaxis の枝 `sources/20261113-0040` にあります。
+頁の全文の SHA-256 は `72c94595a48be0ba40257c55fcee8fc60ca983022327cdd00ced5dcfda034565` で、最終更新の日は「Last updated September 14, 2026」のままです。
+利用規約の第 4 節は「You shall only use the Services under a Hobby plan for your personal or non-commercial use.」のままです。
+利用規約にも、取り寄せた Vercel のほかの頁にも、商用の定義はありません。
+取り寄せと引いた句の記録は、cpsbvbng26-dotcom の同じ見出しの節と `verification/statutes.json` にあります。
+
+| 箇所 | 法令と条 | 要件 | 事実 | 判定 | 対応 |
+| --- | --- | --- | --- | --- | --- |
+| 上の表の Vercel の行（site/ と、それを配る計画） | Vercel の利用規約 第4節、Vercel の Fair use Guidelines | Hobby は個人の利用か非商用の利用に限ること | 上の行は、Fair use Guidelines の商用の例に照らしていました。2026-11-13 に取り寄せた頁には、その節がありません。利用規約の第 4 節の文は変わっていません。site/ は予想を述べる英語の頁で、支払い・販売の広告・広告・受注の場への道は無く、どう読んでも商用に当たる事実を持ちません | 問題なし | 上の行は書いたときのまま残します。結論は変わりません |
+
+この表の判定は、問題なし 1 です。
+
+弁護士は、この節を見ていません。
+
 ## 調べた法令
 
 - GitHub の利用規約（I 節）と GitHub の追加製品の規約（Actions の節。2026-11-13 に `github/site-policy` から直に取り寄せた）
