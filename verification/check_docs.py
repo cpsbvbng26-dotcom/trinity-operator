@@ -409,7 +409,7 @@ for f in sorted(os.listdir(WF_DIR)):
     top = re.search(r"^permissions:\n((?:  \S[^\n]*\n)+)", wf, re.M)
     perms = dict(re.findall(r"^  ([a-z-]+):\s*(\S+)", top.group(1), re.M)) if top else {}
     check("%s が一番上で permissions を決めている" % f, bool(perms), repr(perms))
-    # 2026-11-14：突き合わせの受付（checked-intake.yml）は、誤りの知らせにラベルを付けて閉じるので、issue への書き込みを持つ。
+    # 2026-11-14：突き合わせの受付（checked-intake.yml）は、誤りの知らせにラベルとコメントを付けるので（2026-11-15 から閉じない）、issue への書き込みを持つ。
     # 13 のリポジトリで同じファイルで、cpsbvbng26-dotcom の check_ecosystem.js（12y）が中身と権限を固めている。
     want = {"labels.yml": {"issues": "write"}, "checked-intake.yml": {"contents": "read", "issues": "write"}}.get(f, {"contents": "read"})
     check("%s の権限が %s だけ" % (f, want), perms == want, repr(perms))
