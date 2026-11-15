@@ -1,0 +1,7 @@
+{
+  "base": "https://golden-window-conjecture.vercel.app/",
+  "dir": "site",
+  "include": ["**"],
+  "exclude": ["vercel.json"],
+  "lang": "ja"
+}

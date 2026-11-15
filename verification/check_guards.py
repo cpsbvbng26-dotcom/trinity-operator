@@ -192,6 +192,12 @@ case("CI の checkout を版の名前に戻す（コミットの値で固定し�
      "- uses: actions/setup-python@v7", "verification/check_docs.py")
 case("CI に書き込みの権限を渡す", ".github/workflows/verify.yml",
      "permissions:\n  contents: read", "permissions:\n  contents: write", "verification/check_docs.py")
+case("公開中のサイトの見張りに、issue のほかの書き込みの権限を渡す", ".github/workflows/live.yml",
+     "permissions:\n  contents: read\n  issues: write\n", "permissions:\n  contents: read\n  issues: write\n  pull-requests: write\n", "verification/check_docs.py")
+case("公開中のサイトの見張りに、中身を書く権限を渡す", ".github/workflows/live.yml",
+     "permissions:\n  contents: read\n  issues: write\n", "permissions:\n  contents: write\n  issues: write\n", "verification/check_docs.py")
+case("CI に issue への書き込みの権限を渡す", ".github/workflows/verify.yml",
+     "permissions:\n  contents: read", "permissions:\n  contents: read\n  issues: write", "verification/check_docs.py")
 case("CI に NumPy のほかのパッケージを入れさせる", ".github/workflows/verify.yml",
      "run: pip install numpy", "run: pip install numpy scipy", "verification/check_docs.py")
 case("誤りの知らせの様式で、根拠を必須から外す", ".github/ISSUE_TEMPLATE/error-report.yml",

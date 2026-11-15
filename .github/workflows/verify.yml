@@ -14,9 +14,12 @@ jobs:
   verify:
     name: 作用素 29 項目 / 証書 51 項目 / 展望 81 項目 / 引用情報 30 項目
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       # 外部のアクションは、コミットの値で固定する。版の名前は注釈に残す。
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: '3.12'
@@ -27,10 +30,13 @@ jobs:
         run: python3 verification/check_secrets.py
       # CITATION.cff が名乗る trinity-infinity の件数は、その検査を回して数える。
       # 写しはリポジトリの外（隣）へ移す。誤変換・秘密情報・依存の検査が写しの中まで走らないように。
+      # 読む版はコミットの値で固める（2026-11-15）。隣のリポジトリの main が動いても、この検査の結果は変わらない。
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: cpsbvbng26-dotcom/trinity-infinity
+          ref: 4c90643bbaeca135f4f975156d2b01f09747103b
           path: _sibling/trinity-infinity
+          persist-credentials: false
       - run: mv _sibling/trinity-infinity ../trinity-infinity && rmdir _sibling
       - name: 検査
         run: python3 check.py
