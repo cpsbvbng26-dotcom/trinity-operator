@@ -5,7 +5,8 @@
 
 台本を走らせるのは examples/one_minute.py と、隣の trinity-infinity の
 independent_check.py と claims_audit.py だけで、そこで NumPy を使う。
-ほかは文書と設定を読むだけである。
+17 では games/scan.py を読み込み、確かめの出力の表で決まらない行だけ scan.row を呼ぶ
+（games.py を通して NumPy を使う）。ほかは文書と設定を読むだけである。
 
 見るもの。
   1. README の冒頭の札（種類と状態）と、英語の欄。
@@ -28,16 +29,20 @@ independent_check.py と claims_audit.py だけで、そこで NumPy を使う�
  15. README の言語モデルの開示の表（道具・使ったところ・確かめた人）。
  16. 散文が名乗る件数。CITATION.cff が名乗る trinity-infinity の件数は、隣の
      trinity-infinity の検査を回して数える（場所は環境変数 TRINITY_INFINITY でも渡せる）。
- 17. 黄金比の窓の予想の事前登録の下書き（games/PREREGISTRATION.md）。確かめの格子と深さが
-     games/scan.py の定数と同じか、探索の格子と重ならないか、登録前に結果を置いていないか。
+ 17. 黄金比の窓の予想の事前登録（games/PREREGISTRATION.md）。登録の DOI を一つだけ書くか、
+     登録した本文が動いていないか、確かめの格子と深さが games/scan.py の定数と同じか。
+     確かめの出力（games/scan-confirmatory.txt）から、ノート・開いている問題の頁・README が
+     引く数を数え直す。表で決まらない行だけ scan.row を一行ずつ呼び、格子全部は回さない。
      README と続ける範囲の頁が書く、広げた走査の数も、ここで台本と突き合わせる。
  18. README の「区別が効く場面」の反例が、置換でも行確率でもないと書いているか。
      その行列が本当にそうであるかを、README の図から読んだ成分で確かめる。
 """
 
 import ast
+import hashlib
 import io
 import json
+import math
 import os
 import re
 import subprocess
@@ -227,8 +232,8 @@ if m_scan and m_sdepth and m_last and m_conf and m_cdepth:
           % len(scan_grid) in OPEN
           and "The wider scan shows the same on all %d rows" % len(scan_grid) in OPEN
           and "nor can the %d values of the wider scan" % len(scan_grid) in flat(OPEN))
-    check("頁が、確かめの格子はまだ回していないと書いている",
-          "That grid has not been run." in OPEN and "That grid has not been run." in NOTE)
+    check("ノートと頁が、確かめの格子を回し、その結果を次の節に置いたと書いている",
+          "The next section reports it." in NOTE and "The section below reports it." in OPEN)
 check("頁が、学部一年次の系列の続きだと書いている",
       "first-year undergraduate self-study" in OPEN and "It does not start a new theme." in OPEN)
 check("頁が Claude を著者にしていない", "Claude is not an\nauthor." in OPEN)
@@ -525,27 +530,80 @@ check("展望の README の「均衡 N 件」が、段 6 の台本の回す数�
       total is not None and len(said) == 2 and all(int(x) == total for x in said),
       "名乗り %s / 台本 %s" % (said, total))
 
-# ------------------------------------------------------------ 17. 事前登録の下書き
-print("\n17. 黄金比の窓の予想の、事前登録の下書き（games/PREREGISTRATION.md）")
+# ------------------------------------------------------------ 17. 事前登録と、確かめの格子の結果
+print("\n17. 黄金比の窓の予想の事前登録（games/PREREGISTRATION.md）と、確かめの格子の結果")
+# 2026-11-17 に下書きの状態から登録の状態へ移した。利用者が 2026-11-16 に OSF へ出し、2026-11-17 に承認し、
+# DOI を受け取って Claude が書いた。下書きのときと同じ厳しさで見る。
+#   - 頁は登録の DOI を一つだけ書く。番号は利用者から受け取ったもので、ここに書くのはその一つだけ。
+#   - 登録した本文（線の下の下書き）は、登録したコミットの写しから一字も動かさない。
+#   - 頁が引く数は、どれもここで打たない。確かめの出力の表（games/scan-confirmatory.txt）から数え直す。
+#     表は小数第三位で丸めてある。丸めた値で決まらない行だけ、登録したコミットの scan.row を一行ずつ呼ぶ。
+#     丸めは単調なので、表示の違う二つの値は、真の値でも同じ向きに違う。決まらないのは表示が等しいときだけ。
+#   - 確かめの格子そのもの（scan.py --confirmatory）は回さない。出力の表は生成物ではなく、一度だけの記録である。
 PRE_PATH = os.path.join("games", "PREREGISTRATION.md")
 PRE = read(PRE_PATH) if os.path.exists(os.path.join(ROOT, PRE_PATH)) else ""
-SCOPE_EN_F, SCOPE_JA_F, NOTE_F = flat(SCOPE_EN), flat(SCOPE_JA), flat(NOTE)
+SCOPE_EN_F, SCOPE_JA_F, NOTE_F, OPEN_F = flat(SCOPE_EN), flat(SCOPE_JA), flat(NOTE), flat(OPEN)
 PRE_F = flat(PRE)
-draft = "Status: draft, not registered." in PRE
-check("下書きがあり、まだ登録していないと冒頭で名乗っている",
-      PRE.startswith("# Preregistration draft:") and draft)
-check("下書きが、利用者から受け取っていない登録の DOI を書いていない",
-      "10.17605" not in PRE and "osf.io/" not in PRE.lower()
-      and "No registration DOI exists yet." in PRE)
-check("登録前は、確かめの格子の結果を置いていない（games/scan-confirmatory.txt が無い）",
-      not (draft and os.path.exists(os.path.join(ROOT, "games", "scan-confirmatory.txt"))))
+REG_DOI = "10.17605/OSF.IO/6EW38"          # 2026-11-17 に利用者から受け取った番号。DataCite で findable
+# 線の下の本文は、登録したコミット addf684 の下書きの本文（"This text follows the sections" から末尾まで）。
+PRE_BODY_SHA256 = "82fe3d4d806ebe9bb1b963d2546301ee1d08c51bacc43d7cfc2c2ca50fd5e985"
+registered = PRE.startswith("# Preregistration: a confirmatory scan of the golden-window conjecture\n") \
+    and "Status: registered on OSF. The registration DOI is" in PRE_F
+check("事前登録の頁が、OSF に登録したと冒頭で名乗り、OSF の文が優先すると書いている",
+      registered and "The text on OSF governs." in PRE_F)
+_head, _sep, _body = PRE.partition("\n---\n\n")
+check("線の下の本文が、登録したコミットの下書きの本文と一字一句同じ",
+      bool(_sep) and hashlib.sha256(_body.encode("utf-8")).hexdigest() == PRE_BODY_SHA256
+      and _body.startswith("This text follows the sections of the OSF Preregistration template"))
+
+
+def _osf_ids(text):
+    return sorted(set(m.lower() for m in re.findall(r"osf\.io/([a-z0-9]+)", text, re.I)))
+
+
+_reg_id = REG_DOI.split("/")[-1].lower()
+_named = {"PREREGISTRATION.md": PRE, "README.md": README, "games/README.md": NOTE, "OPEN-PROBLEM.md": OPEN}
+_bad = ["%s: %s" % (k, ", ".join(_osf_ids(v))) for k, v in _named.items() if _osf_ids(v) != [_reg_id]]
+check("事前登録の頁・README・ノート・開いている問題の頁が、登録の DOI として %s だけを書き、doi.org へつないでいる" % REG_DOI,
+      not _bad and all("[%s](https://doi.org/%s)" % (REG_DOI, REG_DOI) in v for v in _named.values()),
+      " / ".join(_bad))
+check("事前登録の頁が、止めた日・出した日時・承認した日・DataCite の登録の日時を書き、著者への手順を置いていない",
+      "The author stopped the registration on OSF on 2026-11-12, and nothing was filed then." in PRE_F
+      and "author filed it on 2026-11-16 at 20:15:06 JST and approved it on 2026-11-17." in PRE_F
+      and "registered on 2026-11-16 at 21:10:44 UTC, which is 2026-11-17 at 06:10 JST." in PRE_F
+      and "The confirmatory grid was not run before the registration was filed." in PRE_F
+      and "## Filing" not in PRE)
+_diffs = re.findall(r"^(\d+)\. ", _head, re.M)
+check("事前登録の頁が、OSF の文と下書きの違いを七つ並べ、Claude が欄の文を書いたと書いている",
+      _diffs == [str(i) for i in range(1, 8)]
+      and "Claude wrote the field texts. The registered text differs from the draft in these ways only:" in flat(_head),
+      "%d 項目" % len(_diffs))
+_commit = re.search(r"run on commit `([0-9a-f]{40})` of https://github\.com/cpsbvbng26-dotcom/trinity-operator\.",
+                    flat(_head))
+check("ノートと開いている問題の頁が、事前登録の頁と同じコミットで回したと書いている",
+      _commit is not None
+      and all("checked out at the registered commit `%s` with a clean tree" % _commit.group(1) in t
+              for t in (NOTE_F, OPEN_F)),
+      _commit.group(1)[:7] if _commit else "事前登録の頁にコミットが無い")
+check("下書きの状態の文が、どこにも残っていない",
+      not any(s in t for s in ("Status: draft, not registered.", "No registration DOI exists yet.",
+                               "# Preregistration draft:", "That grid has not been run.",
+                               "the draft [preregistration]", "the draft\n[preregistration]")
+              for t in (PRE, NOTE, OPEN, SCOPE_EN))
+      and "登録していないので、その格子はまだ回していません。" not in README
+      and "事前登録の下書き" not in SCOPE_JA)
+check("事前登録の頁が、結果の置き場（出力・ノート・開いている問題の頁）を指している",
+      "[`scan-confirmatory.txt`](scan-confirmatory.txt)" in PRE
+      and "[README.md](README.md#the-confirmatory-scan)" in PRE
+      and "[OPEN-PROBLEM.md](OPEN-PROBLEM.md#the-confirmatory-scan)" in PRE
+      and "\n### The confirmatory scan\n" in NOTE and "\n## The confirmatory scan\n" in OPEN)
 if m_scan and m_sdepth and m_last and m_conf and m_cdepth:
     check("確かめの格子が探索の格子と一つも重ならない",
           not set(conf_grid) & set(scan_grid), "%d 通りと %d 通り" % (len(conf_grid), len(scan_grid)))
     golden = Fraction(6180339887, 10 ** 10)          # 1/φ = 0.6180339887…（下から）
     check("確かめの格子が、どれも窓（1/φ と 2/3 の間）の中にある",
           all(golden + Fraction(1, 10 ** 10) < x < Fraction(2, 3) for x in conf_grid))
-    check("下書きが、確かめの格子の数と深さを台本と同じに書いている（%d 通り、深さ %d）"
+    check("登録した本文が、確かめの格子の数と深さを台本と同じに書いている（%d 通り、深さ %d）"
           % (len(conf_grid), conf_depth),
           "The confirmatory grid has %d values of δ:" % len(conf_grid) in PRE
           and "the %d midpoints of the exploratory grid, δ = (2k + 1)/%d for k = %d, …, %d, that is %s, %s, …, %s;"
@@ -557,7 +615,7 @@ if m_scan and m_sdepth and m_last and m_conf and m_cdepth:
           % (conf_depth, last) in PRE_F
           and "`log N/(%d log(1/δ))`" % conf_depth in PRE)
     check("探りの数が台本と同じ（six）", len(probes) == 6 and "six probes near the ends" in PRE)
-    check("下書きが、探索の格子を台本と同じに書いている",
+    check("登録した本文が、探索の格子を台本と同じに書いている",
           "It used %d values of δ, from %s to %s at step 0.001, and a depth of %d periods."
           % (len(scan_grid), fmt(scan_grid[0]), fmt(scan_grid[-1]), scan_depth) in PRE_F)
     check("README が、広げた走査の範囲と深さを台本と同じに書いている",
@@ -566,22 +624,160 @@ if m_scan and m_sdepth and m_last and m_conf and m_cdepth:
     check("続ける範囲の頁が、最初の走査の数を台本と同じに書いている",
           "δ は %d 通り、深さは %d 段で" % (len(scan_grid), scan_depth) in SCOPE_JA
           and "with %d values of δ and a depth of %d periods" % (len(scan_grid), scan_depth) in SCOPE_EN_F)
-check("下書きに、三つの仮説と、予想に反するとみなす結果の表がある",
+    check("開いている問題の頁の表が、確かめの格子の範囲と深さを台本と同じに書いている",
+          "| confirmatory scan of the window, 2026-11-17 | δ = %s, %s, …, %s and the probes %s, %d values; "
+          "depth %d periods; exact counts | `CONFIRM` and `CONFIRM_DEPTH` in `games/scan.py` |"
+          % (fmt(mids[0], 4), fmt(mids[1], 4), fmt(mids[-1], 4), ", ".join(fmt(x, 4) for x in probes),
+             len(conf_grid), conf_depth) in OPEN)
+check("登録した本文に、三つの仮説と、予想に反するとみなす結果の表がある",
       all("- **H%d**" % i in PRE for i in (1, 2, 3))
       and len(re.findall(r"^\| [^|]+ \| [^|]+ \(H[123]\) \|$", PRE, re.M)) == 4)
-check("下書きが、一致しても証明とは呼ばないと書いている",
+check("登録した本文が、一致しても証明とは呼ばないと書いている",
       "It is not reported as a proof." in PRE and "Agreement on the confirmatory grid will be" in PRE)
-check("下書きが、どの結果でもノートと開いている問題の頁に載せると書いている",
+check("登録した本文が、どの結果でもノートと開いている問題の頁に載せると書いている",
       "whatever they show" in PRE_F and "(README.md)" in PRE and "(OPEN-PROBLEM.md)" in PRE)
-check("下書きが LICENSE を指し、Claude を著者にしていない",
+check("事前登録の頁が LICENSE を指し、Claude を著者にしていない",
       "([LICENSE](LICENSE))" in PRE and "Claude is not an\nauthor." in PRE)
-check("README・ノート・開いている問題の頁が、下書きを指している",
+check("README・ノート・開いている問題の頁が、事前登録の頁を指している",
       "(games/PREREGISTRATION.md)" in README and "(PREREGISTRATION.md)" in NOTE
       and "(PREREGISTRATION.md)" in OPEN)
-check("README と下書きが、登録は著者が 2026-11-12 に止めたと止めた者まで書き、まだ登録していないと書き、著者への手順を置いていない（下書きの冒頭と同じ状態）",
-      draft and "OSF への登録は、2026-11-12 に著者が止めました。登録していないので、その格子はまだ回していません。" in README
-      and "The author stopped the registration on OSF on 2026-11-12,\nand nothing has been filed." in PRE
-      and "## Filing" not in PRE)
+check("README が、止めた日・出した日・承認した日と DOI を書き、記録を書いた者を決めた一文で書いている",
+      "OSF への登録は、2026-11-12 に著者がいったん止めました。2026-11-16 に著者が出し、2026-11-17 に承認しました。" in README
+      and "この記録は、2026-11-17 に利用者が登録し、DOI を受け取って Claude が書きました。" in README)
+
+# 確かめの出力。表から数え直し、表で決まらない行だけを scan.row で一行ずつ読む。
+CONF_REL = os.path.join("games", "scan-confirmatory.txt")
+CONF_OK = os.path.isfile(os.path.join(ROOT, CONF_REL))
+check("確かめの格子の出力（games/scan-confirmatory.txt）がある", CONF_OK)
+CONF_RAW = open(os.path.join(ROOT, CONF_REL), "rb").read() if CONF_OK else b""
+CONF_TXT = CONF_RAW.decode("utf-8", "replace")
+CONF_SHA = hashlib.sha256(CONF_RAW).hexdigest()
+check("ノートと開いている問題の頁が、出力の SHA-256 を、置いてあるファイルの値どおりに書いている",
+      CONF_OK and all("(SHA-256 `%s`)" % CONF_SHA in t for t in (NOTE_F, OPEN_F)), CONF_SHA[:12])
+sys.path.insert(0, os.path.join(ROOT, "games"))
+import scan as _scan  # noqa: E402  定数と scan.row を読むだけ。main() は回さない
+
+_lines = CONF_TXT.splitlines()
+_hd = re.match(r"^Golden-window scan, confirmatory grid \(games/PREREGISTRATION\.md\); depth (\d+)\.$",
+               _lines[0]) if _lines else None
+check("出力の一行目が、深さ %d を名乗る（台本の CONFIRM_DEPTH と同じ）" % _scan.CONFIRM_DEPTH,
+      _hd is not None and int(_hd.group(1)) == _scan.CONFIRM_DEPTH)
+_cols = ("| δ | intervals | total length | growth | growth × δ | length ratio "
+         "| dimension estimate | upper estimate | n₀ | lower bound |")
+_tab = [[c.strip() for c in l.strip("|").split("|")] for l in _lines if l.startswith("| 0.")]
+check("出力の表が、列の見出しのあとに %d 行あり、どの行も 10 列" % len(_scan.CONFIRM),
+      len(_lines) == len(_scan.CONFIRM) + 3 and _lines[1] == _cols
+      and len(_tab) == len(_scan.CONFIRM) and all(len(r) == 10 for r in _tab), "%d 行" % len(_tab))
+_shown = [_scan.fmt_delta(p, q) for p, q in _scan.CONFIRM]
+check("表の δ の列が、格子の順（中点を小さい順に、それから探り）の台本の表示と同じ",
+      [r[0] for r in _tab] == _shown)
+_full = {}
+
+
+def _row(i):
+    """表で決まらない行だけ、登録したコミットの台本の scan.row で読む。"""
+    if i not in _full:
+        p, q = _scan.CONFIRM[i]
+        _full[i] = _scan.row(p, q, _scan.CONFIRM_DEPTH)
+    return _full[i]
+
+
+_COL = {"growth_delta": 4, "ratio": 5, "dim": 6, "upper": 7, "lower": 9}
+
+
+def _lt(i, key, bound=Fraction(1)):
+    """行 i の値が bound より小さいか。表示が bound と等しいときだけ scan.row を読む。"""
+    shown = Fraction(_tab[i][_COL[key]])
+    return shown < bound if shown != bound else _row(i)[key] < bound
+
+
+def _dim_below_lower(i):
+    a, b = Fraction(_tab[i][_COL["dim"]]), Fraction(_tab[i][_COL["lower"]])
+    return a < b if a != b else _row(i)["dim"] < _row(i)["lower"]
+
+
+def _largest(key):
+    top = max(Fraction(r[_COL[key]]) for r in _tab)
+    i = max((j for j, r in enumerate(_tab) if Fraction(r[_COL[key]]) == top), key=lambda j: _row(j)[key])
+    return _row(i)[key], i
+
+
+if m_conf and len(_tab) == len(_scan.CONFIRM) and [r[0] for r in _tab] == _shown:
+    n = len(_tab)
+    exact = [Fraction(p, q) for p, q in _scan.CONFIRM]
+    order = sorted(range(n), key=lambda j: exact[j])
+    d4 = lambda j: fmt(exact[j], 4)  # noqa: E731
+    gd_ok = sum(_lt(i, "growth_delta") for i in range(n))
+    ra_ok = sum(_lt(i, "ratio") for i in range(n))
+    dim_ok = sum(_lt(i, "dim") for i in range(n))
+    up_ge = [i for i in order if not _lt(i, "upper")]
+    below = [i for i in range(n) if _dim_below_lower(i)]
+    falls = equal = 0
+    for a, b in zip(order, order[1:]):
+        sa, sb = Fraction(_tab[a][_COL["dim"]]), Fraction(_tab[b][_COL["dim"]])
+        if sa == sb:
+            sa, sb = _row(a)["dim"], _row(b)["dim"]
+        falls += sb < sa
+        equal += sb == sa
+    gd_max, gd_at = _largest("growth_delta")
+    ra_max, ra_at = _largest("ratio")
+    dim_max, dim_at = _largest("dim")
+    row_ok = True
+    for i, r in _full.items():                    # 読んだ行は、表の写しとも合うこと
+        row_ok = (_tab[i][1] == "%d" % r["count"] and _tab[i][2] == "%.2e" % r["length"]
+                  and [_tab[i][c] for c in (3, 4, 5, 6, 7, 9)]
+                  == ["%.3f" % r[k] for k in ("growth", "growth_delta", "ratio", "dim", "upper", "lower")]
+                  and _tab[i][8] == "%d" % r["n0"])
+        if not row_ok:
+            break
+    check("表で決まらず scan.row で読んだ %d 行が、どれも表の写しと同じ（格子は %d 行で、全部は回さない）"
+          % (len(_full), n), bool(_full) and len(_full) < n and row_ok)
+    h1, h2, h3 = gd_ok == ra_ok == n, dim_ok == n, falls == 0
+    m = 1 - gd_max
+    e = math.floor(math.log10(m))
+    sup = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+    margin = "%d × 10%s" % (round(m / 10 ** e), str(e).translate(sup))
+    follow = re.search(r"the affected values of δ are run again at depth (\d+)", PRE_F)
+    words = {6: "six"}
+    pairs = [(a, b) for a, b in zip(range(len(mids)), range(1, len(mids))) if _shown[a] == _shown[b]]
+    said = [
+        "The grid has %d values of δ: the %d midpoints of the exploratory grid and %s probes near the "
+        "ends of the window. The depth is %d periods." % (n, len(mids), words.get(len(probes), "?"),
+                                                          int(_hd.group(1)) if _hd else -1),
+        "- H1 %s. Growth × δ is below 1 at %d of %d values, and the length ratio per period is below 1 at %d of %d."
+        % ("holds" if h1 else "does not hold", gd_ok, n, ra_ok, n),
+        "The largest growth × δ is %.6f, at δ = %s. The largest length ratio per period is %.6f, at δ = %s."
+        % (gd_max, d4(gd_at), ra_max, d4(ra_at)),
+        "- H2 %s. The dimension estimate is below 1 at %d of %d values. The largest is %.6f, at δ = %s."
+        % ("holds" if h2 else "does not hold", dim_ok, n, dim_max, d4(dim_at)),
+        "- H3 %s. With δ in increasing order, the dimension estimate never falls. The scan counts %d decreases, "
+        "and no two neighbouring values are equal." % ("holds" if h3 else "does not hold", falls)
+        if equal == 0 else "（隣り合う値が %d 組等しい）" % equal,
+        "Nothing counts against the conjecture, so the follow-up at depth %s was not run."
+        % (follow.group(1) if follow else "?") if h1 and h2 and h3 else "（予想に反する結果がある）",
+        "The upper estimate is 1 or more at %d values close to 2/3 (δ = %s)."
+        % (len(up_ge), ", ".join(d4(i) for i in up_ge)),
+        "The dimension estimate is below the lower bound of Proposition 6 at %d values." % len(below),
+        "It prints the %d midpoints rounded to three decimals, so %s appears as %s, and %s and %s both appear as %s."
+        % (len(mids), d4(0), _shown[0], d4(pairs[0][0]), d4(pairs[0][1]), _shown[pairs[0][0]])
+        if pairs else "（表示の重なりが無い）",
+        "This is evidence on %d more values of δ, not a proof." % n,
+        "At δ = %s, growth × δ falls short of 1 by about %s." % (d4(gd_at), margin),
+        "There is no deviation from the plan in the analysis.",
+        "A first invocation in the same minute failed before Python started, because the shell's "
+        "`/usr/bin/time` was missing. It computed nothing.",
+    ]
+    for name, text in (("ノート", NOTE_F), ("開いている問題の頁", OPEN_F)):
+        miss = [s for s in said if s not in text]
+        check("%sが書く確かめの結果が、出力の表と scan.row から数え直した値と同じ" % name, not miss,
+              ("無い: " + miss[0][:70]) if miss else "%d 文" % len(said))
+    check("README が、確かめの格子の数と深さと、一文の結果を、数え直した値で書いている",
+          "登録のあとで、確かめの格子（%d 通り、深さ %d 段）を回しました" % (n, _scan.CONFIRM_DEPTH) in README
+          and ("%d 通りのどれでも総長は縮み、次元の推定は 1 未満で、δ とともに減りませんでした。" % n
+               if h1 and h2 and h3 else "（予想に反する結果がある）") in README
+          and "2/3 の近くでは 1 との差が小さく、これも根拠であって証明ではありません。" in README)
+else:
+    check("確かめの出力の表を、格子の順に読めない", False)
 
 # ------------------------------------------------------------ 18. 反例の行列の種類
 print("\n18. 区別が効く場面の反例は、意見の模型の外にある")

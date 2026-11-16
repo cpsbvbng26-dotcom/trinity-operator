@@ -42,7 +42,7 @@ The following also count as continuation.
 - Extending the numerical evidence on the same object. This means more values of δ inside
   the window, a deeper refinement, or a search for counterexamples. The first such scan was
   run on 2026-11-12, with 48 values of δ and a depth of 30 periods, and the open problem page
-  records it. Further grids, such as the one in the draft preregistration, continue it.
+  records it. Further grids, such as the preregistered one run on 2026-11-17, continue it.
 - Using the tools that the note names as a starting point, for this problem only. These are
   expansions in the non-integer base `β = 1/δ` with a hole.
 
