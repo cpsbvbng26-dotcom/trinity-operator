@@ -222,6 +222,12 @@ case("サイトの viewport で拡大を止める", "site/index.html",
 case("サイトの暗い側の切り替えで、淡い文字の色を地に近づける", "site/index.html",
      "\n  --faint: #81818b;", "\n  --faint: #3a3a40;",
      "verification/check_site.py")
+case("サイトの著者の sameAs から、人の Wikidata の項目を外す", "site/index.html",
+     '"https://orcid.org/0009-0000-1406-0547",\n          "https://www.wikidata.org/wiki/Q139590485"',
+     '"https://orcid.org/0009-0000-1406-0547"', "verification/check_site.py")
+case("サイトの著者の sameAs で、人の Wikidata の項目を別の番号にする", "site/index.html",
+     '"https://www.wikidata.org/wiki/Q139590485"', '"https://www.wikidata.org/wiki/Q139590486"',
+     "verification/check_site.py")
 
 print("\n8c. 百本ノック五で足した検査を壊す（黄金比の窓の予想の、広げた走査と事前登録と確かめの走査の結果）")
 case("走査の出力の写しで、区間の数を一つずらす", "games/scan.txt",

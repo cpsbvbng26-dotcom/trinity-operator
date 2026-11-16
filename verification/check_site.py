@@ -75,6 +75,19 @@ check("構造化データの WebSite が配信先を指す",
 check("構造化データの WebPage が配信先を指す",
       len(page_ld) == 1 and page_ld[0].get("url") == URL)
 
+# 2026-11-17。著者の Person は、ORCID と人の Wikidata の項目（Q139590485）を sameAs に持つ。
+# 人の項目は著者のところに一度だけ置き、ほかの Wikidata の項目は置かない。
+ORCID = "https://orcid.org/0009-0000-1406-0547"
+WD_PERSON = "Q139590485"
+author = page_ld[0].get("author") if len(page_ld) == 1 else None
+same = author.get("sameAs", []) if isinstance(author, dict) else []
+check("構造化データの著者が、ORCID と人の Wikidata の項目（%s）を sameAs に持つ" % WD_PERSON,
+      isinstance(author, dict) and author.get("@type") == "Person"
+      and ORCID in same and "https://www.wikidata.org/wiki/" + WD_PERSON in same, repr(same))
+wd_others = sorted(set(re.findall(r"wikidata\.org/(?:wiki|entity)/(Q\d+)", html)) - {WD_PERSON})
+check("人の項目は頁に一度だけあり、ほかの Wikidata の項目が無い",
+      html.count(WD_PERSON) == 1 and not wd_others, ", ".join(wd_others) or "%d 回" % html.count(WD_PERSON))
+
 print("\n3. 検索結果に出るロゴ")
 # Google は、トップページから rel="icon" で指された正方形の画像を使う。
 # 大きさは 48px の倍数を求める。SVG は viewBox で見る。
