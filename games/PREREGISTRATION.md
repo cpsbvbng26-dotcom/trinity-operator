@@ -1,9 +1,45 @@
-# Preregistration draft: a confirmatory scan of the golden-window conjecture
+# Preregistration: a confirmatory scan of the golden-window conjecture
 
-Status: draft, not registered. The author stopped the registration on OSF on 2026-11-12,
-and nothing has been filed. While it is unregistered the text can change, and the confirmatory
-grid below is not run. No registration DOI exists yet. None is written here that the author
-has not given.
+Status: registered on OSF. The registration DOI is
+[10.17605/OSF.IO/6EW38](https://doi.org/10.17605/OSF.IO/6EW38). The text on OSF governs.
+
+The author stopped the registration on OSF on 2026-11-12, and nothing was filed then. The
+author filed it on 2026-11-16 at 20:15:06 JST and approved it on 2026-11-17. DataCite records
+the DOI as registered on 2026-11-16 at 21:10:44 UTC, which is 2026-11-17 at 06:10 JST. The
+confirmatory grid was not run before the registration was filed.
+
+Below the line, this page keeps the draft as it stood before filing, unchanged. The OSF form
+was filled from it, field by field. Claude wrote the field texts. The registered text differs
+from the draft in these ways only:
+
+1. The analysis plan names the commit. The command `python3 games/scan.py --confirmatory` is
+   run on commit `addf684d4b3165af37cbc3ac94763608b7b6d2bf` of
+   https://github.com/cpsbvbng26-dotcom/trinity-operator.
+2. The variables are split into three groups. The manipulated variable is δ, at 54 levels.
+   The measured variables are `N_n` and `L_n` at every period `n`, and `n₀` and the lower
+   bound of Proposition 6 from `games/games.py` (`window_lower_bound`). The indices carry
+   formulas taken from `games/scan.py`, lines 82–94 at that commit: growth =
+   `(N_32 / N_27)^(1/5)`; growth × δ; length ratio per period = `(L_32 / L_27)^(1/5)`;
+   dimension estimate = `log(growth)/log(1/δ)`; upper estimate = `log(N_32)/(32·log(1/δ))`.
+3. The sample size rationale adds four points. There is no power analysis, because the
+   computation is deterministic and has no sampling error. The midpoints keep the exploratory
+   spacing without sharing a value with it. The probes test the ends of the window
+   (`1/φ ≈ 0.6180` and `2/3 ≈ 0.6667`). Depth 32 is two periods deeper than 30.
+4. The inference criteria add: "There are no p-values, so no correction for multiple testing
+   applies. Every value of δ is reported, whatever it shows."
+5. Missing data adds "No value is imputed." Transformations: none. Data exclusion: all 54
+   values are included, and there are no outliers.
+6. Study type: Other. There is no causal inference, no blinding and no randomization.
+7. The field "Other" holds the context, the reporting, the software, the licence and the
+   disclosure of the use of a language model, with the repository URL in place of the
+   relative links.
+
+Results. The confirmatory grid was run on 2026-11-17, after the registration was filed. Its
+output is [`scan-confirmatory.txt`](scan-confirmatory.txt). The results against the
+registered criteria are in the note ([README.md](README.md#the-confirmatory-scan)) and on
+the open problem page ([OPEN-PROBLEM.md](OPEN-PROBLEM.md#the-confirmatory-scan)).
+
+---
 
 This text follows the sections of the OSF Preregistration template, in order, so that each
 section can be pasted into the matching part of the form. It continues the repeated-games note
