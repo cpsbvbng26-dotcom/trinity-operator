@@ -52,19 +52,25 @@ def run(where, script):
 
 
 def case(label, rel, old, new, script):
-    """rel の old を new に替えた写しで script を走らせ、落ちることを見る。"""
+    """rel の old を new に替えた写しで script を走らせ、落ちることを見る。old が None なら rel を消す。"""
     tmp = tempfile.mkdtemp()
     try:
         dst = os.path.join(tmp, "repo")
         shutil.copytree(ROOT, dst, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         path = os.path.join(dst, rel)
-        with io.open(path, encoding="utf-8") as fh:
-            text = fh.read()
-        if text.count(old) != 1:
-            check(label, False, "壊す場所が %s に一つだけあるはずが %d か所" % (rel, text.count(old)))
-            return
-        with io.open(path, "w", encoding="utf-8") as fh:
-            fh.write(text.replace(old, new))
+        if old is None:                     # ファイルごと消す
+            if not os.path.isfile(path):
+                check(label, False, "消すはずの %s が無い" % rel)
+                return
+            os.remove(path)
+        else:
+            with io.open(path, encoding="utf-8") as fh:
+                text = fh.read()
+            if text.count(old) != 1:
+                check(label, False, "壊す場所が %s に一つだけあるはずが %d か所" % (rel, text.count(old)))
+                return
+            with io.open(path, "w", encoding="utf-8") as fh:
+                fh.write(text.replace(old, new))
         code, fails = run(dst, script)
         check(label, code == 1,
               ("%s が落ちた: %s" % (script, fails[0][6:70] if fails else "終了コード 1"))
@@ -217,7 +223,7 @@ case("サイトの暗い側の切り替えで、淡い文字の色を地に近�
      "\n  --faint: #81818b;", "\n  --faint: #3a3a40;",
      "verification/check_site.py")
 
-print("\n8c. 百本ノック五で足した検査を壊す（黄金比の窓の予想の、広げた走査と事前登録の下書き）")
+print("\n8c. 百本ノック五で足した検査を壊す（黄金比の窓の予想の、広げた走査と事前登録と確かめの走査の結果）")
 case("走査の出力の写しで、区間の数を一つずらす", "games/scan.txt",
      "| 0.619 | 461 |", "| 0.619 | 462 |", "verification/check_games.py")
 # 切り捨てそのものを外すと区間が 2³⁰ 個に増え、記憶が尽きる。端を一目盛りだけずらす。
@@ -231,10 +237,60 @@ case("ノートから、走査は証明ではないという一文を消す", "g
      "verification/check_games.py")
 case("開いている問題の頁で、走査の深さを台本と違えて書く", "games/OPEN-PROBLEM.md",
      "depth 30 periods; exact counts", "depth 32 periods; exact counts", "verification/check_docs.py")
-case("事前登録の下書きで、確かめの深さを台本と違えて書く", "games/PREREGISTRATION.md",
+case("事前登録の頁の、登録した本文で、確かめの深さを台本と違えて書く", "games/PREREGISTRATION.md",
      "which is 32.", "which is 34.", "verification/check_docs.py")
-case("事前登録の下書きから、まだ登録していないという冒頭の一文を消す", "games/PREREGISTRATION.md",
-     "Status: draft, not registered. ", "", "verification/check_docs.py")
+case("事前登録の頁から、OSF に登録したという冒頭の一文を消す", "games/PREREGISTRATION.md",
+     "Status: registered on OSF. ", "", "verification/check_docs.py")
+# 2026-11-17 に登録の状態へ移した検査を壊す。違う番号はその場で組む（横断の検査が DOI の一覧と突き合わせるため）。
+case("事前登録の頁の登録の DOI を、受け取っていない番号に替える", "games/PREREGISTRATION.md",
+     "[10.17605/OSF.IO/6EW38](https://doi.org/10.17605/OSF.IO/6EW38)",
+     "[{0}](https://doi.org/{0})".format("10.17605/" + "OSF.IO/6EW39"), "verification/check_docs.py")
+case("ノートに、二つ目の登録の DOI を足す", "games/README.md",
+     "the text on OSF governs.\n", "the text on OSF governs. See also " + "10.17605/" + "osf.io/7kr5n.\n",
+     "verification/check_docs.py")
+case("事前登録の頁の、線の下の登録した本文を一語変える", "games/PREREGISTRATION.md",
+     "There is no stopping rule.", "There is a stopping rule.", "verification/check_docs.py")
+case("事前登録の頁に、まだ登録していないという下書きの一文を戻す", "games/PREREGISTRATION.md",
+     "The text on OSF governs.\n", "The text on OSF governs. No registration DOI exists yet.\n",
+     "verification/check_docs.py")
+case("確かめの格子の出力を消す", "games/scan-confirmatory.txt", None, None, "verification/check_docs.py")
+case("確かめの格子の出力の一行目で、深さを 34 と名乗る", "games/scan-confirmatory.txt",
+     "); depth 32.", "); depth 34.", "verification/check_docs.py")
+case("確かめの格子の出力から、表の一行を落とす", "games/scan-confirmatory.txt",
+     "| 0.6183 | 279 | 5.72e-06 | 1.158 | 0.716 | 0.733 | 0.305 | 0.366 | 12 | 0.314 |\n", "",
+     "verification/check_docs.py")
+case("確かめの格子の出力で、区間の数を一つずらす", "games/scan-confirmatory.txt",
+     "| 0.6182 | 224 |", "| 0.6182 | 225 |", "verification/check_docs.py")
+case("ノートの、成長率 × δ の最大を一目盛り変える", "games/README.md",
+     "The largest growth × δ is 0.999695,", "The largest growth × δ is 0.999696,", "verification/check_docs.py")
+case("開いている問題の頁の、次元の推定の最大を一目盛り変える", "games/OPEN-PROBLEM.md",
+     "The largest is 0.999247, at", "The largest is 0.999248, at", "verification/check_docs.py")
+case("開いている問題の頁の、下界を下回る値の数を変える", "games/OPEN-PROBLEM.md",
+     "Proposition 6 at 17 values.", "Proposition 6 at 16 values.", "verification/check_docs.py")
+case("ノートの、上からの推定が 1 以上になる値の数を変える", "games/README.md",
+     "estimate is 1 or more at 6 values", "estimate is 1 or more at 5 values", "verification/check_docs.py")
+case("ノートの、H1 が通った値の数を変える", "games/README.md",
+     "Growth × δ is below 1 at 54 of 54 values", "Growth × δ is below 1 at 53 of 54 values",
+     "verification/check_docs.py")
+case("開いている問題の頁の、次元の推定が下がる箇所の数を変える", "games/OPEN-PROBLEM.md",
+     "The scan counts\n  0 decreases", "The scan counts\n  1 decreases", "verification/check_docs.py")
+case("ノートの、2/3 の近くの差を一桁変える", "games/README.md",
+     "by about 3 × 10⁻⁴.", "by about 3 × 10⁻⁵.", "verification/check_docs.py")
+case("ノートから、確かめの走査は証明ではないという一文を消す", "games/README.md",
+     "This is evidence on 54 more values of δ, not a proof. ", "", "verification/check_docs.py")
+case("開いている問題の頁で、証明ではないを証明だと書き換える", "games/OPEN-PROBLEM.md",
+     "This is evidence on 54 more values of δ, not a proof.", "This is a proof on 54 more values of δ.",
+     "verification/check_docs.py")
+case("ノートの出力の SHA-256 を一字変える", "games/README.md",
+     "(SHA-256 `f3c40d4b", "(SHA-256 `f3c40d4c", "verification/check_docs.py")
+case("README の、確かめの格子の数を変える", "README.md",
+     "確かめの格子（54 通り、深さ 32 段）", "確かめの格子（53 通り、深さ 32 段）", "verification/check_docs.py")
+case("README から、確かめの走査も証明ではないという一文を消す", "README.md",
+     "2/3 の近くでは 1 との差が小さく、これも根拠であって証明ではありません。\n", "",
+     "verification/check_docs.py")
+case("README から、記録を書いた者の一文を消す", "README.md",
+     "この記録は、2026-11-17 に利用者が登録し、DOI を受け取って Claude が書きました。\n", "",
+     "verification/check_docs.py")
 case("走査の台本で、確かめの格子の端の探りを探索の格子と重ねる", "games/scan.py",
      "for k in (6181, 6182, 6183, 6664, 6665, 6666))", "for k in (6181, 6182, 6183, 6664, 6665, 6660))",
      "verification/check_docs.py")
