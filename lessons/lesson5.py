@@ -79,6 +79,11 @@ def values():
         "cy_worst": "%.2e" % worst,
         "cy_bound": "%.2e" % (lam_max ** STEPS),
         "fj_worst": "%.2e" % fj_worst,
+        # 段の数と試行の数も台本から出す。頁の数が台本の STEPS・TRIALS とずれたら落ちる。
+        "phrase_one": "After %d steps of `A₁` alone the vector has length %.2e." % (STEPS, float(np.linalg.norm(one))),
+        "phrase_alt": "After %d steps alternating `A₁` and `A₂` it has length %.1f." % (STEPS, float(np.linalg.norm(alt))),
+        "phrase_cy": "Over %d random switching sequences of %d steps" % (TRIALS, STEPS),
+        "phrase_fj": "The script draws %d random runs of %d steps" % (TRIALS, STEPS),
     }
 
 

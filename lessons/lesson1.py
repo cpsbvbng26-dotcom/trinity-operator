@@ -47,6 +47,8 @@ def values():
         "radius": "%.6f" % op.spectral_radius,
         "actual_20": "%.2e" % e[STEPS],
         "apriori_20": "%.2e" % apriori,
+        # 段の数も台本から出す。頁の「After 20 steps」が台本の STEPS とずれたら落ちる。
+        "phrase_steps": "After %d steps the error is %.2e" % (STEPS, e[STEPS]),
     }
 
 
