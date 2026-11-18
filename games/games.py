@@ -17,6 +17,7 @@ G_3 is Table 1 of Series I. Payoffs of the repeated game are normalised:
 import math
 import os
 import sys
+from fractions import Fraction
 
 import numpy as np
 
@@ -26,6 +27,12 @@ from trinity import TrinityOperator, cyclic_shift  # noqa: E402
 PHI_INV = (math.sqrt(5.0) - 1.0) / 2.0
 DEPTH = 22          # depth of the interval refinement for the conjectures
 GAP = (0.62, 0.63, 0.64, 0.65, 0.66)
+CYL_DEPTH = 16      # depth of the exact cylinder check of Proposition 8
+CYL = (62, 64, 66)  # δ = k/100 for the cylinder check
+DIM = ((6181, 10000), (62, 100), (63, 100), (64, 100), (65, 100), (66, 100), (6666, 10000))
+DIM_GRID = (6181, 6667, 10000)   # δ = k/10000, k = 6181 … 6666: the grid of Proposition 9
+FLAT = (6400, 6451, 10000)       # δ = k/10000, k = 6400 … 6450: a flat stretch of the entropy
+FORCED_STEPS = 400  # steps of the forced path that are followed
 TOL = 1e-9
 
 
@@ -202,6 +209,74 @@ def dimension_estimate(delta):
     return r[-1][0], r[-1][1], growth, math.log(growth) / math.log(1 / delta)
 
 
+def cylinders(p, q, depth=CYL_DEPTH):
+    """Step 1 of the proof of Proposition 8, in exact arithmetic, for δ = p/q.
+
+    With x = (3 − w)/(1 − δ), β = 1/δ and X = (2δ − 1)/(δ(1 − δ)), the map is
+    T(x) = βx on L = [0, δX] and T(x) = β(x − 1) on R = [1, X]. Each cylinder I of
+    depth n is kept with its image J = Tⁿ(I). The proof says J = [0, b] every time;
+    the function raises if an image does not start at 0. Returns the total length of
+    the cylinders (in x) after each period, as fractions.
+    """
+    d = Fraction(p, q)
+    beta, X = 1 / d, (2 * d - 1) / (d * (1 - d))
+    if not d * X < 1 < X:
+        raise ValueError("δ = %s is not inside the window" % d)
+    pieces = ((Fraction(0), d * X, 0), (Fraction(1), X, 1))
+    cyl = [(Fraction(0), X, Fraction(0), X)]   # I = [i0, i1] and its image J = Tⁿ(I) = [j0, j1]
+    lengths = []
+    for n in range(depth):
+        slope = beta ** n                       # Tⁿ is increasing and affine of this slope on I
+        new = []
+        for i0, i1, j0, j1 in cyl:
+            for lo, hi, a in pieces:
+                l, h = max(j0, lo), min(j1, hi)
+                if l > h:
+                    continue
+                k0, k1 = beta * (l - a), beta * (h - a)
+                if k0 != 0:
+                    raise AssertionError("δ = %s, period %d: an image does not start at 0" % (d, n + 1))
+                new.append((i0 + (l - j0) / slope, i0 + (h - j0) / slope, k0, k1))
+        cyl = new
+        lengths.append(sum(i1 - i0 for i0, i1, _, _ in cyl))
+    return lengths
+
+
+def first_returns(p, q, steps=FORCED_STEPS):
+    """The set A_δ of Proposition 9, in exact arithmetic, for δ = p/q.
+
+    The forced path starts at s₀ = X. From s ≥ 1 it goes to β(s − 1), from s < δX to βs,
+    and it stops at a state in [δX, 1). A_δ holds k + 1 for every state s_k ≥ δX. Only the
+    first `steps` states are followed; a path that has not stopped by then is cut there.
+    """
+    d = Fraction(p, q)
+    beta, X = 1 / d, (2 * d - 1) / (d * (1 - d))
+    s, out = X, []
+    for k in range(steps):
+        if s >= d * X:
+            out.append(k + 1)
+        if s >= 1:
+            s = beta * (s - 1)
+        elif s < d * X:
+            s = beta * s
+        else:
+            break
+    return out
+
+
+def dimension(p, q, steps=FORCED_STEPS):
+    """Proposition 9: the s in (0, 1) with Σ_{n ∈ A_δ} δ^{ns} = 1, by bisection in floats."""
+    A, d = first_returns(p, q, steps), p / q
+    lo, hi = 0.0, 1.0
+    for _ in range(100):
+        s = (lo + hi) / 2
+        if sum(d ** (n * s) for n in A) > 1:
+            lo = s
+        else:
+            hi = s
+    return (lo + hi) / 2, A
+
+
 # ---------------------------------------------------------------------- values
 def values():
     v = {}
@@ -233,6 +308,42 @@ def values():
     v["phi_identity"] = "%.6f" % (1 - PHI_INV ** 3)
     v["phi_identity_2"] = "%.6f" % (2 * PHI_INV ** 2)
     v["depth"] = "%d" % DEPTH
+    v["cyl_run"] = "for %d periods at δ = %s and %s" % (
+        CYL_DEPTH, ", ".join("%g" % (k / 100) for k in CYL[:-1]), "%g" % (CYL[-1] / 100))
+    for k in CYL:
+        lengths = cylinders(k, 100)
+        v["cyl_%g" % (k / 100)] = "from %.3g to %.3g at δ = %g" % (lengths[0], lengths[-1], k / 100)
+    for p, q in DIM:
+        dim, A = dimension(p, q)
+        _, _, lower = window_lower_bound(p / q)
+        shown = ", ".join("%d" % n for n in A[:4]) + (", …" if len(A) > 4 else "")
+        v["dim_%s" % (p / q)] = "| %s | {%s} | %.6f | %.3f |" % (p / q, shown, dim, lower)
+    k0, k1, q = DIM_GRID
+    grid = [dimension(k, q)[0] for k in range(k0, k1)]
+    lows = [window_lower_bound(k / q)[2] for k in range(k0, k1)]
+    rises = sum(1 for a, b in zip(grid, grid[1:]) if b > a)
+    v["dim_grid"] = "On the %d values δ = %s, %s, …, %s" % (
+        len(grid), k0 / q, (k0 + 1) / q, (k1 - 1) / q)
+    v["dim_grid_rises"] = "the dimension rises at %d of the %d steps" % (rises, len(grid) - 1)
+    # Where A_δ = {1, n₀ + 1}, the self-similar set of Proposition 6 is the whole first-return
+    # system, and the bound equals the dimension; the two bisections then differ by rounding only.
+    v["dim_grid_below"] = "it is below the lower bound of Proposition 6 at %d of them and equal to it, to 9 decimals, at %d" % (
+        sum(1 for a, b in zip(grid, lows) if a < b - 1e-9), sum(1 for a, b in zip(grid, lows) if abs(a - b) <= 1e-9))
+    v["dim_grid_ends"] = "It runs from %.4f to %.6f" % (grid[0], grid[-1])
+    k0, k1, q = FLAT
+    flat = [dimension(k, q) for k in range(k0, k1)]
+    sets = {tuple(A) for _, A in flat}
+    A = flat[0][1]
+    lo, hi = 0.0, 1.0                            # h = log(1/z*) with Σ_{n ∈ A} z^n = 1
+    for _ in range(100):
+        z = (lo + hi) / 2
+        lo, hi = (lo, z) if sum(z ** n for n in A) > 1 else (z, hi)
+    rises = all(b[0] > a[0] for a, b in zip(flat, flat[1:]))
+    v["flat"] = "at every δ = %s, %s, …, %s: `A_δ = {%s}`," % (
+        "%.4f" % (k0 / q), "%.4f" % ((k0 + 1) / q), "%.4f" % ((k1 - 1) / q),
+        ", ".join("%d" % n for n in A) if len(sets) == 1 else "?")
+    v["flat_h"] = "the entropy is %.6f throughout, and the dimension %s from %.6f to %.6f" % (
+        math.log(2 / (lo + hi)), "rises" if rises else "does not rise", flat[0][0], flat[-1][0])
     return v
 
 
@@ -256,6 +367,12 @@ def main():
           % v["depth"])
     for delta in GAP:
         print("  " + v["gap_%g" % delta])
+    print("Proposition 8, exact cylinders %s: every image starts at 0; total length (in x) %s"
+          % (v["cyl_run"], "; ".join(v["cyl_%g" % (k / 100)] for k in CYL)))
+    print("Proposition 9:  δ | A_δ | dimension | lower bound of Proposition 6")
+    for p, q in DIM:
+        print("  " + v["dim_%s" % (p / q)])
+    print("%s: %s, and %s. %s." % (v["dim_grid"], v["dim_grid_rises"], v["dim_grid_below"], v["dim_grid_ends"]))
 
 
 if __name__ == "__main__":
