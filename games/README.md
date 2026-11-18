@@ -8,7 +8,15 @@ note by the author.
 [`10.6084/m9.figshare.34419198`](https://doi.org/10.6084/m9.figshare.34419198) (2026-10-13).
 The preprint is frozen. This page and its script remain the maintained version. The preprint
 states both parts of the conjecture as conjectures, and it stays that way. Propositions 8 and
-9, which prove them, are in this note only.
+9, which prove them, are in this note and in the resolution paper below.
+
+**Resolution paper.** A paper that resolves the conjecture is on Figshare:
+[`10.6084/m9.figshare.35050300`](https://doi.org/10.6084/m9.figshare.35050300). The DOI was
+received from the owner on 2026-11-18. It is a separate item, not a new version of the
+preprint above. It contains Propositions 8 and 9 with their proofs, and further results. Its
+source, PDF and scripts are in
+[golden-window-resolution](https://github.com/cpsbvbng26-dotcom/golden-window-resolution).
+It is a preprint and has not been peer-reviewed.
 
 **Run:** `python3 games/games.py` from the root of this repository. Every number on this
 page comes from that script, except the wider scan of the window, which comes from
