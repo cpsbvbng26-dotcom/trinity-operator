@@ -41,12 +41,16 @@ def errors(op, x0, steps):
     return out
 
 
+II_STEPS = 30
+OUT_STEPS = 40
+
+
 def values():
     """name -> the exact string the lesson prints."""
     s2 = series_ii()
-    e = errors(s2, [0.9, 0.1, 0.4], 30)
+    e = errors(s2, [0.9, 0.1, 0.4], II_STEPS)
     b = outside()
-    f = errors(b, [0.0, 1.0], 40)
+    f = errors(b, [0.0, 1.0], OUT_STEPS)
     return {
         "ii_norm": "%.6f" % s2.operator_norm,
         "ii_radius": "%.6f" % s2.spectral_radius,
@@ -54,15 +58,20 @@ def values():
         "ii_cube_offdiag": "%.1e" % float(np.abs(np.linalg.matrix_power(s2.A, 3)
                                                  - np.prod(s2.a) * np.eye(3)).max()),
         "ii_three_steps": "%.6f" % (e[3] / e[0]),
-        "ii_ratio_30": "%.2e" % (e[30] / e[0]),
-        "ii_bound_30": "%.2e" % (s2.operator_norm ** 30),
+        "ii_ratio_30": "%.2e" % (e[II_STEPS] / e[0]),
+        "ii_bound_30": "%.2e" % (s2.operator_norm ** II_STEPS),
         "out_norm": "%.6f" % b.operator_norm,
         "out_radius": "%.6f" % b.spectral_radius,
         "out_errors": ", ".join("%.4f" % v for v in f[:5]),
         "out_peak": "%.2f" % (max(f) / f[0]),
-        "out_err_40": "%.2e" % f[40],
+        "out_err_40": "%.2e" % f[OUT_STEPS],
         "ex_norm": "%.6f" % exercise().operator_norm,
         "ex_radius": "%.6f" % exercise().spectral_radius,
+        # 段の数も台本から出す。頁の段の数が台本とずれたら落ちる。
+        "phrase_compare": "compare the two bounds after %d steps." % II_STEPS,
+        "phrase_table": "| | error after %d steps, relative to the start |" % II_STEPS,
+        "phrase_loose": "loose by five orders of magnitude after %d steps" % II_STEPS,
+        "phrase_out": "After %d steps it is %.2e." % (OUT_STEPS, f[OUT_STEPS]),
     }
 
 

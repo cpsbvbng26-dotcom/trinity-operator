@@ -48,8 +48,13 @@ for script in scripts:
     check("第 %s 回の台本が走る" % num, out.returncode == 0, out.stderr.strip()[-200:])
     rows = [line.split("\t", 1) for line in out.stdout.splitlines() if "\t" in line]
     check("第 %s 回の台本が値を出す" % num, len(rows) > 0, "%d 個" % len(rows))
+    # 「phrase_」で始まる値は、段の数や試行の数を含む一続きの文である（2026-11-18、決めごと 5）。
+    # 頁は 88 字ほどで折り返すので、文は空白と改行を一つの空白に揃えた頁と突き合わせる。
+    # それ以外の値は、これまでどおり頁の字面そのものと突き合わせる。
+    flat = " ".join(page.split())
     for key, value in rows:
-        check("頁に %s = %s がある" % (key, value), value in page)
+        found = (value in flat) if key.startswith("phrase_") else (value in page)
+        check("頁に %s = %s がある" % (key, value), found)
 
 print("\n" + "-" * 58)
 if failures:
