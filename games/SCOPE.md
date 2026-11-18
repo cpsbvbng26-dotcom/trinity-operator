@@ -26,18 +26,20 @@ device.
 ## What counts as continuation
 
 Continuation answers a part that the note and the open problem page have already opened.
-Each open part has one issue label. The table lists them in the order of the labels.
+Each part that was opened has one issue label. The table lists them in the order of the
+labels. Parts (a) and (b) were answered on 2026-11-18 by Propositions 8 and 9. Their labels
+stay, for corrections of those proofs.
 
 | label | open part | work that continues it |
 | --- | --- | --- |
-| `conjecture (a)` | Golden-window conjecture (a) | a proof, or a counterexample, that `T_δ` has length zero inside the window |
-| `conjecture (b)` | Golden-window conjecture (b) | a proof, or a counterexample, about the dimension of `T_δ`, monotonicity included |
+| `conjecture (a)` | Golden-window conjecture (a) | resolved by Proposition 8 (2026-11-18); a special case of known theorems; a correction of that proof |
+| `conjecture (b)` | Golden-window conjecture (b) | resolved by Proposition 9 (2026-11-18); the formula is a special case of known theorems; a correction of that proof, or a source for continuity, strict increase or the end limits along the curve |
 | `why 1/φ twice` | An open question: why 1/φ twice | why Propositions 1 and 5 both come from the polynomial `δ² + δ − 1` |
 | `literature check` | The literature check | checking Propositions 1–7 against the literature, so that they can be counted |
 
 The following also count as continuation.
 
-- Correcting Propositions 1–7 or their proofs. The correction goes into the note and its
+- Correcting Propositions 1–9 or their proofs. The correction goes into the note and its
   script. The Figshare preprint is frozen.
 - Extending the numerical evidence on the same object. This means more values of δ inside
   the window, a deeper refinement, or a search for counterexamples. The first such scan was
@@ -50,7 +52,7 @@ The following also count as continuation.
 
 Work that changes the object `T_δ` is not continuation. It is a new theme.
 
-- A stage game that Propositions 1–7 do not treat.
+- A stage game that Propositions 1–9 do not treat.
 - A monitoring assumption other than the perfect monitoring of the note.
 - The golden example of the roadmap, stage 2, where the joint spectral radius is exactly 1
   at `γ = 1/φ`. The open problem page records it as a different object.
@@ -63,6 +65,8 @@ diamond open access venues, conference talks and joint research.
 ## How continuation is published
 
 - Results go into the note and its script. A proof is added before the status table moves.
+  Parts (a) and (b) went this way on 2026-11-18: Propositions 8 and 9 and their proofs were
+  added first, and then the rows of parts (a) and (b) moved to proved.
 - The conjecture is not rewritten as proved. It does not take a person's name.
 - Rule 14 applies: only diamond open access venues, which charge neither readers nor
   authors. Rule 15 limits Figshare to work of the level that researchmap lists under MISC.
@@ -71,7 +75,7 @@ diamond open access venues, conference talks and joint research.
 
 Two questions decide it.
 
-1. Does the work treat `T_δ` of the open problem page, or Propositions 1–7 of the note,
+1. Does the work treat `T_δ` of the open problem page, or Propositions 1–9 of the note,
    without changing their definitions?
 2. Does it answer one of the labels in the table above, or correct a proposition?
 
