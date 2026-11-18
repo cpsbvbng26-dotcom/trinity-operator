@@ -62,6 +62,9 @@ Both parts are proved, so the conjecture is resolved. Its status is resolved (pa
 stays as the name of the problem. It is already in published DOIs and in issue labels.
 
 The Figshare preprint is frozen. It states both parts as conjectures, and it stays that way.
+Propositions 8 and 9 are also in the resolution paper, a separate Figshare item:
+[`10.6084/m9.figshare.35050300`](https://doi.org/10.6084/m9.figshare.35050300) (DOI received
+on 2026-11-18). It is not a new version of the preprint, and it has not been peer-reviewed.
 
 ## What is open
 
