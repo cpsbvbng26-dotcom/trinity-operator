@@ -165,10 +165,16 @@ check("インラインのスクリプトがすべて CSP のハッシュと合�
 check("インラインのスタイルがすべて CSP のハッシュと合う",
       bool(styles) and all(sha(s) in csp for s in styles), "%d 個" % len(styles))
 
-print("\n5. 予想を予想のまま出している")
-for phrase in ("It has not been proved.",
-               "It has not been checked against the literature.",
-               "It is a preprint and has not been peer-reviewed."):
+print("\n5. 予想の状態を、ノートと同じに出している")
+# 2026-11-18 に、ノートが (a) と (b) を命題 8 と 9 として証明した。証明を足してから頁の状態を動かした。
+# 「It has not been proved.」を、二つの部分を証明したことと、状態（解決済み。(a) と (b) の式は既知の定理の特別な場合で、δ についての連続・狭義の増加・両端の極限は読んだ文献に見つからない）の文に移した。
+# 同じ日の照合のあと、「It has not been checked against the literature.」は「命題 1〜7 は照合していない」に移した。
+for phrase in ("Both are proved: part (a) is Proposition 8 and part (b) is Proposition 9 of the note.",
+               "Status: resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in ",
+               "and the limits at both ends were not found in the texts read).",
+               "Propositions 1–7 have not been checked against the literature.",
+               "It is a preprint and has not been peer-reviewed.",
+               "The posted version is frozen, and it still states both parts as conjectures."):
     check("本文に「" + phrase + "」がある", phrase in html)
 check("論文の DOI へのリンクがある",
       'href="https://doi.org/10.6084/m9.figshare.34419198"' in html)

@@ -182,6 +182,20 @@ for row in open_rows:
     check("証明済みの行がノートの表と同じ：%s" % row[2:16], row in note_rows)
     check("その行の状態が proved", row.endswith("| proved |"))
 check("予想を証明済みの表に入れていない", "conjecture" not in "".join(open_rows))
+# (a)・(b) は命題 8・9 として証明済みの表に入る。両方の文は「解けて証明済みになった」節に置き、開いている節に残さない。
+_solved = OPEN.split("\n## What was open, and is now proved\n")[-1].split("\n## ")[0] \
+    if "\n## What was open, and is now proved\n" in OPEN else ""
+_open = OPEN.split("\n## What is open\n")[-1].split("\n## ")[0] if "\n## What is open\n" in OPEN else ""
+check("証明済みの表に命題 8 と 9 があり、(a)・(b) は解けた節にあって、開いている節には無い",
+      "| Proposition 8 | inside the window 1/φ < δ < 2/3, the sustainable set has length zero | proved |" in open_rows
+      and any(r.startswith("| Proposition 9 | inside the window, the dimension of the sustainable set is the root")
+              and r.endswith("| proved |") for r in open_rows)
+      and "**Golden-window conjecture (a).**" in _solved and "Part (a) is proved. It is Proposition 8" in _solved
+      and "**Golden-window conjecture (b).**" in _solved and "Part (b) is proved. It is Proposition 9" in _solved
+      and "Both parts are proved, so the conjecture is resolved. Its status is resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read)." in flat(_solved)
+      and "Golden-window conjecture (" not in _open)
+check("頁が、凍結したプレプリントは (a)・(b) を予想のまま載せていると書いている",
+      "The Figshare preprint is frozen. It states both parts as conjectures, and it stays that way." in OPEN)
 
 depth = re.search(r"^DEPTH = (\d+)", GAMES, re.M)
 gap = re.search(r"^GAP = \(([^)]*)\)", GAMES, re.M)
@@ -240,8 +254,18 @@ check("頁が Claude を著者にしていない", "Claude is not an\nauthor." i
 
 made = re.findall(r'gh label create "([^"]+)" --color [0-9a-f]{6} --description "([^"]+)" --force',
                   LABELS)
-listed = re.findall(r"^\| `([^`]+)` \| ([^|]+?) \|$", OPEN, re.M)
+# 2026-11-18 に (a) が命題 8 で、(b) が命題 9 で解けた。ラベルの表に状態の列を足した（ラベルは残す）。
+# 名前と部分の照合は前と同じ。
+_lrows = re.findall(r"^\| `([^`]+)` \| ([^|]+?) \| ([^|]+?) \|$", OPEN, re.M)
+listed = [(n, p) for n, p, _ in _lrows]
+states = {n: s for n, _, s in _lrows}
 check("ラベルの表がある", len(listed) > 0, "%d 行" % len(listed))
+_SOLVED = {"conjecture (a)": "resolved: proved as Proposition 8 (2026-11-18)",
+           "conjecture (b)": "resolved: proved as Proposition 9 (2026-11-18)"}
+check("ラベルの表が、(a) を命題 8、(b) を命題 9 で解決済み、ほかを open と書いている",
+      all(states.get(n) == v for n, v in _SOLVED.items())
+      and sorted(n for n, s in states.items() if s == "open") == sorted(n for n in states if n not in _SOLVED)
+      and len(states) > len(_SOLVED), str(states))
 NOT_OPEN = ("bug", "erratum")   # 様式が付けるラベル。開いている部分ではない
 check("頁のラベルが、ワークフローが作るラベル（bug と erratum を除く）と同じ",
       sorted(listed) == sorted(x for x in made if x[0] not in NOT_OPEN),

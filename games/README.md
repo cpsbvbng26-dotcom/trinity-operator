@@ -6,7 +6,9 @@ note by the author.
 
 **Preprint.** An English paper version of Propositions 1–7 and the conjecture is on Figshare:
 [`10.6084/m9.figshare.34419198`](https://doi.org/10.6084/m9.figshare.34419198) (2026-10-13).
-The preprint is frozen. This page and its script remain the maintained version.
+The preprint is frozen. This page and its script remain the maintained version. The preprint
+states both parts of the conjecture as conjectures, and it stays that way. Propositions 8 and
+9, which prove them, are in this note only.
 
 **Run:** `python3 games/games.py` from the root of this repository. Every number on this
 page comes from that script, except the wider scan of the window, which comes from
@@ -25,13 +27,19 @@ the scripts disagree, and checks each proposition by a separate computation.
 | Proposition 5 | without randomization, the same holds for δ ≥ 2/3; only two points survive for 1/2 ≤ δ < 1/φ, and a countable set at δ = 1/φ | proved |
 | Proposition 6 | inside the window 1/φ < δ < 2/3, the sustainable set has positive Hausdorff dimension | proved |
 | Proposition 7 | with benefit b and cost c, the rotation is possible exactly when cooperation is efficient, and always needs more patience than full cooperation | proved |
-| Golden-window conjecture (a) | for 1/φ < δ < 2/3, the sustainable set has length zero | **conjecture** |
-| Golden-window conjecture (b) | its dimension is below 1, continuous and non-decreasing, and runs from 0 to 1 across the interval | **conjecture** |
+| Proposition 8 | inside the window 1/φ < δ < 2/3, the sustainable set has length zero | proved |
+| Proposition 9 | inside the window, the dimension of the sustainable set is the root `s` of `Σ_{n ∈ A_δ} δ^(ns) = 1`; it is below 1, continuous and strictly increasing, and runs from 0 to 1 across the interval | proved |
+| Golden-window conjecture (a) | for 1/φ < δ < 2/3, the sustainable set has length zero | resolved (Proposition 8); a special case of known theorems |
+| Golden-window conjecture (b) | its dimension is below 1, continuous and non-decreasing, and runs from 0 to 1 across the interval | resolved (Proposition 9); the formula is a special case of known theorems; continuity, strict increase and the end limits were not found in the texts read |
 
 A conjecture here means a statement that this note does not prove and has not found
-proved elsewhere. The evidence for each is numerical and is reported with it.
+proved elsewhere. The evidence for each is numerical and is reported with it. Parts (a) and
+(b) were conjectures until 2026-11-18. They are now proved as Propositions 8 and 9, and their
+rows keep their names. The name golden-window conjecture stays as the name of the problem,
+because it is already in published DOIs and in issue labels. Its status is resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read).
+The literature check of 2026-11-18 is recorded below, in the section of that name.
 
-None of the propositions has been checked against the literature. Some may be known
+Propositions 1–7 have not been checked against the literature. Some may be known
 exercises. The model underneath is the Friedkin–Johnsen model with a cyclic influence
 matrix (Friedkin and Johnsen 1990). The papers did not say so. See `E8` in the
 Trinity-Infinity errata.
@@ -299,6 +307,262 @@ explain turn-taking. Turn-taking can only pay where the benefits are not linear,
 instance where one contributor is enough and a second is wasted. Such games are not
 studied here. The literature on turn-taking has not been checked.
 
+## Proposition 8 — length zero inside the window
+
+This proposition is part (a) of the golden-window conjecture below. The proof was written by
+Claude Code at the author's request on 2026-11-18. The author is responsible for it. The
+literature was checked on the same day. Proposition 8 is known. It is an immediate special
+case of Lu, Steiner and Zou (2026), Proposition 2.5 and its proof, which give a dimension
+below 1 when the two cylinders are separated, as they are here. It also follows from the
+ergodicity of the greedy β-transformation (Rényi 1957; Parry 1960); that statement is
+recalled, not read. The elementary proof below is kept. Under the counting of this note,
+Proposition 8 is zero: checked, and not new.
+
+Fix δ with 1/φ < δ < 2/3, and keep the variables of Proposition 6: `β = 1/δ`,
+`X = (2δ − 1)/(δ(1 − δ))`, and `δX < 1 < X`. On `[0, X]` put
+
+```
+L = [0, δX],     R = [1, X],     H = (δX, 1),
+T(x) = βx on L,     T(x) = β(x − 1) on R.
+```
+
+`H` is the hole, of length `1 − δX > 0`. `T(L) = [0, X]`. `T(R) = [0, β(X − 1)]` lies in
+`[0, X]`, because `β(X − 1) ≤ X` is the same as `X(1 − δ) ≤ 1`, that is `(2δ − 1)/δ ≤ 1`.
+
+Because `δX < 1`, a point of `[0, X]` has at most one branch. In Proposition 5, `u = 2` needs
+`w ≤ 2 + δ`, which is `x ≥ 1`, and `u = 3` needs `w ≥ 4 − 2δ`, which is `x ≤ δX`. So the
+backward recursion of Proposition 6 is the single map `T`, and the survivor set is
+
+```
+S = { x in [0, X] : Tⁿx lies in L ∪ R for every n ≥ 0 }.
+```
+
+`S` is closed, and `T(S) ⊂ S`.
+
+**Proposition 8.** For 1/φ < δ < 2/3, `S` has Lebesgue measure zero, and so does `T_δ`.
+
+*Proof.* Write `m` for Lebesgue measure and `|I|` for the length of an interval.
+
+Step 1 (cylinders). Fix `x` in `S`. Define intervals `Iₙ ∋ x` and `Jₙ = [0, bₙ] ∋ Tⁿx` such
+that `Tⁿ` maps `Iₙ` onto `Jₙ` as an increasing affine map of slope `βⁿ`. Start with
+`I₀ = J₀ = [0, X]`. Given `n`, let `P` be the piece, `L` or `R`, that contains `Tⁿx`. Put
+`Iₙ₊₁ = (Tⁿ on Iₙ)⁻¹(Jₙ ∩ P)` and `Jₙ₊₁ = T(Jₙ ∩ P)`. If `P = L`, then
+`Jₙ ∩ L = [0, min(bₙ, δX)]`, so `Jₙ₊₁ = [0, β·min(bₙ, δX)]`. If `P = R`, then
+`bₙ ≥ Tⁿx ≥ 1`, so `Jₙ ∩ R = [1, bₙ]` and `Jₙ₊₁ = [0, β(bₙ − 1)]`. Either way `Jₙ₊₁` starts
+at 0 and contains `Tⁿ⁺¹x`, and `Tⁿ⁺¹` is affine of slope `βⁿ⁺¹` on `Iₙ₊₁`. Every `Jₙ` lies in
+`[0, X]`, so `|Iₙ| = β⁻ⁿ|Jₙ| ≤ Xβ⁻ⁿ → 0`.
+
+Step 2 (density transfers). `Tⁿ` maps `S ∩ Iₙ` into `S ∩ Jₙ`, because `T(S) ⊂ S`, and on
+`Iₙ` it multiplies measure by `βⁿ`. Hence, whenever `|Jₙ| > 0`,
+
+```
+m(S ∩ Iₙ)/|Iₙ| ≤ m(S ∩ Jₙ)/|Jₙ|.
+```
+
+Step 3 (returns to R). If `Tⁿx` lies in `L` for every `n ≥ N`, then `T^(N+k)x = βᵏT^N x ≤ δX`
+for every `k`, so `T^N x = 0`. The points that reach 0 form a countable set, because each `Tⁿ`
+is at most `2ⁿ`-to-one. Take any other `x` in `S`. Then `Tⁿx > 0`, so every `Jₙ` has positive
+length, and `Tⁿx` lies in `R`, so `bₙ ≥ Tⁿx ≥ 1`, for infinitely many `n`.
+
+Step 4 (contradiction). Suppose `m(S) > 0`. Take `x` in `S` that is a Lebesgue density point of
+`S` and does not reach 0. Almost every point of `S` is such a point. For intervals `I ∋ x` with
+`|I| → 0`, centred at `x` or not, `m(I \ S)/|I| → 0`, because `I` lies in the interval of
+radius `|I|` centred at `x`. By Step 2, `m(Jₙ \ S)/|Jₙ| ≤ m(Iₙ \ S)/|Iₙ| → 0`, and
+`|Jₙ| ≤ X`, so `m(Jₙ \ S) → 0`. But for the infinitely many `n` with `bₙ ≥ 1`,
+`Jₙ = [0, bₙ]` contains `[0, 1]`, which contains `H`, and `H` does not meet `S`. So
+`m(Jₙ \ S) ≥ 1 − δX > 0` for those `n`. This is a contradiction, so `m(S) = 0`.
+
+Step 5 (back to `T_δ`). In `w = 3 − (1 − δ)x` the surviving continuation values form
+`W = 3 − (1 − δ)S`, which has measure zero. A starting value is `(1 − δ)u + δw′` with `u` in
+{2, 3} and `w′` in `W` (Proposition 5), and `t` is that value minus 2. So `T_δ` lies in the
+union of two affine images of `W`, and has measure zero. ∎
+
+The proof uses no ergodic theory, only the Lebesgue density theorem. In `y = δx` the map `T`
+is the greedy β-transformation `y ↦ βy − ⌊βy⌋` with a hole added. The literature check
+found the result as a special case of a known theorem, as recorded at the start of this
+section.
+
+The script checks Step 1 in exact arithmetic. It refines `[0, X]` with fractions
+for 16 periods at δ = 0.62, 0.64 and 0.66, and stops if an image `Jₙ` does not start at 0.
+None does. The total length of the cylinders, in `x`, after one period and after the last,
+goes from 0.65 to 0.00695 at δ = 0.62, from 0.993 to 0.154 at δ = 0.64, and
+from 1.37 to 0.834 at δ = 0.66. This checks the construction. It is not part of the proof.
+
+## Proposition 9 — the dimension inside the window
+
+This proposition is part (b) of the golden-window conjecture below. The proof was written by
+Claude Code at the author's request on 2026-11-18. The author is responsible for it. The
+literature was checked on the same day. The formula of Proposition 9 is a special case of Lu,
+Steiner and Zou (2026), Theorem 1.2 with Lemma 2.7. Its entropy part is also a special case
+of Kuang, Li and Xiao (2026), Theorem 4.3 with `t = 0^∞`. That the dimension is below 1 is
+Lu, Steiner and Zou (2026), Proposition 2.5. These parts are zero: checked, and not new.
+Continuity along the curve `t(β) = (2 − β)/(β − 1)`, strict increase in δ, and the limits 0
+at `1/φ` and 1 at `2/3` were not found in the texts read. They are not yet counted. The
+argument of Theorem 1.5 of Lu, Steiner and Zou (2026) may transfer to the continuity. That is
+the inference of the literature check, not a statement of the paper. Joint continuity in β
+and the hole is not known to fail: Allaart and Kong withdrew that claim in Remark 1.10 of
+arXiv 2109.10012v2. That the box dimension equals the Hausdorff dimension was not stated in
+the papers read. With Proposition 8, Proposition 9 resolves the conjecture.
+
+Keep the notation of Proposition 8. Step 1 of its proof shows that the image of every
+cylinder is an interval `[0, b]` with `b ≤ X`. Call `[0, X]` the full state. From a state
+`b`, the step `L` is always possible and leads to `β·min(b, δX)`. It leads back to the full
+state exactly when `b ≥ δX`. The step `R` is possible when `b ≥ 1` and leads to `β(b − 1)`.
+
+**The forced path.** Put `s₀ = X`. If `s_k ≥ 1`, put `s_(k+1) = β(s_k − 1)`. If `s_k < δX`,
+put `s_(k+1) = βs_k`. If `δX ≤ s_k < 1`, the path stops. Let
+
+```
+A_δ = { k + 1 : s_k ≥ δX }.
+```
+
+`1` lies in `A_δ`, because `s₀ = X ≥ δX`.
+
+A word that starts from the full state and does not return to it must take `R` at every state
+of at least 1 and `L` at every state below `δX`, and it cannot pass a state in `[δX, 1)`. So it
+follows the forced path. A word returns to the full state for the first time after `n` steps
+exactly when it follows the forced path for `n − 1` steps and then takes `L` at a state of at
+least `δX`. So there is exactly one first-return word of each length in `A_δ`, and none of any
+other length.
+
+**Proposition 9.** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` equals its box
+dimension and is the unique `s` in (0, 1) with
+
+```
+Σ_{n ∈ A_δ} δ^(ns) = 1.
+```
+
+As a function of δ it is less than 1, continuous and strictly increasing, and it tends to 0
+as δ ↓ 1/φ and to 1 as δ ↑ 2/3.
+
+Strictly increasing is stronger than the "non-decreasing" of conjecture (b).
+
+*Proof.* Step 1 (counting). Every word from the full state splits in one way into
+first-return words followed by a prefix of the forced path. Let `N_n` be the number of
+cylinders of depth `n`, `G_δ(z) = Σ_{n ∈ A_δ} zⁿ`, and `Q(z) = Σ q_m z^m`, where `q_m` is 1 if
+the forced path has `m` steps and 0 otherwise. Then
+
+```
+Σ_n N_n zⁿ = Q(z) · Σ_{j ≥ 0} G_δ(z)^j.
+```
+
+`G_δ` is increasing and continuous on [0, 1), and `q₀ = 1`. So for `z < 1` the series
+converges when `G_δ(z) < 1` and diverges when `G_δ(z) ≥ 1`. Let `h(δ) = lim sup (1/n) log N_n`.
+If `G_δ(z*) = 1` for some `z*` in (0, 1), then `h(δ) = log(1/z*)`. Otherwise `h(δ) = 0`.
+
+Every cylinder contains a point of `S`: the point that `Tⁿ` sends to 0, because `T0 = 0` and 0
+lies in `L`. So `N_n` is also the number of words of length `n` that occur in the itineraries
+of points of `S`. Write the letters as `e = 1 − a`, so that `e = u − 2`. The itineraries form
+the shift space
+
+```
+Ω_δ = { e in {0, 1}^ℕ : Σ_{i ≥ 0} e_(k+i) δ^(i+1) ≥ 1 for every k ≥ 0 },
+```
+
+which is the incentive constraint `w_k ≥ c` written out. Points and itineraries correspond one
+to one, because in the window every point has at most one branch. So `h(δ)` is the
+topological entropy of `Ω_δ`.
+
+Step 2 (the formula). The `N_n` cylinders of depth `n` cover `S`, and each has length at most
+`Xδⁿ`. So the upper box dimension of `S` is at most `h(δ)/log β`. For the lower bound, take
+`s < h(δ)/log β` and `z = δ^s`. Then `z > z*`, so `G_δ(z) > 1`, and some finite set
+`F ⊂ A_δ` has `Σ_{n ∈ F} δ^(ns) > 1`. For `n` in `F`, the inverse of `Tⁿ` on the
+first-return cylinder of length `n` is a similarity of ratio `δⁿ` from `[0, X]` onto that
+cylinder. Take `n < m` in `A_δ`. The forced path continues past step `n − 1`, so
+`s_(n−1) ≥ 1`, and the word of length `m` takes `R` there, where the word of length `n` takes
+`L`. `L` and `R` are separated by `H`, so the two cylinders are disjoint closed intervals. The
+limit set of these similarities therefore satisfies the strong separation condition. By the
+standard theorem on self-similar sets under the strong separation condition, its Hausdorff
+dimension is the `s′` with `Σ_{n ∈ F} δ^(ns′) = 1`, and `s′ > s`. Each of its points follows
+first-return words for ever, so the limit set lies in `S`. Hence
+
+```
+dim_H S = dim_B S = h(δ)/log β = the s with Σ_{n ∈ A_δ} δ^(ns) = 1.
+```
+
+Proposition 6 gives `h(δ) > 0`, so `G_δ` reaches 1 below `z = 1`, and the root exists.
+`T_δ` lies in two affine images of `W = 3 − (1 − δ)S` and contains one of them whole. With
+`u = 3` first, `t = 1 − δ(3 − w′)` for `w′` in `W`, which lies in `[2 − 2δ, 1]`. So `T_δ` has
+the same dimension as `S`.
+
+Step 3 (below 1). `X·G_δ(δ)` is the total length of the first-return cylinders. They are
+disjoint, and none meets `H`, because each lies inside `L` or inside `R`. So
+`G_δ(δ) ≤ 1 − |H|/X < 1`. Hence `z* > δ`, `h(δ) < log β`, and the dimension is below 1.
+
+Step 4 (strictly increasing). Each sum `Σ e_(k+i) δ^(i+1)` is non-decreasing in δ, so
+`Ω_δ ⊂ Ω_δ′` for `δ < δ′`, and `h` is non-decreasing. Since `h(δ) > 0` and `log(1/δ)` is
+strictly decreasing,
+
+```
+dim(δ) = h(δ)/log(1/δ) ≤ h(δ′)/log(1/δ) < h(δ′)/log(1/δ′) = dim(δ′).
+```
+
+Step 5 (continuous). It is enough that `h` is continuous. From the right: `Ω_δ` is the
+intersection of the `Ω_δ′` for `δ′ > δ`, because each constraint is closed and continuous in
+δ. For a decreasing sequence of shift spaces, the number of words of each length in the
+intersection is the limit of the numbers, by compactness. Since `h = inf_n (1/n) log N_n`, the
+entropy of the intersection is the limit of the entropies. So `h(δ+) = h(δ)`.
+
+From the left, `h(δ−) ≤ h(δ)` by monotonicity. Fix `z` in `(z*, 1)`. It is enough that
+`G_δ′(z) > 1` for every `δ′ < δ` close to δ, because then `z*(δ′) < z`. There are two cases.
+
+(A) No `s_k` equals `δX`. Before the last element of `A_δ`, no `s_k` equals 1 either, because
+from 1 the path goes to 0 and stays there. So for each `n` in `A_δ`, the path up to step
+`n − 1` is decided by strict inequalities. The `s_k` move continuously with δ. So for any
+finite `N`, every `n ≤ N` in `A_δ` is also in `A_δ′` once `δ′` is close enough. Choose `N`
+with `Σ_{n ∈ A_δ, n ≤ N} zⁿ > 1`.
+
+(B) `s_(n*−1) = δX` for some `n*`. Then the path stops there, `n* = max A_δ`, and `A_δ` is
+finite. Put `P(z) = G_δ(z) − z^(n*)`. For `δ′` close to δ, the path at `δ′` copies the path at
+δ for `n* − 1` steps and arrives near `δ′X′`. If it arrives at or above `δ′X′`, then `n*` lies
+in `A_δ′`, and `G_δ′(z) ≥ G_δ(z) > 1`. If it arrives below, the step `L` sends it near `X′`,
+and the next `n*` steps repeat the pattern, shifted by `n*`. The error grows by at most a
+factor `β^(n*)` per block, so the closer `δ′` is to δ, the more blocks are repeated. If a
+block after `j` repeated blocks arrives at or above `δ′X′`, then
+`G_δ′(z) ≥ P(z) Σ_{i ≤ j} z^(in*) + z^((j+1)n*)`, and this is more than 1, because each
+repeated block adds `z^(jn*)(G_δ(z) − 1) > 0` to `G_δ(z)`. Otherwise, after `r` repeated blocks,
+`G_δ′(z) ≥ P(z) Σ_{i<r} z^(in*)`, and this is more than 1 for large `r`, because
+`P(z)/(1 − z^(n*)) > 1` is the same as `G_δ(z) > 1`.
+
+Step 6 (limits). As δ ↓ 1/φ, `X → 1`, because at δ = 1/φ, `2δ − 1 = δ³ = δ(1 − δ)`. After any
+step `R` the path is at most `β(X − 1)`, which tends to 0. It then needs `m(δ)` steps of `L` to
+reach `δX`, and `m(δ) → ∞`. So after 1, the elements of `A_δ` are more than `m` and at least
+`m` apart. If the dimension stayed at least `s₀ > 0` along a sequence of δ, then
+`z* = δ^dim ≤ (2/3)^(s₀) = z₀ < 1`, and `1 = G_δ(z*) ≤ z₀ + z₀^m/(1 − z₀^m)`, which fails for
+large `m`. So the dimension tends to 0.
+
+As δ ↑ 2/3, `X → 3/2` and `δX → 1`. Apart from at most one point, a point of `[0, X]` that never
+returns to the full state falls into `H` while it follows the forced path. Those points have
+total length at most `Σ_k δ^k |H| = (1 − δX)/(1 − δ)`, which tends to 0. So
+`G_δ(δ) ≥ 1 − (1 − δX)/((1 − δ)X) → 1`. For `η > 0` and `M` large,
+`G_δ(δ^(1−η)) ≥ δ^(−η)(G_δ(δ) − δ^(M+1)/(1 − δ)) > 1` for δ close to 2/3. Then
+`z* < δ^(1−η)`, so the dimension is more than `1 − η`. So the dimension tends to 1. ∎
+
+The proof uses the Lebesgue density theorem (through Step 1 of Proposition 8), the standard
+theorem on self-similar sets under the strong separation condition, and the entropy of shift
+spaces. Nothing else is used.
+
+The script computes `A_δ` in exact arithmetic, following the forced path for up to 400
+steps, and solves `Σ_{n ∈ A_δ} δ^(ns) = 1` by bisection. The last column is the lower bound of
+Proposition 6.
+
+| δ | A_δ | dimension | lower bound |
+| --- | --- | --- | --- |
+| 0.6181 | {1, 16} | 0.272410 | 0.272 |
+| 0.62 | {1, 9} | 0.404196 | 0.404 |
+| 0.63 | {1, 5} | 0.608610 | 0.609 |
+| 0.64 | {1, 4} | 0.722146 | 0.722 |
+| 0.65 | {1, 4, 8} | 0.825510 | 0.748 |
+| 0.66 | {1, 3} | 0.919930 | 0.920 |
+| 0.6666 | {1, 3, 9, 12, …} | 0.999233 | 0.942 |
+
+On the 486 values δ = 0.6181, 0.6182, …, 0.6666: the dimension rises at 485 of the 485 steps,
+and it is below the lower bound of Proposition 6 at 0 of them and equal to it, to 9 decimals, at 255.
+It runs from 0.2724 to 0.999233. Where `A_δ = {1, n₀ + 1}`, the self-similar set of
+Proposition 6 is the whole first-return system, and the bound is the dimension. The
+finite-depth estimates below agree in direction. At δ = 0.6666 the confirmatory scan
+estimated 0.999247. These computations check the formula. They are not part of the proof.
+
 ## The golden-window conjecture
 
 Between `1/φ` and `2/3` both branches are available, but they leave a hole
@@ -307,14 +571,25 @@ The survivors form the set of points whose orbit never meets the hole.
 
 The window is the interval from `1/φ` to `2/3`. Below it only two points survive, at `1/φ`
 itself a countable set does, and above it the whole segment does (Proposition 5). Inside it
-the set has positive dimension (Proposition 6). The conjecture is about the rest. The name
-describes the statement. It is not named after a person.
+the set has positive dimension (Proposition 6) and length zero (Proposition 8), and its
+dimension is given by Proposition 9. The conjecture was about the rest. The name describes the
+statement. It is not named after a person.
 
 **Golden-window conjecture (a).** For 1/φ < δ < 2/3, `T_δ` has Lebesgue measure zero.
+
+Part (a) is proved. It is Proposition 8, written on 2026-11-18. The statement stays here under
+its old name, so that its issue label and the earlier records still point to it.
 
 **Golden-window conjecture (b).** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` is
 less than 1, is continuous and non-decreasing in δ, and tends to 0 as δ ↓ 1/φ and to 1 as
 δ ↑ 2/3. That it is positive is Proposition 6.
+
+Part (b) is proved. It is Proposition 9, written on 2026-11-18. Measure zero does not settle
+it: a set of measure zero can still have Hausdorff dimension 1, and Proposition 8 says nothing
+about continuity, monotonicity or the limits. Proposition 9 is a separate proof.
+
+Both parts are proved, so the conjecture is resolved. Its status is resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read). The
+name stays as the name of the problem. It is already in published DOIs and in issue labels.
 
 Evidence. The script refines `[c, 3]` for 22 periods. Below 2/3 the two branches have
 disjoint images, so the surviving intervals do not overlap. The growth rate is the
@@ -330,27 +605,30 @@ number of intervals per period over the last five periods. The dimension estimat
 | 0.66 | 5896 | 2.32e-01 | 1.466 | 0.92 | 2 | 0.920 |
 
 In every row the growth rate is below `1/δ`, so the total length keeps shrinking. That
-is the content of part (a). The dimension estimate rises with δ, which is the content of
-part (b). Neither is a proof. The estimates come from a finite depth, and the limit
-at either end is extrapolated. At δ = 0.62 the estimate 0.38 is below the proved lower
+was the evidence for part (a), which Proposition 8 now proves. The dimension estimate rises
+with δ, which was the evidence for part (b), which Proposition 9 now proves. Neither
+computation is a proof. The estimates come
+from a finite depth, and the limit at either end is extrapolated. At δ = 0.62 the estimate 0.38 is below the proved lower
 bound 0.404, so the finite-depth estimate is too low there.
 
-Monotonicity is the least supported part. As δ changes, the base and the hole move
+Monotonicity was the least supported part. As δ changes, the base and the hole move
 together, and dimension functions of maps with holes often behave like a devil's
 staircase. Five values cannot settle it, and the 48 values of the wider scan below cannot
-either.
+either. Proposition 9 settles it: the dimension is strictly increasing, so it has no flat
+steps.
 
 Berg and Kitti (2014) study exactly this kind of object. They show that pure-strategy
 equilibrium payoff sets of discounted repeated games can be fractals, and measure them
-by Hausdorff dimension. Their methods may settle both parts for this game. That has
-not been checked.
+by Hausdorff dimension. Per their abstract, which is all that was read, they give a method
+to estimate the dimension.
 
 The change of variables above places the problem among expansions in non-integer bases
-and expanding maps with holes. Part (a) and the limits in part (b) may follow from
-standard results there. Three leads, recalled from memory and not checked: Glendinning
+and expanding maps with holes. Part (a) is proved directly by Proposition 8, and part
+(b) by Proposition 9. The literature check of 2026-11-18, below, says how much of each is
+known. Three leads were first recalled from memory and not checked: Glendinning
 and Sidorov (2001) on unique expansions in non-integer bases; Kalle, Kong, Langeveld and
 Li (around 2020) on the β-transformation with a hole; Urbański (1986) on the continuity
-of dimension for expanding maps with holes.
+of dimension for expanding maps with holes. Of these, the first remains unchecked.
 
 ### A wider scan
 
@@ -434,7 +712,9 @@ discounted value.
 
 What it does is give the papers' juxtaposition of an operator and a repeated game a
 single equation. It replaces a false example with a proved family that passes through
-Series I's δ* = 1/2. It also leaves two questions that this note cannot answer.
+Series I's δ* = 1/2. It also posed the golden-window conjecture, which Propositions 8 and 9
+now resolve. Part (a) and the formula of part (b) are special cases of known theorems. It leaves the question of why `1/φ` appears
+twice.
 
 ## What this means for mathematics, and for the philosophy of science
 
@@ -445,8 +725,8 @@ that earlier work, and this note becomes a worked reading of it.
 **Mathematics.** The note offers an explicit example with four features.
 
 - One simple game shows three regimes as δ grows: two isolated points below `1/φ`, a set
-  of positive dimension, conjectured to have length zero, inside the window, and the whole
-  segment from `2/3`.
+  of positive dimension and length zero inside the window (Propositions 6 and 8), and the
+  whole segment from `2/3`.
   The boundaries are exact. Examples of fractal equilibrium sets that can be computed this
   far by hand are useful as test cases for general theories such as Berg and Kitti (2014).
 - The discounting recursion, read backwards, is a pair of affine maps with a hole between
@@ -454,7 +734,7 @@ that earlier work, and this note becomes a worked reading of it.
   holes. The note makes the translation explicit for one game.
 - Propositions 4 and 5 measure what a public randomization device adds in this game. With
   it, every point from `1 − δ` upward can be sustained once δ ≥ 1/2. Without it, inside the
-  window, the conjecture says almost none can. The question of what public randomization
+  window, almost none can (Proposition 8). The question of what public randomization
   adds is a known theme in the theory of repeated games. The note gives exact thresholds
   for one case.
 - The same polynomial `δ² + δ − 1` decides both the rotation threshold and the lower end
@@ -468,8 +748,9 @@ intuition was formalized, the number three dissolved, and a known model remained
 route is the case studied in Machine-mediated Rediscovery (SSRN
 `10.2139/ssrn.7537983`). This note adds one step to it. Pushing the rediscovered model
 further, into a setting the original papers had only placed beside it, produced a
-well-posed open question. A rediscovery that contributes nothing as a result can still
-lead to a question that is not yet answered. The note also keeps three states apart and
+well-posed question. On 2026-11-18 it was answered (Propositions 8 and 9). Most of the
+answer turned out to be special cases of known theorems. A rediscovery that contributes nothing as a
+result can still lead to a question that was not answered when it was posed. The note also keeps three states apart and
 has them checked by machine: known, proved but not yet counted, and conjectured. That
 bookkeeping is itself part of the case.
 
@@ -483,16 +764,27 @@ How far a proof would go depends on what the proof is.
 | parts (a) and (b) are proved with a new argument | one small paper | a specialist journal in dynamical systems or repeated games |
 | the dimension is found in closed form as a function of δ, and the double appearance of `1/φ` is explained | a full paper; the game could become a standard example | a specialist journal |
 
+Both parts were proved on 2026-11-18 (Propositions 8 and 9). The proofs use the Lebesgue
+density theorem, the standard theorem on self-similar sets under the strong separation
+condition, and the entropy of shift spaces. The literature check found Proposition 8 and the
+formula of Proposition 9 to be special cases of known theorems, so the first row applies to
+them. For continuity, strict increase and the end limits along the curve of this game, no
+source was found in the texts read. The dimension is the root of an equation in δ, not a closed form, and the double
+appearance of `1/φ` is not explained, so the third row is not reached.
+
 Some things do not change. The operator remains a special case of the Friedkin–Johnsen
 model. What moves up is one statement about this game, this payoff table and this window.
-The framework does not become a new theory. If proved, the statement could be called the
-golden-window theorem. Whether that name is used depends on others citing it.
+The framework does not become a new theory. The proved statement could be called the
+golden-window theorem. This note keeps the name golden-window conjecture as the name of the
+problem, because the name is already in published DOIs and in issue labels. Whether another
+name is used depends on others citing it.
 
 The order of work would be this. First, check the literature, including Berg and Kitti
 (2014) and work on survivor sets of interval maps with holes, for a result that already
-settles the question. If none does, start with part (a). Showing that the surviving
-length shrinks by a fixed factor from period to period should be easier than part (b).
-Part (a) alone would be a short paper.
+settles the question. Both parts were proved first, on 2026-11-18, because their proofs
+needed only standard theorems (Propositions 8 and 9). The literature check followed on the
+same day. Most of the result is special cases of known theorems, so it is not counted as a
+paper of its own.
 
 ### An open question: why 1/φ twice
 
@@ -512,12 +804,13 @@ checking whether the two thresholds separate would decide whether there is more 
 
 This is not a theory. The proofs have not been checked against the literature, and no
 third party has recognised them. Under those conditions, the following contributions are
-claimed.
+claimed. Propositions 8 and 9 are the exception to the first condition: they were checked on
+2026-11-18.
 
 | contribution | content | condition |
 | --- | --- | --- |
-| a mathematical contribution as mathematical proof | Propositions 1–7, such as the threshold `1/φ` for the three-player rotation | not checked against the literature and not recognised by any third party; moves to zero if an earlier statement is found |
-| a mathematical contribution as a mathematical conjecture | the golden-window conjecture | the contribution of posing the question, not of answering it |
+| a mathematical contribution as mathematical proof | Propositions 1–7, and the continuity, strict increase and end limits of Proposition 9, such as the threshold `1/φ` for the three-player rotation | not checked against the literature and not recognised by any third party; moves to zero if an earlier statement is found |
+| a mathematical contribution as a mathematical conjecture | the golden-window conjecture; its two parts are now Propositions 8 and 9 | the contribution of posing the question; the answer is counted with the propositions |
 | a contribution as a case study in the philosophy of science | the route of rediscovery (Machine-mediated Rediscovery, SSRN `10.2139/ssrn.7537983`) | passed SSRN's screening; not peer-reviewed |
 
 Claiming a contribution and having the field count it are different things. The field's
@@ -529,7 +822,7 @@ The contribution of the three Trinity-Infinity papers to mathematics is zero. Th
 settled when the operator was identified. Everything in them is a known model or a
 textbook fact.
 
-The propositions in this note are in a different state. They are proved, but they have
+Propositions 1–7 of this note are in a different state. They are proved, but they have
 not been checked against the literature. Until they are, they are not counted as new
 results. That is not the same as zero. Zero means the check was made and nothing new was
 found. Not yet counted means the check has not been made.
@@ -538,15 +831,92 @@ found. Not yet counted means the check has not been made.
 | --- | --- | --- |
 | the three papers | a special case of a known model | zero |
 | Propositions 1–7 | proved; literature not checked | not yet counted |
-| golden-window conjecture | not proved | a conjecture, not a result |
+| Proposition 8 | proved; a special case of known theorems | zero |
+| Proposition 9 | proved; the formula and the bound below 1 are special cases of known theorems; continuity, strict increase and the end limits were not found in the texts read | the formula: zero; the rest: not yet counted |
+| golden-window conjecture | resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read) | part (a) zero; part (b) partly zero, partly not yet counted |
 
-Only a literature check can move the second row. If no earlier statement is found for the
+Only a literature check can move the row of Propositions 1–7. If no earlier statement is found for the
 rotation thresholds, they become small new results. If one is found, the row moves to
 zero, and the earlier source is cited here. The search terms to start with are
 "rotation scheme", "golden ratio", "discount factor" and "three-player prisoner's
-dilemma". For Proposition 6 and the conjecture, "beta-expansion with a hole" and
-"open dynamical system" are likely to be faster. The environment this note was written in cannot reach the literature
-databases, so the check has not been made.
+dilemma". For Proposition 6, "beta-expansion with a hole" and "open dynamical system" are
+likely to be faster. The environment this note was written in cannot reach the literature
+databases, so the check of Propositions 1–7 has not been made.
+
+## The literature check of 2026-11-18
+
+Claude checked the literature for Propositions 8 and 9 on 2026-11-18. The search ran through
+Crossref and DataCite. Some arXiv papers were then read in the parts named below. Every DOI and
+arXiv id below is the one that Crossref, DataCite or the arXiv API returned. Each source is
+marked "read in part", "abstract read" or "recalled, not read".
+
+**A reduction.** Write `y = δx` and `t(β) = (2 − β)/(β − 1)`, which equals `δX`. Then `S` is
+`δ⁻¹K`, where `K` is the set of `y` in [0, 1) whose orbit under the greedy β-transformation
+`y ↦ βy − ⌊βy⌋` never enters the hole `(t(β), 1)`. In the digit coding, the itineraries are
+`{ u : σⁿu ≼ w for all n }`, where `w` is the quasi-greedy β-expansion of `t(β)`. With this, the
+theorems below apply. The check confirmed the reduction numerically. It is not part of the
+proofs.
+
+**Flat stretches of the entropy.** The entropy `h = log(1/z*)` depends on δ only through
+`A_δ`, and `A_δ` can stay the same while δ moves. The dimension `h/log β` still rises strictly,
+because β moves. The script finds this at every δ = 0.6400, 0.6401, …, 0.6450: `A_δ = {1, 4}`,
+the entropy is 0.322285 throughout, and the dimension rises from 0.722146 to 0.734962. The same
+mechanism, a locally constant entropy over a moving base, is known for univoque sets
+(Komornik, Kong and Li 2017).
+
+**Proposition 8.** Known. It is an immediate special case of Lu, Steiner and Zou (2026),
+Proposition 2.5 and its proof. It also follows from the ergodicity of the greedy
+β-transformation (Rényi 1957; Parry 1960), recalled, not read. It is counted as zero.
+
+**Proposition 9.** The formula is a special case of Lu, Steiner and Zou (2026), Theorem 1.2
+with Lemma 2.7, for `q0 = q1 = β`. The entropy part is also Kuang, Li and Xiao (2026), Theorem
+4.3 with `t = 0^∞`. The bound below 1 is Lu, Steiner and Zou (2026), Proposition 2.5. These
+parts are zero. For a fixed base, continuity in the symbolic hole is Lu, Steiner and Zou (2026),
+Theorem 1.4, and continuity in the base for a fixed symbolic hole is their Lemma 3.16. For a
+fixed β with one end of the hole moving, the dimension is a devil's staircase (Sun, Li and
+Ding 2024, Corollary 1.5, for the left end fixed). For the right end fixed, which is the case
+here, that paper asserts the same without proof. Joint continuity in β and the hole is open: Allaart and Kong (2023), in
+Remark 1.10 of arXiv 2109.10012v2, withdraw the published claim that it fails. Continuity along
+the curve of this game, strict increase in δ, and the limits 0 at `1/φ` and 1 at `2/3` were not
+found in the texts read, and are not yet counted. The argument of Theorem 1.5 of Lu, Steiner
+and Zou (2026) may transfer to the continuity. That is the inference of the check, not a
+statement of the paper. That the box dimension equals the Hausdorff dimension was not stated in
+the papers read.
+
+**The game.** Berg and Kitti (2014) and Mailath, Obara and Sekiguchi (2002) were read at
+abstract level only. Their full texts are not on arXiv. No exact dimension, and no
+measure-zero result, for this segment was found. The nearest are Berg and Kitti (2014), who
+give a method to estimate the dimension, and Mailath, Obara and Sekiguchi (2002), who study the
+maximum efficient payoff.
+
+Sources of the check:
+
+- Allaart, P., and Kong, D. (2023). Critical values for the β-transformation with a hole at 0.
+  *Ergodic Theory and Dynamical Systems*. doi:10.1017/etds.2022.24. Read in part: Proposition
+  1.9 and Remark 1.10 of arXiv 2109.10012v2 (doi:10.48550/arxiv.2109.10012).
+- Berg, K., and Kitti, M. (2014). Fractal geometry of equilibrium payoffs in discounted
+  supergames. *Fractals*, 22(4), 1450016. doi:10.1142/s0218348x14500169. Abstract read.
+- Komornik, V., Kong, D., and Li, W. (2017). Hausdorff dimension of univoque sets and Devil's
+  staircase. *Advances in Mathematics*. doi:10.1016/j.aim.2016.03.047. Abstract read.
+- Kuang, R., Li, B., and Xiao, Y. (2026). The Hausdorff dimension of the survivor set. arXiv
+  2604.23737v1. doi:10.48550/arxiv.2604.23737. Read in part: Introduction, Theorems 1.1, 1.2
+  and 4.3.
+- Lu, J., Steiner, W., and Zou, Y. (2026). Hausdorff dimension of double-base expansions and
+  binary shifts with a hole. *Bulletin of the London Mathematical Society*.
+  doi:10.1112/blms.70344. Read in part: Sections 1–3 of arXiv 2509.04227v2, in full
+  (doi:10.48550/arxiv.2509.04227).
+- Mailath, G. J., Obara, I., and Sekiguchi, T. (2002). The maximum efficient equilibrium payoff
+  in the repeated Prisoners' Dilemma. *Games and Economic Behavior*. doi:10.1006/game.2001.0901.
+  Abstract read.
+- Parry, W. (1960). On the β-expansions of real numbers. *Acta Mathematica Academiae
+  Scientiarum Hungaricae*. doi:10.1007/bf02020954. Recalled, not read.
+- Rényi, A. (1957). Representations for real numbers and their ergodic properties. *Acta
+  Mathematica Academiae Scientiarum Hungaricae*. doi:10.1007/bf02020331. Recalled, not read.
+- Sun, Y., Li, B., and Ding, Y. (2024). Topological expansive Lorenz maps with a hole at
+  critical point. *Journal of Statistical Physics*. doi:10.1007/s10955-024-03265-0. Read in
+  part: Introduction, and the statements of Theorems 1.1, 1.3 and 1.4, Corollary 1.5 and
+  Remark 1.2 of arXiv
+  2311.02465v1 (doi:10.48550/arxiv.2311.02465).
 
 ## References
 

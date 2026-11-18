@@ -39,6 +39,10 @@ output is [`scan-confirmatory.txt`](scan-confirmatory.txt). The results against 
 registered criteria are in the note ([README.md](README.md#the-confirmatory-scan)) and on
 the open problem page ([OPEN-PROBLEM.md](OPEN-PROBLEM.md#the-confirmatory-scan)).
 
+Later. On 2026-11-18, parts (a) and (b) were proved as Propositions 8 and 9 of the note. The
+registered text below says that both parts are open. It is kept as it was registered. This
+paragraph is outside the registered text.
+
 ---
 
 This text follows the sections of the OSF Preregistration template, in order, so that each

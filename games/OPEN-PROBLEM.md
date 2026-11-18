@@ -1,8 +1,12 @@
 # Open problem: the golden-window conjecture
 
 This page collects, on one sheet, what is proved and what is open about the golden-window
-conjecture. Everything here is taken from [the repeated-games note](README.md) and from
-[the roadmap](../roadmap/README.md). Nothing is added. The note remains the maintained
+conjecture. Both parts were proved on 2026-11-18: part (a) is Proposition 8, and part (b) is
+Proposition 9. Part (a) and the formula of part (b) are special cases of known theorems.
+Continuity and strict increase in δ and the limits at both ends were not found in the texts
+read. The name stays as the
+name of the problem. Everything here is taken from [the repeated-games note](README.md) and
+from [the roadmap](../roadmap/README.md). Nothing is added. The note remains the maintained
 version, with the proofs and the evidence in full.
 
 ## The object
@@ -22,18 +26,44 @@ The window is the interval from `1/φ` to `2/3`.
 | Proposition 4 | with public randomization, `(2+t, 4−t, 2+t)` is sustainable exactly when δ ≥ max(1/2, 1 − t) | proved |
 | Proposition 5 | without randomization, the same holds for δ ≥ 2/3; only two points survive for 1/2 ≤ δ < 1/φ, and a countable set at δ = 1/φ | proved |
 | Proposition 6 | inside the window 1/φ < δ < 2/3, the sustainable set has positive Hausdorff dimension | proved |
+| Proposition 8 | inside the window 1/φ < δ < 2/3, the sustainable set has length zero | proved |
+| Proposition 9 | inside the window, the dimension of the sustainable set is the root `s` of `Σ_{n ∈ A_δ} δ^(ns) = 1`; it is below 1, continuous and strictly increasing, and runs from 0 to 1 across the interval | proved |
 
 The rows are copied from the status table of the note. Proposition 1 gives the same
-polynomial `δ² + δ − 1` for the three-player rotation. None of the propositions has been
+polynomial `δ² + δ − 1` for the three-player rotation. Propositions 1–7 have not been
 checked against the literature. Some may be known exercises.
 
-## What is open
+Propositions 8 and 9 are parts (a) and (b) of the conjecture. Their proofs were written by
+Claude Code at the author's request on 2026-11-18. The author is responsible for them. The
+literature was checked on the same day. Proposition 8 is known: it is an immediate special
+case of Lu, Steiner and Zou (2026), Proposition 2.5, and it is zero. The formula of
+Proposition 9 is a special case of their Theorem 1.2 with Lemma 2.7, and that part is zero.
+Continuity along the curve of this game, strict increase in δ and the limits at both ends
+were not found in the texts read, and are not yet counted. The proofs and the record of
+the check are in the note. The dimension of Proposition 9 is strictly increasing in δ, which is
+stronger than the "non-decreasing" of part (b).
+
+## What was open, and is now proved
 
 **Golden-window conjecture (a).** For 1/φ < δ < 2/3, `T_δ` has Lebesgue measure zero.
+
+Part (a) is proved. It is Proposition 8, written on 2026-11-18. The statement stays here under
+its old name, so that its issue label and the earlier records still point to it.
 
 **Golden-window conjecture (b).** For 1/φ < δ < 2/3, the Hausdorff dimension of `T_δ` is
 less than 1, is continuous and non-decreasing in δ, and tends to 0 as δ ↓ 1/φ and to 1 as
 δ ↑ 2/3. That it is positive is Proposition 6.
+
+Part (b) is proved. It is Proposition 9, written on 2026-11-18. Measure zero does not settle
+it: a set of measure zero can still have Hausdorff dimension 1, and Proposition 8 says nothing
+about continuity, monotonicity or the limits. Proposition 9 is a separate proof.
+
+Both parts are proved, so the conjecture is resolved. Its status is resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read). The name
+stays as the name of the problem. It is already in published DOIs and in issue labels.
+
+The Figshare preprint is frozen. It states both parts as conjectures, and it stays that way.
+
+## What is open
 
 **An open question: why 1/φ twice.** The threshold of the three-player rotation
 (Proposition 1) and the lower end of the window (Proposition 5) both come from the same
@@ -41,15 +71,18 @@ polynomial `δ² + δ − 1`. The note records this as a question, not as a conj
 
 **The literature check.** Propositions 1–7 are proved but not yet counted. Only a
 literature check can move them. The environment the note was written in cannot reach the
-literature databases, so the check has not been made.
+literature databases, so the check of Propositions 1–7 has not been made. Propositions 8 and 9
+were checked on 2026-11-18.
 
-Monotonicity is the least supported part of (b). The note says that five values cannot
+Monotonicity was the least supported part of (b). The note says that five values cannot
 settle it, nor can the 48 values of the wider scan, and that dimension functions of maps
-with holes often behave like a devil's staircase.
+with holes often behave like a devil's staircase. Proposition 9 settles it: the dimension is
+strictly increasing, so it has no flat steps.
 
 ## What was computed, and what was not
 
-The evidence for both parts is numerical. The ranges below are the ones the scripts
+Both parts had numerical evidence before Propositions 8 and 9 proved them. The ranges
+below are the ones the scripts
 `games/games.py` and `games/scan.py` use. The numbers on this page are checked against
 those scripts by `verification/check_docs.py`.
 
@@ -125,13 +158,14 @@ between its points, and a finite depth cannot fix a dimension.
 ## Where a proof might start
 
 The note gives the order of work. First, check the literature, including Berg and Kitti
-(2014) and work on survivor sets of interval maps with holes. If nothing there settles the
-question, start with part (a).
+(2014) and work on survivor sets of interval maps with holes. Both parts were proved first, on
+2026-11-18, because their proofs needed only standard theorems (Propositions 8 and 9). The
+literature check followed on the same day.
 
 The change of variables `x = (3 − w)/(1 − δ)` turns the recursion into `x = a + δx′` with
 `a ∈ {0, 1}`. This is an expansion in the non-integer base `β = 1/δ` with a hole. The note
-names three leads, recalled from memory and not checked: Glendinning and Sidorov (2001),
-Kalle, Kong, Langeveld and Li (around 2020), and Urbański (1986).
+named three leads, recalled from memory: Glendinning and Sidorov (2001), Kalle, Kong,
+Langeveld and Li (around 2020), and Urbański (1986). The first remains unchecked.
 
 ## Not part of this problem
 
@@ -142,16 +176,17 @@ roadmap records that deciding `JSR ≤ 1` is undecidable in general (Blondel and
 
 ## Issue labels
 
-Each open part has an issue label. The labels are defined in
+Each part that was opened has an issue label. The labels are defined in
 [`.github/workflows/labels.yml`](../.github/workflows/labels.yml), which creates them on
-GitHub when it runs.
+GitHub when it runs. The labels of parts (a) and (b) stay after Propositions 8 and 9, for
+reports of an error in their proofs.
 
-| label | open part |
-| --- | --- |
-| `conjecture (a)` | Golden-window conjecture (a) |
-| `conjecture (b)` | Golden-window conjecture (b) |
-| `why 1/φ twice` | An open question: why 1/φ twice |
-| `literature check` | The literature check |
+| label | part | state |
+| --- | --- | --- |
+| `conjecture (a)` | Golden-window conjecture (a) | resolved: proved as Proposition 8 (2026-11-18) |
+| `conjecture (b)` | Golden-window conjecture (b) | resolved: proved as Proposition 9 (2026-11-18) |
+| `why 1/φ twice` | An open question: why 1/φ twice | open |
+| `literature check` | The literature check | open |
 
 ## Place in the series
 
