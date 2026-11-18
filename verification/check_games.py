@@ -5,15 +5,22 @@
 
 NumPy のみ。乱数は使わない。
 
-三つのことを見る。
+四つのことを見る。
 1. 頁が書いている数値が、games/games.py --values の出す数値と一字一句合うか。
 2. 各命題を、台本とは別の計算で確かめる。台本の関数は使わない。
    台本が間違っていれば、頁と台本は一致したまま両方とも間違う。それを止める。
 3. games/scan.py の広げた走査。games/scan.txt が台本の出力と同じか。区間の数を、台本とは
    別の座標と浮動小数点で数え直して同じになるか。ノートが書く走査の値が台本と同じか。
 
-予想（黄金比の窓の予想、Golden-window conjecture の (a)・(b)）は証明しない。頁が根拠として書いていること
-（成長率が 1/δ を下回る、次元の推定が δ とともに増える）だけを確かめる。
+予想（黄金比の窓の予想、Golden-window conjecture の (a)・(b)）は、2026-11-18 に命題 8 と 9 として
+証明を足した。ここでは証明そのものは確かめない。証明が言う構成と式を、台本とは別の計算で当たり直す。
+4. 命題 8 の証明の段 1（筒の像がどれも 0 から始まる）を、台本とは別の座標（w）と有理数で回し直し、
+   総長が期ごとに縮むことと、頁の数・窓の表の総長と合うことを見る。表の status が (a) を命題 8、
+   (b) を命題 9 で証明済みとし、予想の印が残っていないことも見る。
+5. 命題 9 の強制された道と A_δ を、台本とは別の座標（w）と有理数で作り直し、根を z の側の二分法で
+   解き直して、頁の表の次元と合うか見る。初回帰の分け方から出る筒の数が、走査の台本の整数の数と
+   一致するか（生成関数の恒等式）。δ = k/10000 の格子で、次元が真に増え、1 未満で、命題 6 の下界を
+   下回らないか。
 """
 
 import itertools
@@ -409,6 +416,80 @@ check("δ² = 1 − δ なら 1 − δ³ = 2δ²（δ = 1/φ）", abs((1 - phi_i
 check("頁が、これを予想ではなく問いとして置き、利得への依存を書いている",
       "may depend on the defector's bonus being 2" in page)
 
+# ------------------------------------------------------------ 命題 8
+print("\n命題 8（窓の中で長さ 0。予想 (a)）")
+
+
+def w_cylinders(k, depth):
+    """台本とは別の計算。w の座標で、有理数で、証明の段 1 の筒を作る。
+
+    台本は x = (3 − w)/(1 − δ) の座標で前へ写す。ここは w のまま、後ろ向きの枝
+    w′ = (w − (1 − δ)u)/δ（u = 2 は [c, 2 + δ]、u = 3 は [4 − 2δ, 3]）で筒 I とその像 J を持つ。
+    x の 0 は w の 3 なので、証明が言う「像は 0 から始まる」は、ここでは「像は 3 で終わる」になる。
+    """
+    d = Fr(k, 100)
+    c = 2 + (1 - d) / d
+    branches = ((Fr(2), c, 2 + d), (Fr(3), 4 - 2 * d, Fr(3)))
+    cyl = [(c, Fr(3), c, Fr(3))]
+    ends, lengths = set(), []
+    for n in range(depth):
+        new = []
+        for i0, i1, j0, j1 in cyl:
+            for u, lo, hi in branches:
+                l, h = max(j0, lo), min(j1, hi)
+                if l > h:
+                    continue
+                k0, k1 = (l - (1 - d) * u) / d, (h - (1 - d) * u) / d
+                ends.add(k1)
+                new.append((i0 + (l - j0) * d ** n, i0 + (h - j0) * d ** n, k0, k1))
+        cyl = new
+        lengths.append(sum(b - a for a, b, _, _ in cyl))
+    return ends, lengths
+
+
+CYL_DEPTH, CYL_K = 16, (62, 64, 66)
+cyl_ok, shrink_ok, quoted_ok, table_ok = True, True, True, True
+for k in CYL_K:
+    d = k / 100
+    ends, lens = w_cylinders(k, int(vals.get("depth", "0")))
+    cyl_ok = cyl_ok and ends == {Fr(3)}
+    shrink_ok = shrink_ok and all(a > b for a, b in zip(lens, lens[1:]))
+    x0, x16 = float(lens[0]) / (1 - d), float(lens[CYL_DEPTH - 1]) / (1 - d)
+    quoted_ok = quoted_ok and vals.get("cyl_%g" % d) == "from %.3g to %.3g at δ = %g" % (x0, x16, d)
+    row = gap_rows.get(d)
+    table_ok = table_ok and row is not None and "%.2e" % float(lens[-1]) == row[2]
+check("δ = 0.62・0.64・0.66 で、どの筒の像も 0 から始まる（w では 3 で終わる。有理数で、深さ %s）"
+      % vals.get("depth"), cyl_ok)
+check("同じ三つの δ で、筒の総長が期ごとに真に縮む", shrink_ok)
+check("台本が名乗る範囲が、ここで回した範囲と同じ（%d 期、δ = 0.62・0.64・0.66）" % CYL_DEPTH,
+      vals.get("cyl_run") == "for %d periods at δ = 0.62, 0.64 and 0.66" % CYL_DEPTH
+      and "for %d periods at δ = 0.62, 0.64 and 0.66" % CYL_DEPTH in page)
+check("1 期目と 16 期目の総長（x の長さ）が、台本の値と同じ", quoted_ok)
+check("筒の総長が、窓の表の総長（深さ %s、w の長さ）と同じ" % vals.get("depth"), table_ok)
+flat_p8 = re.sub(r"\s+", " ", page)
+check("頁が、命題 8 を書いた者・日付・責任と、照合で既知の定理の特別な場合（ゼロ）と数えたことを書いている",
+      "This proposition is part (a) of the golden-window conjecture below. The proof was written by Claude Code at the author's request on 2026-11-18. The author is responsible for it."
+      in flat_p8
+      and "The literature was checked on the same day. Proposition 8 is known. It is an immediate special case of Lu, Steiner and Zou (2026), Proposition 2.5 and its proof,"
+      in flat_p8
+      and "(Rényi 1957; Parry 1960); that statement is recalled, not read." in flat_p8
+      and "Under the counting of this note, Proposition 8 is zero: checked, and not new." in flat_p8)
+check("頁に命題 8 の節と言明と、証明の末尾の ∎ がある（証明を足してから表を動かす）",
+      "\n## Proposition 8 — length zero inside the window\n" in page
+      and "**Proposition 8.** For 1/φ < δ < 2/3, `S` has Lebesgue measure zero, and so does `T_δ`." in page
+      and "has measure zero. ∎" in page)
+check("頁が、凍結したプレプリントは (a)・(b) を予想のまま載せていると書いている",
+      "The preprint states both parts of the conjecture as conjectures, and it stays that way." in flat_p8)
+check("頁が、命題 9 を書いた者・日付・責任・式は既知の定理の特別な場合・連続と単調と極限は見つからずまだ数えないことと、強い単調性を書き、文献を記憶から足していない",
+      "## Proposition 9 — the dimension inside the window" in page
+      and "This proposition is part (b) of the golden-window conjecture below. The proof was written by Claude Code at the author's request on 2026-11-18. The author is responsible for it. The literature was checked on the same day. The formula of Proposition 9 is a special case of Lu, Steiner and Zou (2026), Theorem 1.2 with Lemma 2.7."
+      in flat_p8
+      and "were not found in the texts read. They are not yet counted." in flat_p8
+      and "That is the inference of the literature check, not a statement of the paper." in flat_p8
+      and "Strictly increasing is stronger than the \"non-decreasing\" of conjecture (b)." in flat_p8
+      and "the standard theorem on self-similar sets under the strong separation condition" in flat_p8
+      and "Hutchinson" not in page and "Falconer" not in page)
+
 # ------------------------------------------------------------ 予想の根拠
 print("\n予想の根拠（証明ではない）")
 growth = {}
@@ -421,12 +502,23 @@ check("どの行も成長率 < 1/δ（総長が縮む）",
 dims = [growth[d][1] for d in sorted(growth)]
 check("次元の推定が δ とともに増える", all(a < b for a, b in zip(dims, dims[1:])))
 check("次元の推定が 0 と 1 の間", all(0 < x < 1 for x in dims))
-check("頁が黄金比の窓の予想を、名前つきで予想と名乗っている",
+# 2026-11-18 に (a) を命題 8 で証明した。証明を足してから表を動かした。(a) の行は名前を残して
+# 「proved (Proposition 8)」に、予想の印は (b) の一つだけに。どちらかが崩れれば落ちる。
+check("頁が黄金比の窓の予想を名前つきで置き、(a) を命題 8、(b) を命題 9 で解決済み（既知の定理の特別な場合と、見つからない部分）と書き、予想の印を残していない",
       "**Golden-window conjecture (a).**" in page and "**Golden-window conjecture (b).**" in page
-      and page.count("| **conjecture** |") == 2
+      and page.count("| **conjecture** |") == 0
+      and "\n| Golden-window conjecture (a) | for 1/φ < δ < 2/3, the sustainable set has length zero | resolved (Proposition 8); a special case of known theorems |\n" in page
+      and "\n| Golden-window conjecture (b) | its dimension is below 1, continuous and non-decreasing, and runs from 0 to 1 across the interval | resolved (Proposition 9); the formula is a special case of known theorems; continuity, strict increase and the end limits were not found in the texts read |\n" in page
+      and "\n| Proposition 8 | inside the window 1/φ < δ < 2/3, the sustainable set has length zero | proved |\n" in page
+      and "\n| Proposition 9 | inside the window, the dimension of the sustainable set is the root `s` of `Σ_{n ∈ A_δ} δ^(ns) = 1`; it is below 1, continuous and strictly increasing, and runs from 0 to 1 across the interval | proved |\n" in page
       and "It is not named after a person." in page)
-check("頁が文献と照合していないと書いている",
-      "None of the propositions has been checked against the literature." in page)
+check("頁が、測度 0 では (b) が決まらないこと、(b) は命題 9 で別に証明したこと、名前を問題の名として残すことを書いている",
+      "Part (b) is proved. It is Proposition 9, written on 2026-11-18. Measure zero does not settle it:" in re.sub(r"\s+", " ", page)
+      and "Both parts are proved, so the conjecture is resolved. Its status is resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read). The name stays as the name of the problem."
+      in re.sub(r"\s+", " ", page))
+# 2026-11-18 に命題 8 と 9 だけを要旨まで照合した。命題 1〜7 は照合していないと書く文に移した。
+check("頁が、命題 1〜7 は文献と照合していないと書いている",
+      "Propositions 1–7 have not been checked against the literature." in page)
 check("頁が Claude を著者にしていない", "Claude is not an author." in page)
 check("頁が名乗る貢献を、理論でない・未照合・第三者の公認なしの条件つきで書いている",
       "This is not a theory. The proofs have not been checked against the literature, and no\nthird party has recognised them." in page
@@ -443,6 +535,9 @@ check("頁が、予想が解けても枠組みは新理論にならないと書�
 check("頁が、三篇はゼロ、命題はまだ数えていない、と分けて書いている",
       "| the three papers | a special case of a known model | zero |" in page
       and "| Propositions 1–7 | proved; literature not checked | not yet counted |" in page
+      and "| Proposition 8 | proved; a special case of known theorems | zero |" in page
+      and "| Proposition 9 | proved; the formula and the bound below 1 are special cases of known theorems; continuity, strict increase and the end limits were not found in the texts read | the formula: zero; the rest: not yet counted |" in page
+      and "| golden-window conjecture | resolved (part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read) | part (a) zero; part (b) partly zero, partly not yet counted |" in page
       and "That is not the same as zero." in page)
 
 # ------------------------------------------------------------ 広げた走査
@@ -560,6 +655,119 @@ check("走査の範囲が上から続いている（「every δ up to」と書�
 check("ノートが、走査は証明ではないと書き、上からの推定を根拠としてだけ扱っている",
       "None of this is a proof." in flat_note
       and "so the column is reported as evidence only." in flat_note)
+
+# ------------------------------------------------------------ 命題 9
+print("\n命題 9（窓の中の次元。予想 (b)）")
+
+
+def w_first_returns(k, q, steps=400):
+    """台本とは別の計算。w の座標で、有理数で、強制された道を辿る。
+
+    筒の像は x では [0, b]、w では [v, 3]（v = 3 − (1 − δ)b）。満ちた状態は v = c。
+    v ≤ 2 + δ なら R（u = 2）へ進み、v > 4 − 2δ なら L（u = 3）へ進み、その間なら止まる。
+    v ≤ 4 − 2δ の段で、L を取れば満ちた状態へ戻る。その段の番号 + 1 が A_δ に入る。
+    """
+    d = Fr(k, q)
+    v, out = 2 + (1 - d) / d, []
+    for j in range(steps):
+        if v <= 4 - 2 * d:
+            out.append(j + 1)
+        if v <= 2 + d:
+            v = (v - 2 * (1 - d)) / d
+        elif v > 4 - 2 * d:
+            v = (v - 3 * (1 - d)) / d
+        else:
+            break
+    stopped = j + 1 if v > 2 + d and v <= 4 - 2 * d else None
+    return out, stopped
+
+
+def dim_by_z(A, d):
+    """G(z) = Σ_{n ∈ A} zⁿ = 1 を z の側で二分法で解き、dim = log z / log δ。"""
+    lo, hi = 0.0, 1.0
+    for _ in range(100):
+        z = (lo + hi) / 2
+        lo, hi = (lo, z) if sum(z ** n for n in A) > 1 else (z, hi)
+    return math.log((lo + hi) / 2) / math.log(d)
+
+
+p9_rows = [cells for cells in (line.strip("|").split("|") for line in page.splitlines()
+                               if re.match(r"^\| 0\.\d+ \| \{", line))]
+p9_rows = [[c.strip() for c in r] for r in p9_rows]
+check("頁に命題 9 の表がある", len(p9_rows) == 7, "%d 行" % len(p9_rows))
+tab_ok, ident_ok = True, True
+for cells in p9_rows:
+    dd = Fr(cells[0])
+    A, stopped = w_first_returns(dd.numerator, dd.denominator)
+    shown = "{" + ", ".join("%d" % n for n in A[:4]) + (", …" if len(A) > 4 else "") + "}"
+    tab_ok = tab_ok and shown == cells[1] and "%.6f" % dim_by_z(A, float(dd)) == cells[2]
+    # 生成関数の恒等式：N_n = q_n + Σ_{a ∈ A} N_{n−a}。走査の台本の整数の数（深さ 22）と比べる。
+    dep = int(vals.get("depth", "0"))
+    N = [0] * (dep + 1)
+    for n in range(dep + 1):
+        N[n] = (1 if stopped is None or n <= stopped - 1 else 0) + sum(N[n - a] for a in A if a <= n)
+    ident_ok = ident_ok and N[1:] == scan_mod.refine_exact(dd.numerator, dd.denominator, dep)[0]
+check("表の A_δ と次元が、w の座標で作り直した道と z の側の根から出る値と同じ（7 行）", tab_ok)
+check("初回帰の分け方から数えた筒の数が、走査の台本の整数の数と、深さ %s まで全部一致する（7 つの δ）"
+      % vals.get("depth"), ident_ok)
+g_dims, g_low = [], []
+for kk in range(6181, 6667):
+    A, _ = w_first_returns(kk, 10000)
+    g_dims.append(dim_by_z(A, kk / 10000))
+    g_low.append(lower_closed(kk / 10000)[1])
+check("δ = 0.6181〜0.6666（0.0001 刻み、486 通り）で、次元が真に増え、1 未満で、命題 6 の下界を下回らない",
+      len(g_dims) == 486 and all(a < b for a, b in zip(g_dims, g_dims[1:])) and all(0 < x < 1 for x in g_dims)
+      and all(x >= lo - 1e-9 for x, lo in zip(g_dims, g_low)), "%.4f〜%.6f" % (g_dims[0], g_dims[-1]))
+check("台本が名乗る格子の数が、ここで数え直した数と同じ",
+      vals.get("dim_grid_rises") == "the dimension rises at %d of the %d steps" % (
+          sum(1 for a, b in zip(g_dims, g_dims[1:]) if b > a), len(g_dims) - 1)
+      and vals.get("dim_grid_ends") == "It runs from %.4f to %.6f" % (g_dims[0], g_dims[-1]))
+
+# 2026-11-18 の文献の照合。DOI と arXiv の番号は Crossref・DataCite・arXiv の API が返したものだけで、照合の報告にある番号に限る。
+# 各行は「Read in part:」「Abstract read.」「Recalled, not read.」のどれかを持つ。記憶から文献を足せば、番号が表に無くて落ちる。
+# Allaart と Kong は arXiv 2109.10012v2 の Remark 1.10 で、出版された「同時には連続でない」を取り下げた。頁は「壊れる」と書かない。
+CHECKED_DOIS = {"10.1017/etds.2022.24", "10.48550/arxiv.2109.10012", "10.1142/s0218348x14500169",
+                "10.1016/j.aim.2016.03.047", "10.48550/arxiv.2604.23737", "10.1112/blms.70344",
+                "10.48550/arxiv.2509.04227", "10.1006/game.2001.0901", "10.1007/bf02020954",
+                "10.1007/bf02020331", "10.1007/s10955-024-03265-0", "10.48550/arxiv.2311.02465"}
+lit = page.split("\n## The literature check of 2026-11-18\n")[-1].split("\n## ")[0] \
+    if "\n## The literature check of 2026-11-18\n" in page else ""
+lit_f = re.sub(r"\s+", " ", lit)
+items = re.findall(r"^- (.*?)(?=\n- |\Z)", lit.split("Sources of the check:")[-1], re.S | re.M)
+dois = re.findall(r"doi:([0-9A-Za-z./_()-]*[0-9A-Za-z])", lit)
+marks = [bool(re.search(r"(Read in part: |Abstract read\.|Recalled, not read\.)", re.sub(r"\s+", " ", it))) for it in items]
+check("文献の照合の節があり、読んだところを印で分け、出典の %d 行がどれも印を持つ" % len(items),
+      "Each source is marked \"read in part\", \"abstract read\" or \"recalled, not read\"." in lit_f
+      and len(items) == 9 and all(marks))
+check("節の DOI が、照合の報告にある番号だけで、どれも一度ずつ", sorted(dois) == sorted(CHECKED_DOIS),
+      ", ".join(sorted(set(dois) ^ CHECKED_DOIS)))
+check("定理の番号を報告のとおりに引き、Rényi と Parry は思い出したもの、同時の連続は「壊れる」と書かない",
+      all(x in lit_f for x in ("Lu, Steiner and Zou (2026), Theorem 1.2 with Lemma 2.7",
+                               "Kuang, Li and Xiao (2026), Theorem 4.3 with `t = 0^∞`",
+                               "The bound below 1 is Lu, Steiner and Zou (2026), Proposition 2.5.",
+                               "Theorem 1.4", "Lemma 3.16", "Corollary 1.5", "Remark 1.10 of arXiv 2109.10012v2",
+                               "(Rényi 1957; Parry 1960), recalled, not read."))
+      and all(re.search(n + r".{0,200}?Recalled, not read\.", lit, re.S) for n in (r"Parry, W\. \(1960\)", r"Rényi, A\. \(1957\)"))
+      and "fails in general" not in page and "known to fail" not in page.replace("is not known to fail", ""))
+flat_A = [w_first_returns(kk, 10000)[0] for kk in range(6400, 6451)]
+flat_d = [dim_by_z(A, kk / 10000) for A, kk in zip(flat_A, range(6400, 6451))]
+_lo, _hi = 0.0, 1.0                     # z + z⁴ = 1 を z の側で解く。h = log(1/z)
+for _ in range(100):
+    _z = (_lo + _hi) / 2
+    _lo, _hi = (_lo, _z) if _z + _z ** 4 > 1 else (_z, _hi)
+flat_h = math.log(2 / (_lo + _hi))
+check("δ = 0.6400〜0.6450（51 通り）で A_δ = {1, 4} が変わらず、エントロピーは一定で、次元は真に増える（台本の値と同じ）",
+      all(A == [1, 4] for A in flat_A) and all(a < b for a, b in zip(flat_d, flat_d[1:]))
+      and vals.get("flat") == "at every δ = 0.6400, 0.6401, …, 0.6450: `A_δ = {1, 4}`,"
+      and vals.get("flat_h") == "the entropy is %.6f throughout, and the dimension rises from %.6f to %.6f" % (
+          flat_h, flat_d[0], flat_d[-1]), "%.6f・%.6f〜%.6f" % (flat_h, flat_d[0], flat_d[-1]))
+
+# 命題 9 の節が引く確かめの走査の推定は、確かめの結果の節が書く最大の推定と同じ数（check_docs.py が出力の表から数え直す）。
+_est = re.search(r"At δ = 0\.6666 the confirmatory scan estimated (\d\.\d+)\.", flat_p8)
+_max = re.search(r"The dimension estimate is below 1 at \d+ of \d+ values\. The largest is (\d\.\d+), at δ = 0\.6666\.", flat_p8)
+check("命題 9 の節が引く δ = 0.6666 の推定が、確かめの走査の節の最大の推定と同じ",
+      _est is not None and _max is not None and _est.group(1) == _max.group(1),
+      "%s / %s" % (_est.group(1) if _est else "無し", _max.group(1) if _max else "無し"))
 
 print("\n" + "-" * 58)
 if failures:

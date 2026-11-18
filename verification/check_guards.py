@@ -188,7 +188,7 @@ case("CITATION.cff の trinity-infinity の件数を古い 31 に戻す", "CITAT
 case("CLAUDE.md の一覧の、作用素の件数だけを変える", "CLAUDE.md",
      "# 作用素 29 項目", "# 作用素 28 項目", "verification/check_docs.py")
 case("続ける範囲の頁から、開いている部分を一行落とす", "games/SCOPE.ja.md",
-     "| `conjecture (b)` | Golden-window conjecture (b) | `T_δ` の次元についての証明か反例（単調性を含む） |\n", "",
+     "| `conjecture (b)` | Golden-window conjecture (b) | 命題 9 で解決済み（2026-11-18）。式は既知の定理の特別な場合。その証明の誤りを直すことと、曲線に沿った連続・狭義の増加・両端の極限の出典を探すこと |\n", "",
      "verification/check_docs.py")
 case("続ける範囲の頁が引く決めごと 15 の一文を変える", "games/SCOPE.md",
      "> 学部二年次以降に進めるのは、学部一年次の成果の続きか修正に限る",
@@ -304,6 +304,46 @@ case("README の、広げた走査の δ の数を変える", "README.md",
      "0.001 刻みの 48 通りに増やし", "0.001 刻みの 47 通りに増やし", "verification/check_docs.py")
 case("続ける範囲の頁の、最初の走査の深さを変える", "games/SCOPE.ja.md",
      "深さは 30 段で", "深さは 22 段で", "verification/check_docs.py")
+
+print("\n8d. 2026-11-18 に足した検査を壊す（黄金比の窓の予想の (a)・(b) を命題 8・9 で証明した）")
+case("ノートの、命題 8 の筒の総長を一目盛り変える", "games/README.md",
+     "goes from 0.65 to 0.00695 at δ = 0.62,", "goes from 0.65 to 0.00696 at δ = 0.62,", "verification/check_games.py")
+case("台本の筒で、R の枝の引き算を外す（像が 0 から始まらなくなる）", "games/games.py",
+     "pieces = ((Fraction(0), d * X, 0), (Fraction(1), X, 1))", "pieces = ((Fraction(0), d * X, 0), (Fraction(1), X, 0))",
+     "verification/check_games.py")
+case("ノートの表で、(a) の行を予想に戻す", "games/README.md",
+     "the sustainable set has length zero | resolved (Proposition 8); a special case of known theorems |", "the sustainable set has length zero | **conjecture** |",
+     "verification/check_games.py")
+case("ノートの表で、(b) の行を予想に戻す", "games/README.md",
+     "runs from 0 to 1 across the interval | resolved (Proposition 9); the formula is a special case of known theorems; continuity, strict increase and the end limits were not found in the texts read |", "runs from 0 to 1 across the interval | **conjecture** |",
+     "verification/check_games.py")
+case("ノートから、測度 0 では (b) が決まらないという文を消す", "games/README.md",
+     "Part (b) is proved. It is Proposition 9, written on 2026-11-18. Measure zero does not settle\nit:",
+     "Part (b) is proved. It is Proposition 9, written on 2026-11-18. Measure zero settles\nit:",
+     "verification/check_games.py")
+case("ノートから、命題 8 の証明を書いた者と日付の一文を消す", "games/README.md",
+     "This proposition is part (a) of the golden-window conjecture below. The proof was written by\nClaude Code at the author's request on 2026-11-18. ",
+     "This proposition is part (a) of the golden-window conjecture below. ", "verification/check_games.py")
+case("ノートの命題 9 の表の次元を一目盛り変える", "games/README.md",
+     "| 0.62 | {1, 9} | 0.404196 |", "| 0.62 | {1, 9} | 0.404197 |", "verification/check_games.py")
+case("台本の強制された道で、R の歩みを β(s − 1) から βs − 1 に替える", "games/games.py",
+     "            s = beta * (s - 1)\n        elif s < d * X:", "            s = beta * s - 1\n        elif s < d * X:",
+     "verification/check_games.py")
+case("ノートに、記憶から引いた文献の名を足す", "games/README.md",
+     "the standard\ntheorem on self-similar sets under the strong separation condition,",
+     "the standard\ntheorem on self-similar sets under the strong separation condition (Hutchinson 1981),",
+     "verification/check_games.py")
+case("開いている問題の頁で、ラベル (b) の状態を open に戻す", "games/OPEN-PROBLEM.md",
+     "| Golden-window conjecture (b) | resolved: proved as Proposition 9 (2026-11-18) |",
+     "| Golden-window conjecture (b) | open |", "verification/check_docs.py")
+case("開いている問題の頁で、(b) を開いているに戻す", "games/OPEN-PROBLEM.md",
+     "Part (b) is proved. It is Proposition 9, written on 2026-11-18.", "Part (b) is open.", "verification/check_docs.py")
+case("開いている問題の頁の証明済みの表から、命題 8 の行を落とす", "games/OPEN-PROBLEM.md",
+     "| Proposition 8 | inside the window 1/φ < δ < 2/3, the sustainable set has length zero | proved |\n", "",
+     "verification/check_docs.py")
+case("予想のサイトで、二つの部分を証明したという一文を、証明していないに戻す", "site/index.html",
+     "Both are proved: part (a) is Proposition 8 and part (b) is Proposition 9 of the note.", "It has not been proved.",
+     "verification/check_site.py")
 
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
