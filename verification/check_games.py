@@ -176,6 +176,31 @@ check("δ_3 は 1/φ", abs(threshold(3) - phi_inv) < 1e-9)
 for n in range(4, 11):
     check("δ_%d が台本と合う" % n, "%.6f" % threshold(n) == vals.get("delta%d" % n))
 
+# 2026-11-19 に足した。差 1/m − δ_n（m = n − 2）の一次の大きさは 2(m − 1)/m^(n+1)。
+# Figshare 10.6084/m9.figshare.35050300 の Proposition 8.10 の r = 1 の場合（査読なし）。
+# f_n の根を有理数の二分法で 2^-260 の幅まで挟み、相対誤差が O(n m^-(n-1)) で縮むことを見る。
+def root_exact(n, steps=260):
+    lo, hi = Fr(0), Fr(1, n - 2)
+    for _ in range(steps):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if f_exact(n, mid) < 0 else (lo, mid)
+    return lo, hi
+
+
+gap_rel = []
+for n in (6, 8, 10, 12, 16, 20):
+    m = n - 2
+    lo, hi = root_exact(n)
+    pred = Fr(2 * (m - 1), m ** (n + 1))
+    rel = max(abs((Fr(1, m) - x) / pred - 1) for x in (lo, hi))
+    gap_rel.append((n, float(rel), float(4 * n * Fr(1, m ** (n - 1)))))
+check("差 1/m − δ_n が 2(m − 1)/m^(n+1)·(1 + O(n m^-(n-1))) に合う（n = 6〜20、有理数の二分法）",
+      all(r < b for _, r, b in gap_rel)
+      and all(a[1] > b[1] for a, b in zip(gap_rel, gap_rel[1:]))
+      and "1/m − δ_n  =  2(m − 1)/m^(n+1) · (1 + O(n m^(−(n−1))))." in page
+      and "Proposition 8.10 of the resolution paper" in page,
+      " / ".join("n=%d %.1e" % (n, r) for n, r, _ in gap_rel))
+
 # ------------------------------------------------------------ 命題 3
 print("\n命題 3（(2,4,2) は持続しない）")
 ok3 = True
