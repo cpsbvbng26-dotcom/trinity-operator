@@ -152,6 +152,20 @@ Its root is `δ_n`. Since `h > 0`, `δ_n < 1/(n − 2)`. Since `h(δ) ≤ δⁿ�
 
 The gap to `1/(n − 2)` closes faster than any power of `1/n`.
 
+Its first-order size is now known (added on 2026-11-19). Write `m = n − 2`. As `n → ∞`,
+
+```
+1/m − δ_n  =  2(m − 1)/m^(n+1) · (1 + O(n m^(−(n−1)))).
+```
+
+So the lower bound of Proposition 2 is sharp up to the factor `(m − 1)/m`. This is the case
+`r = 1` of Proposition 8.10 of the resolution paper
+([`10.6084/m9.figshare.35050300`](https://doi.org/10.6084/m9.figshare.35050300)), which gives
+the first-order term for every `r` in the setting of Proposition 7. It is proved there, not on
+this page. The paper is a preprint and has not been peer-reviewed.
+`python3 verification/check_games.py` compares the formula with a bisection at high
+precision.
+
 ## Proposition 3 — the printed example
 
 Series II §4 says that `(2,4,2)` is "eventually sustainable", at a higher discount
