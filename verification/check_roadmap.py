@@ -10,7 +10,7 @@
 
     厳密に決まること      スペクトル半径、E[A⊗A]、冪零性、閉じた式との一致
     推定でしかないこと    リアプノフ指数、標本による ‖Df‖ の最大
-    決まらないこと        JSR がちょうど 1 の場合
+    決まらないこと        JSR がちょうど 1 の場合の、一般の判定（黄金比の対は個別に決まる）
 
 三つ目を「通った」と数えないことが、この検査の要点である。
 
@@ -133,11 +133,36 @@ check("共通の P が与える上界は JSR の下界を下回らない", w2 >=
 phi = (1 + 5 ** 0.5) / 2
 C1, C2 = S / phi, S.T / phi
 lo3, hi3 = jsr_bounds([C1, C2], depth=7)
-check("黄金比の対では JSR が 1 に挟まれる",
-      abs(lo3 - 1) < 1e-6 and abs(hi3 - 1) < 1e-6,
-      "%.9f ≤ JSR ≤ %.9f" % (lo3, hi3))
-check("その場合に「収束する」と言わない（κ < 1 が出ない）",
-      common_lyapunov([C1, C2])[1] >= 1 - 1e-6)
+# 2026-11-19。この対は決まっている（Figshare 10.6084/m9.figshare.35050300 の Theorem 8.9。査読なし）。
+# 挟みが 1 に張りつくのは、‖S‖₂ と ρ(SSᵀ)^(1/2) がどちらもちょうど φ だからである。
+# 上の P = I が定数 1 の共通の二次のリアプノフ関数になる。二つの検査に条件を足し、件数は変えない。
+nS = float(np.linalg.norm(S, 2))
+rS = float(np.sqrt(np.max(np.abs(np.linalg.eigvals(S @ S.T)))))
+nI = max(float(np.linalg.norm(C1, 2)), float(np.linalg.norm(C2, 2)))
+check("黄金比の対では JSR が 1 に挟まれ、‖S‖₂ = ρ(SSᵀ)^(1/2) = φ でちょうど 1 と決まる",
+      abs(lo3 - 1) < 1e-6 and abs(hi3 - 1) < 1e-6
+      and abs(nS - phi) < 1e-12 and abs(rS - phi) < 1e-12 and abs(nI - 1) < 1e-12,
+      "%.9f ≤ JSR ≤ %.9f | ‖S‖₂ %.12f | ρ(SSᵀ)^(1/2) %.12f | P = I で %.12f"
+      % (lo3, hi3, nS, rS, nI))
+# すべての切り替えで収束するとは言わない。交互の切り替えでは 0 へ行かない。
+# 同じ文字が隣り合う組が無限にあれば 0 へ行き、重ならない組ごとに q = (1 + √2)/φ² 倍以下に縮む。
+# 展望の README は、この対を「決まらない」例として書かず、q を台本と同じ桁で名乗る。
+q3 = (1 + 2 ** 0.5) / phi ** 2
+x0 = [0.3, -1.1]
+alt3 = simulate([C1, C2], (0, 1), x0, 4000)
+rep3 = simulate([C1, C2], (0, 0, 1), x0, 3000)
+doc2 = open(os.path.join(ROOT, "roadmap", "README.md"), encoding="utf-8").read()
+stage2 = doc2[doc2.find("## 段 2 —"):doc2.find("## 段 3 —")]
+check("その場合に「どの切り替えでも収束する」と言わない（κ < 1 が出ず、交互では 0 へ行かない）",
+      common_lyapunov([C1, C2])[1] >= 1 - 1e-6
+      and alt3[-1] > 0.5 and rep3[-1] <= q3 ** 1000 * alt3[0]
+      and abs(float(np.linalg.norm(S @ S, 2)) - (1 + 2 ** 0.5)) < 1e-12
+      and "### 黄金比の例は決まっています" in stage2
+      and ("`q = (1 + √2)/φ² = %.6f`" % q3) in stage2
+      and "10.6084/m9.figshare.35050300" in stage2 and "Theorem 8.9" in stage2
+      and "挟まれて動きません" not in doc2,
+      "交互 第 4000 段 %.4f | 繰り返し 第 3000 段 %.3e ≤ q^1000‖x₀‖ %.3e | q %.6f"
+      % (alt3[-1], rep3[-1], q3 ** 1000 * alt3[0], q3))
 
 D3 = np.diag([0.5, 0.7, 0.3])
 Q3 = cyclic_shift(3)
