@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-x9fSslgSzKI3ExCqtPWypzBKQJjptO1AhiCg0x3OlTE='; img-src 'self'; form-action 'none'; base-uri 'none'">
+<title>Legal handling of the design · The golden-window conjecture</title>
+<meta name="description" content="Who made each visual part of the golden-window conjecture site (logo, images, figure, colours, layout, fonts), where it came from, how it is licensed, and which Japanese statutes it touches.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://golden-window-conjecture.vercel.app/design-legal.html">
+<link rel="alternate" hreflang="en" href="https://golden-window-conjecture.vercel.app/design-legal.html">
+<link rel="alternate" hreflang="ja" href="https://golden-window-conjecture.vercel.app/design-legal.ja.html">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="icon" href="./favicon.ico" sizes="48x48">
+<style>
+:root {
+  --bg: #faf9f7;
+  --card: #ffffff;
+  --text: #17171a;
+  --muted: #63636b;
+  --faint: #727278;
+  --line: #e6e4df;
+  --accent: #8a6a3d;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121214;
+    --card: #191919;
+    --text: #ececee;
+    --muted: #9c9ca4;
+    --faint: #81818b;
+    --line: #2a2a2d;
+    --accent: #b08d57;
+  }
+}
+:root {
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-xs: .75rem;
+  --fs-sm: .875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --measure: 40rem;
+  --page: 48rem;
+}
+html { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: 1.9;
+}
+.wrap { max-width: calc(var(--page) + 3rem); margin: 0 auto; padding: 0 1.5rem; }
+header { border-bottom: 1px solid var(--line); }
+.head-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding-top: .75rem; padding-bottom: .75rem; }
+.mark { display: inline-flex; line-height: 0; }
+.mark img { width: 2rem; height: 2rem; border-radius: .3rem; }
+.nav { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; }
+.nav a { font-size: var(--fs-sm); color: var(--muted); }
+h1, h2 { font-family: var(--font-serif); font-weight: 600; line-height: 1.4; }
+h1 { font-size: var(--fs-xl); margin: 3rem 0 1rem; }
+h2 { font-size: var(--fs-lg); margin: 2.5rem 0 .75rem; }
+.prose { max-width: var(--measure); }
+.prose p, .prose li { color: var(--text); }
+.prose .note { color: var(--muted); font-size: var(--fs-sm); }
+.prose a, .foot a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
+.prose code { font-family: var(--font-mono); font-size: var(--fs-sm); overflow-wrap: anywhere; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: var(--fs-sm); margin: 1rem 0; }
+.prose th, .prose td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+.prose th { color: var(--muted); font-weight: 600; }
+.prose td, .prose th { min-width: 7rem; }
+.prose td code { overflow-wrap: normal; white-space: nowrap; }
+blockquote { margin: 1rem 0; padding: .6rem 1rem; background: var(--card); border-left: 3px solid var(--accent); }
+blockquote p { margin: 0; white-space: pre-line; font-family: var(--font-serif); font-size: var(--fs-sm); }
+.gist { color: var(--muted); font-size: var(--fs-sm); }
+footer { border-top: 1px solid var(--line); margin-top: 3rem; }
+.foot { display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding-top: 1.5rem; padding-bottom: 2rem; font-size: var(--fs-xs); color: var(--faint); }
+:where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: .3rem; }
+.skip-link { position: absolute; left: 1rem; top: -3rem; padding: .55rem 1rem; color: var(--bg); background: var(--text); font-size: var(--fs-sm); border-radius: .5rem; }
+.skip-link:focus { top: 1rem; }
+@media (max-width: 30rem) {
+  .head-row { flex-wrap: wrap; }
+  .wrap { padding: 0 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header>
+  <div class="wrap head-row">
+    <a class="mark" href="./"><img src="./favicon.svg" alt="The golden-window conjecture" width="32" height="32"></a>
+    <nav class="nav">
+      <a href="./">Top page</a>
+      <a href="./design-legal.ja.html" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1" class="wrap">
+<div class="prose">
+
+<h1>Legal handling of the design</h1>
+
+<h2 id="about">About this page</h2>
+<p>This page covers the visual parts of the golden-window conjecture site (golden-window-conjecture.vercel.app).</p>
+<p>For each part, it states who made it, where it came from, how it is licensed, and which statutes it touches.</p>
+<p>It is the operator’s own understanding. It is not legal advice.</p>
+<p>No lawyer has reviewed this page.</p>
+<p>Articles are quoted as fetched from the e-Gov law API on 2026-11-22.</p>
+<p>The copy is kept in this repository at <a href="https://github.com/cpsbvbng26-dotcom/trinity-operator/blob/main/verification/design-statutes.json"><code>verification/design-statutes.json</code></a>, with the SHA-256 of each article.</p>
+<p>Each article is given in the original Japanese. The English after it is a summary, not a translation. No official English translation is used.</p>
+<p>The English names of the statutes are glosses. The Japanese titles are in the list at the end.</p>
+<p>This page quotes <span id="statute-count">11</span> articles. They are listed at the end.</p>
+<p>Long articles are cut to the paragraph or item the text relies on. Each cut says what was cut.</p>
+
+<h2 id="parts">The parts</h2>
+<p>The visual parts the site serves are listed by file. Parts with no file of their own are in the second table.</p>
+<table id="parts-table">
+<thead><tr><th>Part</th><th>File</th><th>How it was made, and where from</th><th>Rights and licence</th><th>How it is checked</th></tr></thead>
+<tbody>
+<tr><td>Top page</td><td><code>index.html</code></td><td>Generated by <code>build.js</code> in researcher-profile from its settings (<code>golden-window.en.json</code> and <code>golden-window.site.json</code>) and copied here. The colours, layout and type are set there.</td><td>CC BY 4.0, by the notice at its foot</td><td><code>check_site.py</code> checks contrast, zoom, alternative text and more. The cross-repository check regenerates it and compares every character.</td></tr>
+<tr><td>This page (English)</td><td><code>design-legal.html</code></td><td>Written by hand. Written by Claude Code (Anthropic) on 2026-11-22. Its colour values are copied from the top page.</td><td>CC BY 4.0, by the notice at its foot</td><td><code>check_site.py</code> checks that its colour values match the top page, and checks the quoted articles.</td></tr>
+<tr><td>This page (Japanese)</td><td><code>design-legal.ja.html</code></td><td>Placed on the same day, in the same way, as the English page.</td><td>CC BY 4.0, by the notice at its foot</td><td>The same as the English page.</td></tr>
+<tr><td>Logo</td><td><code>favicon.svg</code></td><td>Drawn by Claude Code (Anthropic) on 2026-10-26. A window frame holding three rows of bands, each split in two by a gap. Built from <span id="logo-rects">9</span> rectangles only, with no text and no font.</td><td>MIT, by the repository’s LICENSE</td><td><code>check_site.py</code> checks that it holds only a title and rectangles, counts the rectangles, and checks that it loads nothing.</td></tr>
+<tr><td>Logo in pixels</td><td><code>favicon.ico</code></td><td>The same logo, drawn in a browser at 960 px and halved step by step (2026-10-30). It holds three images, <span id="ico-sizes">16, 32, 48</span> px.</td><td>MIT, by the repository’s LICENSE</td><td><code>check_site.py</code> checks the three sizes.</td></tr>
+<tr><td>Logo in pixels</td><td><code>favicon-192.png</code></td><td>Made the same way, a <span id="size-favicon-192.png">192</span> px square.</td><td>MIT, by the repository’s LICENSE</td><td><code>check_site.py</code> checks the size.</td></tr>
+<tr><td>Logo in pixels</td><td><code>apple-touch-icon.png</code></td><td>Made the same way, a <span id="size-apple-touch-icon.png">180</span> px square, corners not rounded.</td><td>MIT, by the repository’s LICENSE</td><td><code>check_site.py</code> checks the size.</td></tr>
+<tr><td>Image for shared links</td><td><code>og.png</code></td><td><code>favicon.svg</code> drawn as a <span id="size-og.png">600</span> px square PNG, corners not rounded (2026-10-26).</td><td>MIT, by the repository’s LICENSE</td><td><code>check_site.py</code> checks the size.</td></tr>
+</tbody>
+</table>
+<p id="others"><code>site/</code> holds <span id="file-count">11</span> files. Besides the <span id="part-count">8</span> in the table, they are <code>robots.txt</code>, <code>sitemap.xml</code> and <code>vercel.json</code>, which are not visual parts.</p>
+<table id="nonfile-table">
+<thead><tr><th>Part</th><th>How it was made, and where from</th><th>Rights and licence</th></tr></thead>
+<tbody>
+<tr><td>Figure</td><td>Drawn in the reader’s browser by the script in the top page, from the recursion of Propositions 5 and 6. It fetches nothing.</td><td>Part of the top page.</td></tr>
+<tr><td>Colours</td><td>CSS variables in each page, one set for light and one for dark.</td><td>Part of each page.</td></tr>
+<tr><td>Layout</td><td>CSS in each page.</td><td>Part of each page.</td></tr>
+<tr><td>Fonts</td><td>No font file is served. The pages have no <code>@font-face</code>. They only list font names in <code>font-family</code>, and the reader’s device decides which font is drawn.</td><td>The site holds no font file.</td></tr>
+<tr><td>Outside material</td><td>None. The pages load no image, font, script or style from elsewhere. Their CSP starts with <code>default-src 'none'</code>.</td><td>No one else’s material is used.</td></tr>
+</tbody>
+</table>
+<p>The font names listed are these. Only the names are written; no font is served.</p>
+<ul id="fonts">
+<li>Text: <code>"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif</code></li>
+<li>Headings: <code>"Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, "Times New Roman", serif</code></li>
+<li>Monospace: <code>ui-monospace, SFMono-Regular, Menlo, Consolas, monospace</code></li>
+</ul>
+
+<h2 id="copyright">Copyright</h2>
+<p>Copyright Act, Article 2(1)(i):</p>
+<blockquote lang="ja" data-statute="著作権法 第2条第1項第1号" data-cut="whole"><p>一 著作物 思想又は感情を創作的に表現したものであつて、文芸、学術、美術又は音楽の範囲に属するものをいう。</p></blockquote>
+<p class="gist">Summary, not a translation: it defines a work as a creative expression of thoughts or sentiments within the literary, scientific, artistic or musical domain.</p>
+<p>Copyright Act, Article 10(1)(iv):</p>
+<blockquote lang="ja" data-statute="著作権法 第10条第1項第4号" data-cut="whole"><p>四 絵画、版画、彫刻その他の美術の著作物</p></blockquote>
+<p class="gist">Summary, not a translation: it names paintings, prints, sculpture and other artistic works.</p>
+<p>Whether the logo, figure, colours or layout of this site fall under these words is not settled by the text of the articles.</p>
+<p>This page does not decide either way.</p>
+<p>The logo and images were drawn by Claude Code (Anthropic) at the operator’s request.</p>
+<p>This page also does not decide whether something drawn by a language model has an author. Claude is not an author.</p>
+<p>The licence is as in the licence table of the repository’s README.</p>
+<p>The pages in <code>site/</code> are under CC BY 4.0, by the notice at their foot.</p>
+<p>The image files carry no notice of their own, and are under MIT, by the repository’s LICENSE.</p>
+<p>This page does not change any licence.</p>
+<p>Copyright Act, Article 19, cut to the first sentence of paragraph 1:</p>
+<blockquote lang="ja" data-statute="著作権法 第19条" data-cut="excerpt"><p>著作者は、その著作物の原作品に、又はその著作物の公衆への提供若しくは提示に際し、その実名若しくは変名を著作者名として表示し、又は著作者名を表示しないこととする権利を有する。</p></blockquote>
+<p class="gist">Summary, not a translation: the author may have a real name or pen name shown as the author, or no name shown.</p>
+<p>Copyright Act, Article 20, cut to paragraph 1:</p>
+<blockquote lang="ja" data-statute="著作権法 第20条" data-cut="excerpt"><p>著作者は、その著作物及びその題号の同一性を保持する権利を有し、その意に反してこれらの変更、切除その他の改変を受けないものとする。</p></blockquote>
+<p class="gist">Summary, not a translation: the author keeps the integrity of the work and its title against changes made against the author’s will.</p>
+<p>The foot of each page shows the name and licence as “© 2026 Takuya Nemoto · CC BY 4.0”.</p>
+<p>The legal code of CC BY 4.0 says this in Section 2(b)(1) and (2). The same text is in <code>lessons/LICENSE</code> in this repository.</p>
+<blockquote lang="en" data-license="moral"><p>Moral rights, such as the right of integrity, are not licensed under this Public License, nor are publicity, privacy, and/or other similar personality rights; however, to the extent possible, the Licensor waives and/or agrees not to assert any such rights held by the Licensor to the limited extent necessary to allow You to exercise the Licensed Rights, but not otherwise.</p></blockquote>
+<blockquote lang="en" data-license="trademark"><p>Patent and trademark rights are not licensed under this Public License.</p></blockquote>
+<p>No one else’s material is used. There are no images besides those in the table.</p>
+<p>The pages load no image, font or script from elsewhere.</p>
+
+<h2 id="marks">Trademarks, designs and unfair competition</h2>
+<p>The repository holds no record of the site’s name or logo being filed or registered as a trademark or a design.</p>
+<p>Registration has not been checked in the Japan Patent Office’s records.</p>
+<p>Design Act, Article 2, cut to paragraph 1:</p>
+<blockquote lang="ja" data-statute="意匠法 第2条" data-cut="excerpt"><p>この法律で「意匠」とは、物品（物品の部分を含む。以下同じ。）の形状、模様若しくは色彩若しくはこれらの結合（以下「形状等」という。）、建築物（建築物の部分を含む。以下同じ。）の形状等又は画像（機器の操作の用に供されるもの又は機器がその機能を発揮した結果として表示されるものに限り、画像の部分を含む。次条第二項、第三十七条第二項、第三十八条第七号及び第八号、第四十四条の三第二項第六号並びに第五十五条第二項第六号を除き、以下同じ。）であつて、視覚を通じて美感を起こさせるものをいう。</p></blockquote>
+<p class="gist">Summary, not a translation: a design is the shape, pattern or colour of an article, the shape of a building, or certain images for operating a device or shown as its result, that create an aesthetic impression through sight.</p>
+<p>Design Act, Article 23:</p>
+<blockquote lang="ja" data-statute="意匠法 第23条" data-cut="whole"><p>（意匠権の効力） 第二十三条 意匠権者は、業として登録意匠及びこれに類似する意匠の実施をする権利を専有する。 ただし、その意匠権について専用実施権を設定したときは、専用実施権者がその登録意匠及びこれに類似する意匠の実施をする権利を専有する範囲については、この限りでない。</p></blockquote>
+<p class="gist">Summary, not a translation: the holder has the exclusive right to work the registered design and similar designs as a business.</p>
+<p>This page does not decide whether the site’s screens are designs in the sense of “images” in Article 2.</p>
+<p>Trademark Act, Article 25:</p>
+<blockquote lang="ja" data-statute="商標法 第25条" data-cut="whole"><p>（商標権の効力） 第二十五条 商標権者は、指定商品又は指定役務について登録商標の使用をする権利を専有する。 ただし、その商標権について専用使用権を設定したときは、専用使用権者がその登録商標の使用をする権利を専有する範囲については、この限りでない。</p></blockquote>
+<p class="gist">Summary, not a translation: the holder has the exclusive right to use the registered trademark for the designated goods or services.</p>
+<p>Unfair Competition Prevention Act, Article 2(1)(i) and (ii). The copy holds only the text of the items:</p>
+<blockquote lang="ja" data-statute="不正競争防止法 第2条第1項第1号・第2号" data-cut="whole"><p>一 他人の商品等表示（人の業務に係る氏名、商号、商標、標章、商品の容器若しくは包装その他の商品又は営業を表示するものをいう。以下同じ。）として需要者の間に広く認識されているものと同一若しくは類似の商品等表示を使用し、又はその商品等表示を使用した商品を譲渡し、引き渡し、譲渡若しくは引渡しのために展示し、輸出し、輸入し、若しくは電気通信回線を通じて提供して、他人の商品又は営業と混同を生じさせる行為
+二 自己の商品等表示として他人の著名な商品等表示と同一若しくは類似のものを使用し、又はその商品等表示を使用した商品を譲渡し、引き渡し、譲渡若しくは引渡しのために展示し、輸出し、輸入し、若しくは電気通信回線を通じて提供する行為</p></blockquote>
+<p class="gist">Summary, not a translation: item (i) covers using an indication identical or similar to another’s well-known indication so as to cause confusion; item (ii) covers using one identical or similar to another’s famous indication as one’s own.</p>
+<p>Unfair Competition Prevention Act, Article 2(1)(iii):</p>
+<blockquote lang="ja" data-statute="不正競争防止法 第2条第1項第3号" data-cut="whole"><p>三 他人の商品の形態（当該商品の機能を確保するために不可欠な形態を除く。）を模倣した商品を譲渡し、貸し渡し、譲渡若しくは貸渡しのために展示し、輸出し、輸入し、又は電気通信回線を通じて提供する行為</p></blockquote>
+<p class="gist">Summary, not a translation: it covers transferring or offering goods that imitate the configuration of another’s goods.</p>
+<p>The site’s name, logo and screens have not been compared with others’ registered trademarks, registered designs, indications or product configurations, in registers or by search.</p>
+<p>Whether something similar exists has not been checked.</p>
+<p>What is checked is the record of how the logo was made. The commit that placed it (<code>b26c15b</code>) describes a window frame holding three rows of bands, each split in two by a gap.</p>
+
+<h2 id="access">Accessibility</h2>
+<p>The Act on eliminating discrimination on the basis of disability (Japanese title: 障害を理由とする差別の解消の推進に関する法律), Article 2, cut to item (vii):</p>
+<blockquote lang="ja" data-statute="障害者差別解消法 第2条" data-cut="excerpt"><p>七 事業者 商業その他の事業を行う者（国、独立行政法人等、地方公共団体及び地方独立行政法人を除く。）をいう。</p></blockquote>
+<p class="gist">Summary, not a translation: a business operator is a person who carries out commerce or other business, other than the state, local governments and certain public bodies.</p>
+<p>The same Act, Article 8:</p>
+<blockquote lang="ja" data-statute="障害者差別解消法 第8条" data-cut="whole"><p>（事業者における障害を理由とする差別の禁止） 第八条 事業者は、その事業を行うに当たり、障害を理由として障害者でない者と不当な差別的取扱いをすることにより、障害者の権利利益を侵害してはならない。 ２ 事業者は、その事業を行うに当たり、障害者から現に社会的障壁の除去を必要としている旨の意思の表明があった場合において、その実施に伴う負担が過重でないときは、障害者の権利利益を侵害することとならないよう、当該障害者の性別、年齢及び障害の状態に応じて、社会的障壁の除去の実施について必要かつ合理的な配慮をしなければならない。</p></blockquote>
+<p class="gist">Summary, not a translation: business operators must not infringe the rights of persons with disabilities by unfair discriminatory treatment, and, when asked, must make necessary and reasonable accommodation to remove social barriers unless the burden is excessive.</p>
+<p>Whether the operator is a business operator under this Act is not settled by the text of the articles. This page does not decide it.</p>
+<p>What the site does, limited to what the checks confirm, is listed below. <code>verification/check_site.py</code> checks each item.</p>
+<ul id="a11y">
+<li>Text and background colours have a contrast of at least 4.5:1, in both light and dark. The lowest pair is <span id="min-ratio">4.54</span>:1.</li>
+<li>The dark side also follows the reader’s device setting.</li>
+<li>Zoom is not blocked. Font sizes are not set in px.</li>
+<li>With the reduced-motion setting (<code>prefers-reduced-motion</code>), motion is stopped.</li>
+<li>Links are shown by underline, not by colour alone.</li>
+<li>The state of the figure is also given in text, besides the coloured bands. The figure itself states its content in an accessible name (<code>aria-label</code>).</li>
+<li>The logo image has alternative text.</li>
+<li>A link to skip to the content can be used from the keyboard. Focus is shown by an outline.</li>
+</ul>
+<p>The repository has no record of a check by listening with a screen reader.</p>
+<p>It also has no record of a person operating the pages to check them.</p>
+
+<h2 id="people">People and organisations</h2>
+<p>No portrait of a real person (photograph or drawing) is used.</p>
+<p>No emblem or logo of a real organisation is used.</p>
+<p><code>site/</code> holds only the <span id="image-count">5</span> images in the table. All of them are made from this site’s logo.</p>
+<p>Each page places one image element (<code>img</code>), the logo.</p>
+
+<h2 id="changes">When something changes</h2>
+<p>When a part changes, this page and its check are changed in the same pull request.</p>
+<p>If the table and the files in <code>site/</code> disagree, <code>verification/check_site.py</code> fails.</p>
+
+<h2 id="articles">Articles quoted</h2>
+<p>The SHA-256 is of the UTF-8 text of the whole article in the copy. For a cut article, the value of the whole is given.</p>
+<table id="statute-table">
+<thead><tr><th>Statute</th><th>Article</th><th>Law ID</th><th>SHA-256</th></tr></thead>
+<tbody>
+<tr><td>著作権法</td><td>第2条第1項第1号</td><td><code>345AC0000000048</code></td><td><code>0f88f7f03918f732cfd781dbb99e4866384cea43aa62ca7e592ba493fe25cdf9</code></td></tr>
+<tr><td>著作権法</td><td>第10条第1項第4号</td><td><code>345AC0000000048</code></td><td><code>1b51b19db7203d4b06a5c38df46175351f6ec7066007c6e7fc656dbbb655d184</code></td></tr>
+<tr><td>著作権法</td><td>第19条</td><td><code>345AC0000000048</code></td><td><code>e544aec935d1d2d11c98e1f90407335be874712ae20f88a90ea4ff100d8bf042</code></td></tr>
+<tr><td>著作権法</td><td>第20条</td><td><code>345AC0000000048</code></td><td><code>fd3c3f660c5bc41d424736d468def4f29f0f65d368f3a8c7be334dc9294e21c9</code></td></tr>
+<tr><td>意匠法</td><td>第2条</td><td><code>334AC0000000125</code></td><td><code>1269a8ef67318251bacfa8d8e3e21c068c595c209bcf8b75a44b30c155dfcc0a</code></td></tr>
+<tr><td>意匠法</td><td>第23条</td><td><code>334AC0000000125</code></td><td><code>9b5f05ea19a53e1d43811f6be3cf4d311e1e97e59667fdfad36e4ab19917bc3e</code></td></tr>
+<tr><td>商標法</td><td>第25条</td><td><code>334AC0000000127</code></td><td><code>e1cd4c4290fdca9b93e0fd753c50e9fe5c6e353650609eb3f0d044c66797c405</code></td></tr>
+<tr><td>不正競争防止法</td><td>第2条第1項第1号・第2号</td><td><code>405AC0000000047</code></td><td><code>900c33bc3c6d3b7db92cc13678d27b03af57f0dfdab5215edabbea437fb08484</code></td></tr>
+<tr><td>不正競争防止法</td><td>第2条第1項第3号</td><td><code>405AC0000000047</code></td><td><code>252a66b5a09d62812203a03b27a15a835de6216b0b8059f044519dd7b2ad28a9</code></td></tr>
+<tr><td>障害を理由とする差別の解消の推進に関する法律</td><td>第2条</td><td><code>425AC0000000065</code></td><td><code>3c5f4837cb368517ec9d236bc43ea08bfdb8b190f228e0f27800623c6a23522f</code></td></tr>
+<tr><td>障害を理由とする差別の解消の推進に関する法律</td><td>第8条</td><td><code>425AC0000000065</code></td><td><code>0a058f1f4e2e5968d50afd70576a381409a1e62d19e629036114dea9139934f2</code></td></tr>
+</tbody>
+</table>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Takuya Nemoto · CC BY 4.0</span>
+    <span class="foot-links"><a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/issues/new/choose">Contact</a> · <a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/blob/main/DISCLAIMER.en.md">Disclaimer</a> · <span class="updated">Last changed <time datetime="2026-11-22">2026-11-22</time></span></span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-x9fSslgSzKI3ExCqtPWypzBKQJjptO1AhiCg0x3OlTE='; img-src 'self'; form-action 'none'; base-uri 'none'">
+<title>デザインに関する法的な扱い · The golden-window conjecture</title>
+<meta name="description" content="黄金比の窓の予想のサイトの見た目の部品（ロゴ、画像、図、配色、配置、書体）について、作り手と出所、権利と許諾、関わる法令の条を書いた頁です。">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://golden-window-conjecture.vercel.app/design-legal.ja.html">
+<link rel="alternate" hreflang="ja" href="https://golden-window-conjecture.vercel.app/design-legal.ja.html">
+<link rel="alternate" hreflang="en" href="https://golden-window-conjecture.vercel.app/design-legal.html">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="icon" href="./favicon.ico" sizes="48x48">
+<style>
+:root {
+  --bg: #faf9f7;
+  --card: #ffffff;
+  --text: #17171a;
+  --muted: #63636b;
+  --faint: #727278;
+  --line: #e6e4df;
+  --accent: #8a6a3d;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121214;
+    --card: #191919;
+    --text: #ececee;
+    --muted: #9c9ca4;
+    --faint: #81818b;
+    --line: #2a2a2d;
+    --accent: #b08d57;
+  }
+}
+:root {
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-xs: .75rem;
+  --fs-sm: .875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --measure: 40rem;
+  --page: 48rem;
+}
+html { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: 1.9;
+}
+.wrap { max-width: calc(var(--page) + 3rem); margin: 0 auto; padding: 0 1.5rem; }
+header { border-bottom: 1px solid var(--line); }
+.head-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding-top: .75rem; padding-bottom: .75rem; }
+.mark { display: inline-flex; line-height: 0; }
+.mark img { width: 2rem; height: 2rem; border-radius: .3rem; }
+.nav { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; }
+.nav a { font-size: var(--fs-sm); color: var(--muted); }
+h1, h2 { font-family: var(--font-serif); font-weight: 600; line-height: 1.4; }
+h1 { font-size: var(--fs-xl); margin: 3rem 0 1rem; }
+h2 { font-size: var(--fs-lg); margin: 2.5rem 0 .75rem; }
+.prose { max-width: var(--measure); }
+.prose p, .prose li { color: var(--text); }
+.prose .note { color: var(--muted); font-size: var(--fs-sm); }
+.prose a, .foot a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
+.prose code { font-family: var(--font-mono); font-size: var(--fs-sm); overflow-wrap: anywhere; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: var(--fs-sm); margin: 1rem 0; }
+.prose th, .prose td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
+.prose th { color: var(--muted); font-weight: 600; }
+.prose td, .prose th { min-width: 7rem; }
+.prose td code { overflow-wrap: normal; white-space: nowrap; }
+blockquote { margin: 1rem 0; padding: .6rem 1rem; background: var(--card); border-left: 3px solid var(--accent); }
+blockquote p { margin: 0; white-space: pre-line; font-family: var(--font-serif); font-size: var(--fs-sm); }
+.gist { color: var(--muted); font-size: var(--fs-sm); }
+footer { border-top: 1px solid var(--line); margin-top: 3rem; }
+.foot { display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding-top: 1.5rem; padding-bottom: 2rem; font-size: var(--fs-xs); color: var(--faint); }
+:where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: .3rem; }
+.skip-link { position: absolute; left: 1rem; top: -3rem; padding: .55rem 1rem; color: var(--bg); background: var(--text); font-size: var(--fs-sm); border-radius: .5rem; }
+.skip-link:focus { top: 1rem; }
+@media (max-width: 30rem) {
+  .head-row { flex-wrap: wrap; }
+  .wrap { padding: 0 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">本文へ</a>
+
+<header>
+  <div class="wrap head-row">
+    <a class="mark" href="./"><img src="./favicon.svg" alt="The golden-window conjecture" width="32" height="32"></a>
+    <nav class="nav">
+      <a href="./">トップの頁</a>
+      <a href="./design-legal.html" hreflang="en" lang="en">English</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1" class="wrap">
+<div class="prose">
+
+<h1>デザインに関する法的な扱い</h1>
+
+<h2 id="about">この頁について</h2>
+<p>この頁は、黄金比の窓の予想のサイト（golden-window-conjecture.vercel.app）の見た目の部品を扱います。</p>
+<p>部品ごとに、誰が作ったか、どこから来たか、権利と許諾がどうなっているか、どの法令の条に関わるかを書きます。</p>
+<p>書いてあるのは、運営者の側の理解です。法的な助言ではありません。</p>
+<p>この頁は、弁護士の確認を受けていません。</p>
+<p>条の文は、e-Gov 法令 API から 2026-11-22 に取り寄せた写しのとおりに引きます。</p>
+<p>写しは、このリポジトリの <a href="https://github.com/cpsbvbng26-dotcom/trinity-operator/blob/main/verification/design-statutes.json"><code>verification/design-statutes.json</code></a> にあり、条ごとに SHA-256 を記してあります。</p>
+<p>この頁が引く条は <span id="statute-count">11</span> です。一覧は頁の末尾にあります。</p>
+<p>長い条は、頁の文が拠る項や号だけを切り出して置きます。切り出したところには、どこを切り出したかを書きます。</p>
+
+<h2 id="parts">部品の一覧</h2>
+<p>このサイトが配る見た目の部品を、ファイルごとに並べます。ファイルを持たない部品は、その下の表に並べます。</p>
+<table id="parts-table">
+<thead><tr><th>部品</th><th>ファイル</th><th>作り方と出所</th><th>権利と許諾</th><th>確かめ方</th></tr></thead>
+<tbody>
+<tr><td>トップの頁</td><td><code>index.html</code></td><td>researcher-profile の設定（<code>golden-window.en.json</code> と <code>golden-window.site.json</code>）から <code>build.js</code> で生成し、ここへ写したものです。配色・配置・字の決めは、その生成もとにあります。</td><td>頁の末尾の表示により CC BY 4.0</td><td><code>check_site.py</code> が配色の比・拡大・代替文などを見ます。横断の検査が、生成し直したものと一字一句同じかを見ます。</td></tr>
+<tr><td>この頁（英語）</td><td><code>design-legal.html</code></td><td>手で置いた頁です。2026-11-22 に Claude Code（Anthropic）が書きました。配色の値は、トップの頁の値を写しています。</td><td>頁の末尾の表示により CC BY 4.0</td><td><code>check_site.py</code> が、配色の値がトップの頁と同じことと、引いた条の文を見ます。</td></tr>
+<tr><td>この頁（日本語）</td><td><code>design-legal.ja.html</code></td><td>英語の頁と同じ日に、同じ作り方で置きました。</td><td>頁の末尾の表示により CC BY 4.0</td><td>英語の頁と同じです。</td></tr>
+<tr><td>ロゴ</td><td><code>favicon.svg</code></td><td>2026-10-26 に Claude Code（Anthropic）が描きました。窓の枠の中に、穴を挟んで二つに分かれる帯を三段重ねた図です。長方形 <span id="logo-rects">9</span> 個だけで組み、文字も書体も使っていません。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が、中身が題と長方形だけであることと、長方形の数と、外から何も読まないことを見ます。</td></tr>
+<tr><td>ロゴの画素の版</td><td><code>favicon.ico</code></td><td>同じロゴを、ブラウザで 960 px に描き、半分ずつ縮めて作りました（2026-10-30）。<span id="ico-sizes">16・32・48</span> px の三枚が入っています。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が三枚の大きさを見ます。</td></tr>
+<tr><td>ロゴの画素の版</td><td><code>favicon-192.png</code></td><td>同じ作り方で、<span id="size-favicon-192.png">192</span> px の正方形です。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が大きさを見ます。</td></tr>
+<tr><td>ロゴの画素の版</td><td><code>apple-touch-icon.png</code></td><td>同じ作り方で、<span id="size-apple-touch-icon.png">180</span> px の正方形です。角を丸めていません。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が大きさを見ます。</td></tr>
+<tr><td>共有したときのカードの画像</td><td><code>og.png</code></td><td><code>favicon.svg</code> を、角を丸めずに <span id="size-og.png">600</span> px の正方形で描いた PNG です（2026-10-26）。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が大きさを見ます。</td></tr>
+</tbody>
+</table>
+<p id="others"><code>site/</code> にあるファイルは <span id="file-count">11</span> 個です。表に挙げた <span id="part-count">8</span> 個のほかは、<code>robots.txt</code>・<code>sitemap.xml</code>・<code>vercel.json</code> で、見た目の部品ではありません。</p>
+<table id="nonfile-table">
+<thead><tr><th>部品</th><th>作り方と出所</th><th>権利と許諾</th></tr></thead>
+<tbody>
+<tr><td>図</td><td>トップの頁の中の台本が、閲覧者のブラウザで、命題 5 と 6 の漸化式から描きます。何も取りに行きません。</td><td>トップの頁の一部です。</td></tr>
+<tr><td>配色</td><td>頁の中の CSS の変数です。明るい側と暗い側の二組があります。</td><td>それぞれの頁の一部です。</td></tr>
+<tr><td>配置</td><td>頁の中の CSS です。</td><td>それぞれの頁の一部です。</td></tr>
+<tr><td>書体</td><td>書体のファイルを配っていません。頁は <code>@font-face</code> を持たず、<code>font-family</code> で書体の名を並べるだけです。どの書体で描かれるかは、閲覧者の端末が決めます。</td><td>このサイトは書体のファイルを持っていません。</td></tr>
+<tr><td>外から読む素材</td><td>ありません。頁は、外から画像・書体・台本・様式を読みません。頁の CSP は <code>default-src 'none'</code> から始まります。</td><td>他人の素材を使っていません。</td></tr>
+</tbody>
+</table>
+<p>名を並べている書体は、次のとおりです。名を書くだけで、書体そのものは配っていません。</p>
+<ul id="fonts">
+<li>本文：<code>"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif</code></li>
+<li>見出し：<code>"Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, "Times New Roman", serif</code></li>
+<li>等幅：<code>ui-monospace, SFMono-Regular, Menlo, Consolas, monospace</code></li>
+</ul>
+
+<h2 id="copyright">著作権</h2>
+<p>著作権法第2条第1項第1号は、次のとおりです。</p>
+<blockquote lang="ja" data-statute="著作権法 第2条第1項第1号" data-cut="whole"><p>一 著作物 思想又は感情を創作的に表現したものであつて、文芸、学術、美術又は音楽の範囲に属するものをいう。</p></blockquote>
+<p>同じ法の第10条第1項第4号は、次のとおりです。</p>
+<blockquote lang="ja" data-statute="著作権法 第10条第1項第4号" data-cut="whole"><p>四 絵画、版画、彫刻その他の美術の著作物</p></blockquote>
+<p>このサイトのロゴ・図・配色・配置が、この「著作物」や「美術の著作物」に当たるかどうかは、条の文からは決まりません。</p>
+<p>この頁は、当たるとも当たらないとも決めません。</p>
+<p>ロゴと画像は、Claude Code（Anthropic）が運営者の求めで描いたものです。</p>
+<p>言語モデルが描いたものに著作者がいるかどうかも、この頁は決めません。Claude は著者ではありません。</p>
+<p>許諾は、リポジトリの README のライセンスの表のとおりです。</p>
+<p><code>site/</code> の頁は、頁の末尾の表示により CC BY 4.0 です。</p>
+<p>画像のファイルには頁とは別の表示が無く、リポジトリの LICENSE により MIT です。</p>
+<p>この頁は、許諾を変えません。</p>
+<p>著作権法第19条は、次のとおりです。第1項の第1文だけを切り出しました。</p>
+<blockquote lang="ja" data-statute="著作権法 第19条" data-cut="excerpt"><p>著作者は、その著作物の原作品に、又はその著作物の公衆への提供若しくは提示に際し、その実名若しくは変名を著作者名として表示し、又は著作者名を表示しないこととする権利を有する。</p></blockquote>
+<p>同じ法の第20条は、次のとおりです。第1項だけを切り出しました。</p>
+<blockquote lang="ja" data-statute="著作権法 第20条" data-cut="excerpt"><p>著作者は、その著作物及びその題号の同一性を保持する権利を有し、その意に反してこれらの変更、切除その他の改変を受けないものとする。</p></blockquote>
+<p>頁の末尾は、名と許諾を「© 2026 Takuya Nemoto · CC BY 4.0」と表示しています。</p>
+<p>CC BY 4.0 の法的な文は、第2条の b の 1 と 2 で、次のとおり定めます。同じ文は、このリポジトリの <code>lessons/LICENSE</code> にあります。</p>
+<blockquote lang="en" data-license="moral"><p>Moral rights, such as the right of integrity, are not licensed under this Public License, nor are publicity, privacy, and/or other similar personality rights; however, to the extent possible, the Licensor waives and/or agrees not to assert any such rights held by the Licensor to the limited extent necessary to allow You to exercise the Licensed Rights, but not otherwise.</p></blockquote>
+<blockquote lang="en" data-license="trademark"><p>Patent and trademark rights are not licensed under this Public License.</p></blockquote>
+<p>他人の素材は使っていません。表に挙げた画像のほかに、画像は置いていません。</p>
+<p>頁は、外から画像・書体・台本を読みません。</p>
+
+<h2 id="marks">商標・意匠・不正競争</h2>
+<p>このリポジトリの記録には、サイトの名やロゴを商標や意匠として出願・登録したという記録がありません。</p>
+<p>登録の有無を、特許庁の記録で確かめてはいません。</p>
+<p>意匠法第2条は、次のとおりです。第1項だけを切り出しました。</p>
+<blockquote lang="ja" data-statute="意匠法 第2条" data-cut="excerpt"><p>この法律で「意匠」とは、物品（物品の部分を含む。以下同じ。）の形状、模様若しくは色彩若しくはこれらの結合（以下「形状等」という。）、建築物（建築物の部分を含む。以下同じ。）の形状等又は画像（機器の操作の用に供されるもの又は機器がその機能を発揮した結果として表示されるものに限り、画像の部分を含む。次条第二項、第三十七条第二項、第三十八条第七号及び第八号、第四十四条の三第二項第六号並びに第五十五条第二項第六号を除き、以下同じ。）であつて、視覚を通じて美感を起こさせるものをいう。</p></blockquote>
+<p>同じ法の第23条は、次のとおりです。</p>
+<blockquote lang="ja" data-statute="意匠法 第23条" data-cut="whole"><p>（意匠権の効力） 第二十三条 意匠権者は、業として登録意匠及びこれに類似する意匠の実施をする権利を専有する。 ただし、その意匠権について専用実施権を設定したときは、専用実施権者がその登録意匠及びこれに類似する意匠の実施をする権利を専有する範囲については、この限りでない。</p></blockquote>
+<p>このサイトの画面が、この条の「画像」の意匠に当たるかどうかを、この頁は決めません。</p>
+<p>商標法第25条は、次のとおりです。</p>
+<blockquote lang="ja" data-statute="商標法 第25条" data-cut="whole"><p>（商標権の効力） 第二十五条 商標権者は、指定商品又は指定役務について登録商標の使用をする権利を専有する。 ただし、その商標権について専用使用権を設定したときは、専用使用権者がその登録商標の使用をする権利を専有する範囲については、この限りでない。</p></blockquote>
+<p>不正競争防止法第2条第1項第1号・第2号は、次のとおりです。写しにあるのは号の文だけです。</p>
+<blockquote lang="ja" data-statute="不正競争防止法 第2条第1項第1号・第2号" data-cut="whole"><p>一 他人の商品等表示（人の業務に係る氏名、商号、商標、標章、商品の容器若しくは包装その他の商品又は営業を表示するものをいう。以下同じ。）として需要者の間に広く認識されているものと同一若しくは類似の商品等表示を使用し、又はその商品等表示を使用した商品を譲渡し、引き渡し、譲渡若しくは引渡しのために展示し、輸出し、輸入し、若しくは電気通信回線を通じて提供して、他人の商品又は営業と混同を生じさせる行為
+二 自己の商品等表示として他人の著名な商品等表示と同一若しくは類似のものを使用し、又はその商品等表示を使用した商品を譲渡し、引き渡し、譲渡若しくは引渡しのために展示し、輸出し、輸入し、若しくは電気通信回線を通じて提供する行為</p></blockquote>
+<p>同じ項の第3号は、次のとおりです。</p>
+<blockquote lang="ja" data-statute="不正競争防止法 第2条第1項第3号" data-cut="whole"><p>三 他人の商品の形態（当該商品の機能を確保するために不可欠な形態を除く。）を模倣した商品を譲渡し、貸し渡し、譲渡若しくは貸渡しのために展示し、輸出し、輸入し、又は電気通信回線を通じて提供する行為</p></blockquote>
+<p>ほかの人の登録商標・登録意匠・商品等表示・商品の形態と、このサイトの名・ロゴ・画面を、登録の記録や検索で突き合わせてはいません。</p>
+<p>似たものが無いかは、確かめていません。</p>
+<p>確かめてあるのは、作った記録です。ロゴを置いたコミット（<code>b26c15b</code>）の説明は、窓の枠の中に、穴を挟んで二つに分かれる帯を三段重ねた図だと書いています。</p>
+
+<h2 id="access">見やすさ</h2>
+<p>障害を理由とする差別の解消の推進に関する法律（以下、障害者差別解消法）の第2条は、次のとおりです。第七号だけを切り出しました。</p>
+<blockquote lang="ja" data-statute="障害者差別解消法 第2条" data-cut="excerpt"><p>七 事業者 商業その他の事業を行う者（国、独立行政法人等、地方公共団体及び地方独立行政法人を除く。）をいう。</p></blockquote>
+<p>同じ法の第8条は、次のとおりです。</p>
+<blockquote lang="ja" data-statute="障害者差別解消法 第8条" data-cut="whole"><p>（事業者における障害を理由とする差別の禁止） 第八条 事業者は、その事業を行うに当たり、障害を理由として障害者でない者と不当な差別的取扱いをすることにより、障害者の権利利益を侵害してはならない。 ２ 事業者は、その事業を行うに当たり、障害者から現に社会的障壁の除去を必要としている旨の意思の表明があった場合において、その実施に伴う負担が過重でないときは、障害者の権利利益を侵害することとならないよう、当該障害者の性別、年齢及び障害の状態に応じて、社会的障壁の除去の実施について必要かつ合理的な配慮をしなければならない。</p></blockquote>
+<p>運営者が、この法の「事業者」に当たるかどうかは、条の文からは決まりません。この頁は決めません。</p>
+<p>このサイトがしていることのうち、検査で確かめている事柄を挙げます。どれも <code>verification/check_site.py</code> が見ています。</p>
+<ul id="a11y">
+<li>本文の色と地の色の比は、明るい側と暗い側のどちらでも 4.5:1 以上です。いちばん低い組は <span id="min-ratio">4.54</span>:1 です。</li>
+<li>暗い側は、閲覧者の端末の設定に従っても出ます。</li>
+<li>拡大を止めていません。字の大きさを px で決めていません。</li>
+<li>動きを減らす設定（<code>prefers-reduced-motion</code>）では、動きを止めます。</li>
+<li>リンクは、色だけでなく下線でも示します。</li>
+<li>図の状態は、色の帯のほかに文でも書きます。図そのものも、読み上げのための名（<code>aria-label</code>）で中身を言います。</li>
+<li>ロゴの画像は代替文を持ちます。</li>
+<li>キーボードで、本文へ飛ぶリンクを使えます。焦点の在りかは、輪郭で示します。</li>
+</ul>
+<p>読み上げの道具で実際に聞いて確かめた記録は、このリポジトリにありません。</p>
+<p>人が画面を操作して確かめた記録も、このリポジトリにありません。</p>
+
+<h2 id="people">人と団体</h2>
+<p>実在の人の肖像（写真や似顔絵）は使っていません。</p>
+<p>実在の団体の印やロゴも使っていません。</p>
+<p><code>site/</code> にある画像は、表に挙げた <span id="image-count">5</span> 個だけです。どれも、このサイトのロゴから作ったものです。</p>
+<p>頁が置く画像の要素（<code>img</code>）は、どの頁でもロゴの一つだけです。</p>
+
+<h2 id="changes">変わったとき</h2>
+<p>部品を変えたら、この頁と検査を同じ PR で直します。</p>
+<p>表と <code>site/</code> のファイルが食い違えば、<code>verification/check_site.py</code> が落ちます。</p>
+
+<h2 id="articles">引いた条</h2>
+<p>SHA-256 は、写しにある条の全文の UTF-8 の値です。切り出した条も、全文の値を記します。</p>
+<table id="statute-table">
+<thead><tr><th>法令</th><th>条</th><th>法令 ID</th><th>SHA-256</th></tr></thead>
+<tbody>
+<tr><td>著作権法</td><td>第2条第1項第1号</td><td><code>345AC0000000048</code></td><td><code>0f88f7f03918f732cfd781dbb99e4866384cea43aa62ca7e592ba493fe25cdf9</code></td></tr>
+<tr><td>著作権法</td><td>第10条第1項第4号</td><td><code>345AC0000000048</code></td><td><code>1b51b19db7203d4b06a5c38df46175351f6ec7066007c6e7fc656dbbb655d184</code></td></tr>
+<tr><td>著作権法</td><td>第19条</td><td><code>345AC0000000048</code></td><td><code>e544aec935d1d2d11c98e1f90407335be874712ae20f88a90ea4ff100d8bf042</code></td></tr>
+<tr><td>著作権法</td><td>第20条</td><td><code>345AC0000000048</code></td><td><code>fd3c3f660c5bc41d424736d468def4f29f0f65d368f3a8c7be334dc9294e21c9</code></td></tr>
+<tr><td>意匠法</td><td>第2条</td><td><code>334AC0000000125</code></td><td><code>1269a8ef67318251bacfa8d8e3e21c068c595c209bcf8b75a44b30c155dfcc0a</code></td></tr>
+<tr><td>意匠法</td><td>第23条</td><td><code>334AC0000000125</code></td><td><code>9b5f05ea19a53e1d43811f6be3cf4d311e1e97e59667fdfad36e4ab19917bc3e</code></td></tr>
+<tr><td>商標法</td><td>第25条</td><td><code>334AC0000000127</code></td><td><code>e1cd4c4290fdca9b93e0fd753c50e9fe5c6e353650609eb3f0d044c66797c405</code></td></tr>
+<tr><td>不正競争防止法</td><td>第2条第1項第1号・第2号</td><td><code>405AC0000000047</code></td><td><code>900c33bc3c6d3b7db92cc13678d27b03af57f0dfdab5215edabbea437fb08484</code></td></tr>
+<tr><td>不正競争防止法</td><td>第2条第1項第3号</td><td><code>405AC0000000047</code></td><td><code>252a66b5a09d62812203a03b27a15a835de6216b0b8059f044519dd7b2ad28a9</code></td></tr>
+<tr><td>障害を理由とする差別の解消の推進に関する法律</td><td>第2条</td><td><code>425AC0000000065</code></td><td><code>3c5f4837cb368517ec9d236bc43ea08bfdb8b190f228e0f27800623c6a23522f</code></td></tr>
+<tr><td>障害を理由とする差別の解消の推進に関する法律</td><td>第8条</td><td><code>425AC0000000065</code></td><td><code>0a058f1f4e2e5968d50afd70576a381409a1e62d19e629036114dea9139934f2</code></td></tr>
+</tbody>
+</table>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Takuya Nemoto · CC BY 4.0</span>
+    <span class="foot-links"><a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/issues/new/choose">連絡</a> · <a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/blob/main/DISCLAIMER.md">免責事項</a> · <span class="updated">最終更新 <time datetime="2026-11-22">2026-11-22</time></span></span>
+  </div>
+</footer>
+
+</body>
+</html>
