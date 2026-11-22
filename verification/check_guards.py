@@ -345,6 +345,54 @@ case("予想のサイトで、二つの部分を証明したという一文を�
      "Both are proved: part (a) is Proposition 8 and part (b) is Proposition 9 of the note.", "It has not been proved.",
      "verification/check_site.py")
 
+print("\n8e. 2026-11-22 に足した検査を壊す（デザインに関する法的な扱いの頁と、引いた条の写し）")
+CS = "verification/check_site.py"
+case("日本語の頁で、商標法第25条の文を一語変える", "site/design-legal.ja.html",
+     "について登録商標の使用をする権利を専有する。", "について登録商標の使用をする権利を保有する。", CS)
+case("英語の頁で、切り出した障害者差別解消法第2条第七号を写しに無い文にする", "site/design-legal.html",
+     "七 事業者 商業その他の事業を行う者", "七 事業者 商業を行う者", CS)
+case("条の写しの文を一語変える（固めた SHA-256 と合わなくなる）", "verification/design-statutes.json",
+     "思想又は感情を創作的に表現したもの", "思想又は感情を表現したもの", CS)
+case("日本語の頁の部品の表から、og.png の行を落とす", "site/design-legal.ja.html",
+     '<tr><td>共有したときのカードの画像</td><td><code>og.png</code></td>', '<tr><td>共有したときのカードの画像</td><td><code>og.jpg</code></td>', CS)
+case("表に挙げた画像のファイルを消す", "site/apple-touch-icon.png", None, None, CS)
+case("英語の頁で、favicon.ico の中の大きさを違えて書く", "site/design-legal.html",
+     '<span id="ico-sizes">16, 32, 48</span>', '<span id="ico-sizes">16, 32, 64</span>', CS)
+case("日本語の頁で、ロゴの長方形の数を違えて書く", "site/design-legal.ja.html",
+     '<span id="logo-rects">9</span>', '<span id="logo-rects">8</span>', CS)
+case("英語の頁で、配色の比の最小を一目盛り上げて書く", "site/design-legal.html",
+     '<span id="min-ratio">4.54</span>', '<span id="min-ratio">4.55</span>', CS)
+case("日本語の頁で、淡い文字の色をトップの頁と違える", "site/design-legal.ja.html",
+     "  --faint: #727278;", "  --faint: #929298;", CS)
+case("英語の頁で、条の要旨から「訳ではない」の断りを外す", "site/design-legal.html",
+     "Summary, not a translation: it defines a work", "It defines a work", CS)
+case("英語の頁に、外のスタイルシートを読ませる", "site/design-legal.html",
+     '<link rel="icon" href="./favicon.ico" sizes="48x48">\n',
+     '<link rel="icon" href="./favicon.ico" sizes="48x48">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2">\n', CS)
+case("日本語の頁から、弁護士の確認を受けていないという一文を消す", "site/design-legal.ja.html",
+     "<p>この頁は、弁護士の確認を受けていません。</p>\n", "", CS)
+case("sitemap.xml から、日本語の頁を落とす", "site/sitemap.xml",
+     "  <url>\n    <loc>https://golden-window-conjecture.vercel.app/design-legal.ja.html</loc>\n  </url>\n", "", CS)
+case("英語の頁の下の欄から、CC BY 4.0 を外す", "site/design-legal.html",
+     "<span>© 2026 Takuya Nemoto · CC BY 4.0</span>", "<span>© 2026 Takuya Nemoto</span>", CS)
+case("日本語の頁で、引く条の数を違えて名乗る", "site/design-legal.ja.html",
+     '<span id="statute-count">11</span>', '<span id="statute-count">10</span>', CS)
+case("英語の頁の引いた条の表で、SHA-256 を一字変える", "site/design-legal.html",
+     "<code>e1cd4c4290fdca9b93e0fd753c50e9fe5c6e353650609eb3f0d044c66797c405</code>",
+     "<code>e1cd4c4290fdca9b93e0fd753c50e9fe5c6e353650609eb3f0d044c66797c406</code>", CS)
+case("日本語の頁で、障害者差別解消法を正式の名より先に略称で書く", "site/design-legal.ja.html",
+     "<p>障害を理由とする差別の解消の推進に関する法律（以下、障害者差別解消法）の第2条は、",
+     "<p>障害者差別解消法の第2条は、", CS)
+case("日本語の頁で、CC BY 4.0 の法的な文を一語変える", "site/design-legal.ja.html",
+     "Patent and trademark rights are not licensed under this Public License.",
+     "Patent and trademark rights are licensed under this Public License.", CS)
+case("英語の頁で、等幅の書体の並びを入れ替える", "site/design-legal.html",
+     "<li>Monospace: <code>ui-monospace, SFMono-Regular,", "<li>Monospace: <code>SFMono-Regular, ui-monospace,", CS)
+case("日本語の頁で、切り出した条の前から切り出したという断りを消す", "site/design-legal.ja.html",
+     "同じ法の第20条は、次のとおりです。第1項だけを切り出しました。", "同じ法の第20条は、次のとおりです。", CS)
+case("日本語の頁に、創作の系列の名を書く", "site/design-legal.ja.html",
+     "<p>他人の素材は使っていません。", "<p>Nusquama の素材は使っていません。", CS)
+
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
     BREAKS = len(re.findall(r"^case\(", fh.read(), re.M))
