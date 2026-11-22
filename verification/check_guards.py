@@ -353,7 +353,7 @@ case("英語の頁で、切り出した障害者差別解消法第2条第七号�
      "七 事業者 商業その他の事業を行う者", "七 事業者 商業を行う者", CS)
 case("条の写しの文を一語変える（固めた SHA-256 と合わなくなる）", "verification/design-statutes.json",
      "思想又は感情を創作的に表現したもの", "思想又は感情を表現したもの", CS)
-case("日本語の頁の部品の表から、og.png の行を落とす", "site/design-legal.ja.html",
+case("日本語の頁の部品の表で、og.png を無いファイルの名に替える", "site/design-legal.ja.html",
      '<tr><td>共有したときのカードの画像</td><td><code>og.png</code></td>', '<tr><td>共有したときのカードの画像</td><td><code>og.jpg</code></td>', CS)
 case("表に挙げた画像のファイルを消す", "site/apple-touch-icon.png", None, None, CS)
 case("英語の頁で、favicon.ico の中の大きさを違えて書く", "site/design-legal.html",
