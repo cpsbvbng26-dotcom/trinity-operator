@@ -392,6 +392,11 @@ case("日本語の頁で、切り出した条の前から切り出したとい�
      "同じ法の第20条は、次のとおりです。第1項だけを切り出しました。", "同じ法の第20条は、次のとおりです。", CS)
 case("日本語の頁に、創作の系列の名を書く", "site/design-legal.ja.html",
      "<p>他人の素材は使っていません。", "<p>Nusquama の素材は使っていません。", CS)
+# 2026-11-23。奥行きで足した二色。面の下の色（--card-lo）と、地の左上に重ねる光（--glow）。
+case("サイトの明るい側の面の下の色を、地より暗くする", "site/index.html",
+     "\n  --card-lo: #fcfbf9;", "\n  --card-lo: #e2dfda;", CS)
+case("サイトの明るい側の地に重ねる光を、白から墨に替える", "site/index.html",
+     "--glow: rgba(255, 255, 255, .72);", "--glow: rgba(23, 23, 26, .3);", CS)
 
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
