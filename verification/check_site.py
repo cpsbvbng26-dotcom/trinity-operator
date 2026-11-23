@@ -562,6 +562,102 @@ for name in DESIGN_PAGES:
                                             {"ja": "リポジトリの LICENSE により MIT", "en": "MIT, by the repository’s LICENSE"}[lang])
                                        for f, r in part_rows))
 
+print("\n14. 予想のサイトの意匠（帯・渦・飾り・ロゴの二色）")
+# 2026-11-23。予想のサイトだけの意匠を、researcher-profile の golden-window-design.js が描く。決まりはその README の「予想のサイトの意匠」にある。
+# ここでは、頁に入った形を、φ の式から数え直す。帯と飾りの各段は、区間の両端の二つを長さの 1/φ² ずつ残す操作を n 回当てた 2^n 個の区間である。
+# ロゴの二色は favicon.svg の塗りと同じで、明暗どちらでも同じ。デザインに関する法的な扱いの頁は、帯と題の下の飾りをトップの頁から写す。
+PHI = (1 + 5 ** 0.5) / 2
+KEEP = 2 - PHI
+
+
+def cantor(n):
+    cur = [(0.0, 1.0)]
+    for _ in range(n):
+        nxt = []
+        for a, b in cur:
+            d = (b - a) * KEEP
+            nxt += [(a, a + d), (b - d, b)]
+        cur = nxt
+    return cur
+
+
+def cantor_rows(svgtext):
+    """viewBox の幅と、y ごとに並べた区間の行を返す。墨の地の長方形（class を持つもの）は除く。"""
+    vb = re.search(r'viewBox="([-\d.]+) ([-\d.]+) ([\d.]+) ([\d.]+)"', svgtext)
+    by = {}
+    for x, y, w in re.findall(r'<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="[\d.]+"/>', svgtext):
+        by.setdefault(float(y), []).append((float(x), float(w)))
+    return (float(vb.group(3)) if vb else 0), [sorted(by[y]) for y in sorted(by)]
+
+
+def rows_ok(svgtext):
+    """各行が、ある n について cantor(n) を幅に伸ばしたものと 0.006 の内で同じか。段は上から一つずつ深くなる。"""
+    width, rows = cantor_rows(svgtext)
+    if not rows or width <= 0:
+        return False
+    ns = []
+    for row in rows:
+        n = len(row).bit_length() - 1
+        ref = cantor(n)
+        if len(row) != 2 ** n or any(abs(x - a * width) > 0.006 or abs(w - (b - a) * width) > 0.006 for (x, w), (a, b) in zip(row, ref)):
+            return False
+        ns.append(n)
+    return all(ns[i + 1] == ns[i] + 1 for i in range(len(ns) - 1))
+
+
+band = re.findall(r'<svg class="gw-band"[^>]*>.*?</svg>', html, re.S)
+seal = re.findall(r'<svg class="gw-seal"[^>]*>.*?</svg>', html, re.S)
+orn_long = re.findall(r'<svg class="gw-orn gw-orn-long"[^>]*>.*?</svg>', html, re.S)
+orn_short = re.findall(r'<svg class="gw-orn gw-orn-short"[^>]*>.*?</svg>', html, re.S)
+heads = html.count('<div class="sec-head reveal">')
+check("トップの頁に、帯が一本（頁の上の欄の先頭）・渦が一つ・題の下の飾りが一つ・節の見出しごとに飾りが一つ（%d）ある" % heads,
+      len(band) == 1 and re.search(r'<header>\n  <svg class="gw-band"', html) is not None and len(seal) == 1
+      and len(orn_long) == 1 and len(orn_short) == heads and heads > 0)
+check("帯と飾りの各段が、両端の二つを長さの 1/φ² ずつ残す 2^n 個の区間で、段は上から一つずつ深くなる（φ の式から数え直す）",
+      bool(band) and bool(orn_long) and bool(orn_short)
+      and rows_ok(re.sub(r'<rect width="[^"]*" height="[^"]*" class="gw-band-ink"/>', "", band[0]))
+      and rows_ok(orn_long[0]) and all(rows_ok(o) for o in orn_short))
+sq = [float(w) for w in re.findall(r'<rect x="[\d.]+" y="[\d.]+" width="([\d.]+)" height="\1" class="gw-seal-sq"', seal[0])] if seal else []
+svb = re.search(r'viewBox="([-\d.]+) ([-\d.]+) ([\d.]+) ([\d.]+)"', seal[0]) if seal else None
+check("渦の正方形の辺が 1/φ ずつ縮み、外の長方形の縦と横の比が φ である",
+      len(sq) >= 4 and all(abs(sq[i + 1] / sq[i] - 1 / PHI) < 0.002 for i in range(len(sq) - 1))
+      and svb is not None and abs((float(svb.group(4)) - 1) / (float(svb.group(3)) - 1) - PHI) < 0.001,
+      "%d 個" % len(sq))
+deco = band + seal + orn_long + orn_short
+check("帯・渦・飾りが、長方形と道だけで描かれ、字も外への参照も持たず、読み上げない",
+      bool(deco) and all(set(re.findall(r"<([a-zA-Z]+)", d)) <= {"svg", "g", "rect", "path"} and 'aria-hidden="true"' in d
+                         and not re.search(r"href|https?:|<text|font", d) for d in deco))
+
+# ロゴの二色。favicon.svg の地（rx を持つ長方形の塗り）と枠（stroke）の色と同じで、明暗どちらでも同じ一組だけを置く。
+logo_ink = re.search(r'<rect width="48" height="48" rx="\d+" fill="(#[0-9A-Fa-f]{6})"/>', svg)
+logo_gold = re.search(r'stroke="(#[0-9A-Fa-f]{6})"', svg)
+# 紙の段は二色を #000 に替えるが、六桁の値だけを拾うので、ここには入らない。
+gw_tok = re.findall(r"--gw-(ink|gold):\s*(#[0-9a-fA-F]{6});", css)
+check("意匠の色（--gw-ink・--gw-gold）が、ロゴ（favicon.svg）の墨と金と同じで、明暗で一組だけ",
+      logo_ink is not None and logo_gold is not None
+      and sorted((k, v.lower()) for k, v in gw_tok) == sorted([("ink", logo_ink.group(1).lower()), ("gold", logo_gold.group(1).lower())]),
+      repr(gw_tok))
+gw = dict((k, v) for k, v in gw_tok)
+r_gold = ratio(gw["gold"], gw["ink"]) if "gold" in gw and "ink" in gw else 0
+check("帯の金と墨の比が 3:1 以上（字でない図形）", r_gold >= 3, "%.2f:1" % r_gold)
+bars = sorted({float(w) for w in re.findall(r'<rect x="[\d.]+" y="[\d.]+" width="([\d.]+)" height="6"', svg)}, reverse=True)
+check("ロゴの帯の段の比は 0.38 に丸めた 1/φ² で、意匠は丸めない 1/φ² を使う",
+      len(bars) == 3 and all(round(bars[i + 1] / bars[i], 2) == 0.38 for i in range(2)) and abs(0.38 - KEEP) < 0.005,
+      ", ".join("%.4g" % b for b in bars))
+check("紙では、帯と渦を刷らない",
+      re.search(r"@media print \{[^@]*\.gw-band, \.hero \.gw-seal, \.hero::after \{ display: none; \}", css) is not None)
+copies = []
+for name in DESIGN_PAGES:
+    page = read(name)
+    pcss = "\n".join(re.findall(r"<style[^>]*>(.*?)</style>", page, re.S))
+    ptok = re.findall(r"--gw-(ink|gold):\s*(#[0-9a-fA-F]{6});", pcss)
+    if not (band and orn_long and page.count(band[0]) == 1 and re.search(r'<header>\n  <svg class="gw-band"', page)
+            and page.count(orn_long[0]) == 1 and re.search(r"</h1>\n<svg class=\"gw-orn gw-orn-long\"", page)
+            and sorted(ptok) == sorted(gw_tok) and re.search(r"@media print \{[^@]*\.gw-band \{ display: none; \}", pcss)):
+        copies.append(name)
+check("デザインに関する法的な扱いの頁（英日）が、帯と題の下の飾りをトップの頁と一字一句同じに写し、同じ二色を置き、紙では帯を刷らない",
+      not copies, ", ".join(copies))
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))
