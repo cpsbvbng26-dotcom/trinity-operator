@@ -445,6 +445,14 @@ OSF への登録は、2026-11-12 に著者がいったん止めました。2026-
 共有したときのカードには、同じ図を正方形の画像（`site/og.png`）にして出します。
 帯の比は図のためのもので、実際の写像の縮尺ではありません。
 
+2026-11-23 から、サイトには予想のサイトだけの意匠を当てています。
+頁の上端の墨の帯、最初の画面の右肩の渦、見出しの下の飾り、状態の段と δ の範囲ごとの行の札です。
+帯と飾りは、ロゴと同じ作り方で、区間の両端の二つを長さの 1/φ² ずつ残す操作を繰り返したものです。ロゴはこの比を 0.38 に丸めています。
+渦は、黄金比の長方形を正方形で切り分けて描きます。
+どれも飾りで、予想の集合 T_δ の図ではありません。
+数と CSS は researcher-profile の `golden-window-design.js` にあり、`site/index.html` を作り直すと入ります。
+`verification/check_site.py` が、形を φ の式から数え直し、色をロゴの塗りと突き合わせます。
+
 サイトの見た目の部品について、作り手と出所、権利と許諾、関わる法令の条を書いた頁を、英語（[`site/design-legal.html`](site/design-legal.html)）と日本語（[`site/design-legal.ja.html`](site/design-legal.ja.html)）で置いています。
 二つとも手で置いた頁で、生成物ではありません。2026-11-22 に Claude Code（Anthropic）が書きました。
 頁が引く条の文は、e-Gov 法令 API から 2026-11-22 に取り寄せた写しで、[`verification/design-statutes.json`](verification/design-statutes.json) にあります。
