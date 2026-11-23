@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-EA2jgGG3fLhKcT8+UOjHHsRRalSo/q9PLzGgL8V8020='; img-src 'self'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-PCfsePUBs4WgPn2mCERTLUHLa2hQ3UPF2gE2F2uSmIk='; img-src 'self'; form-action 'none'; base-uri 'none'">
 <title>デザインに関する法的な扱い · The golden-window conjecture</title>
 <meta name="description" content="黄金比の窓の予想のサイトの見た目の部品（ロゴ、画像、図、配色、配置、書体）について、作り手と出所、権利と許諾、関わる法令の条を書いた頁です。">
 <meta name="robots" content="index, follow">
@@ -93,6 +93,18 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 :where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: .3rem; }
 .skip-link { position: absolute; left: 1rem; top: -3rem; padding: .55rem 1rem; color: var(--bg); background: var(--text); font-size: var(--fs-sm); border-radius: .5rem; }
 .skip-link:focus { top: 1rem; box-shadow: var(--shadow-front); }
+/* 2026-11-23。予想のサイトの意匠。帯と題の下の飾りは、トップの頁（researcher-profile の golden-window-design.js が描く）から写す。
+   色はロゴの二色で、明暗どちらでも同じ。check_site.py が、トップの頁と一字一句同じかを見る。 */
+:root {
+  --gw-ink: #161a23;
+  --gw-gold: #c9a13b;
+}
+.gw-band { display: block; width: 100%; }
+.gw-band-ink { fill: var(--gw-ink); }
+.gw-band-gold { fill: var(--gw-gold); }
+.gw-orn-fill { fill: var(--accent); }
+.gw-orn-long { display: block; margin: -.25rem 0 1.5rem; }
+footer { border-top: 2px solid var(--gw-gold); }
 @media (max-width: 30rem) {
   .head-row { flex-wrap: wrap; }
   .wrap { padding: 0 1rem; }
@@ -103,6 +115,8 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 /* 2026-11-23。奥行き。光は左上から一方向で、影は右下へ落ちる。値はトップの頁の段と同じ。紙では影も濃淡も外す。 */
 @media print {
   *, *::before, *::after { box-shadow: none !important; background-image: none !important; }
+  .gw-band { display: none; }
+  :root { --gw-gold: #000; }
 }
 </style>
 </head>
@@ -111,6 +125,7 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <a class="skip-link" href="#main">本文へ</a>
 
 <header>
+  <svg class="gw-band" viewBox="0 0 1000 12" height="12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect width="1000" height="12" class="gw-band-ink"/><g class="gw-band-gold"><rect x="0" y="1.5" width="55.73" height="2"/><rect x="90.17" y="1.5" width="55.73" height="2"/><rect x="236.07" y="1.5" width="55.73" height="2"/><rect x="326.24" y="1.5" width="55.73" height="2"/><rect x="618.03" y="1.5" width="55.73" height="2"/><rect x="708.2" y="1.5" width="55.73" height="2"/><rect x="854.1" y="1.5" width="55.73" height="2"/><rect x="944.27" y="1.5" width="55.73" height="2"/><rect x="0" y="5" width="21.29" height="2"/><rect x="34.44" y="5" width="21.29" height="2"/><rect x="90.17" y="5" width="21.29" height="2"/><rect x="124.61" y="5" width="21.29" height="2"/><rect x="236.07" y="5" width="21.29" height="2"/><rect x="270.51" y="5" width="21.29" height="2"/><rect x="326.24" y="5" width="21.29" height="2"/><rect x="360.68" y="5" width="21.29" height="2"/><rect x="618.03" y="5" width="21.29" height="2"/><rect x="652.48" y="5" width="21.29" height="2"/><rect x="708.2" y="5" width="21.29" height="2"/><rect x="742.65" y="5" width="21.29" height="2"/><rect x="854.1" y="5" width="21.29" height="2"/><rect x="888.54" y="5" width="21.29" height="2"/><rect x="944.27" y="5" width="21.29" height="2"/><rect x="978.71" y="5" width="21.29" height="2"/><rect x="0" y="8.5" width="8.13" height="2"/><rect x="13.16" y="8.5" width="8.13" height="2"/><rect x="34.44" y="8.5" width="8.13" height="2"/><rect x="47.6" y="8.5" width="8.13" height="2"/><rect x="90.17" y="8.5" width="8.13" height="2"/><rect x="103.33" y="8.5" width="8.13" height="2"/><rect x="124.61" y="8.5" width="8.13" height="2"/><rect x="137.77" y="8.5" width="8.13" height="2"/><rect x="236.07" y="8.5" width="8.13" height="2"/><rect x="249.22" y="8.5" width="8.13" height="2"/><rect x="270.51" y="8.5" width="8.13" height="2"/><rect x="283.67" y="8.5" width="8.13" height="2"/><rect x="326.24" y="8.5" width="8.13" height="2"/><rect x="339.39" y="8.5" width="8.13" height="2"/><rect x="360.68" y="8.5" width="8.13" height="2"/><rect x="373.84" y="8.5" width="8.13" height="2"/><rect x="618.03" y="8.5" width="8.13" height="2"/><rect x="631.19" y="8.5" width="8.13" height="2"/><rect x="652.48" y="8.5" width="8.13" height="2"/><rect x="665.63" y="8.5" width="8.13" height="2"/><rect x="708.2" y="8.5" width="8.13" height="2"/><rect x="721.36" y="8.5" width="8.13" height="2"/><rect x="742.65" y="8.5" width="8.13" height="2"/><rect x="755.8" y="8.5" width="8.13" height="2"/><rect x="854.1" y="8.5" width="8.13" height="2"/><rect x="867.26" y="8.5" width="8.13" height="2"/><rect x="888.54" y="8.5" width="8.13" height="2"/><rect x="901.7" y="8.5" width="8.13" height="2"/><rect x="944.27" y="8.5" width="8.13" height="2"/><rect x="957.43" y="8.5" width="8.13" height="2"/><rect x="978.71" y="8.5" width="8.13" height="2"/><rect x="991.87" y="8.5" width="8.13" height="2"/></g></svg>
   <div class="wrap head-row">
     <a class="mark" href="./"><img src="./favicon.svg" alt="The golden-window conjecture" width="32" height="32"></a>
     <nav class="nav">
@@ -124,6 +139,7 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <div class="prose">
 
 <h1>デザインに関する法的な扱い</h1>
+<svg class="gw-orn gw-orn-long" viewBox="0 0 96 12.5" width="96" height="12.5" aria-hidden="true" focusable="false"><g class="gw-orn-fill"><rect x="0" y="0" width="96" height="2"/><rect x="0" y="3.5" width="36.67" height="2"/><rect x="59.33" y="3.5" width="36.67" height="2"/><rect x="0" y="7" width="14.01" height="2"/><rect x="22.66" y="7" width="14.01" height="2"/><rect x="59.33" y="7" width="14.01" height="2"/><rect x="81.99" y="7" width="14.01" height="2"/><rect x="0" y="10.5" width="5.35" height="2"/><rect x="8.66" y="10.5" width="5.35" height="2"/><rect x="22.66" y="10.5" width="5.35" height="2"/><rect x="31.32" y="10.5" width="5.35" height="2"/><rect x="59.33" y="10.5" width="5.35" height="2"/><rect x="67.99" y="10.5" width="5.35" height="2"/><rect x="81.99" y="10.5" width="5.35" height="2"/><rect x="90.65" y="10.5" width="5.35" height="2"/></g></svg>
 
 <h2 id="about">この頁について</h2>
 <p>この頁は、黄金比の窓の予想のサイト（golden-window-conjecture.vercel.app）の見た目の部品を扱います。</p>
@@ -155,7 +171,8 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <thead><tr><th>部品</th><th>作り方と出所</th><th>権利と許諾</th></tr></thead>
 <tbody>
 <tr><td>図</td><td>トップの頁の中の台本が、閲覧者のブラウザで、命題 5 と 6 の漸化式から描きます。何も取りに行きません。</td><td>トップの頁の一部です。</td></tr>
-<tr><td>配色</td><td>頁の中の CSS の変数です。明るい側と暗い側の二組があります。2026-11-23 から、面に高さを付ける影と、左上からのごく薄い光も、同じ二組に置いています。</td><td>それぞれの頁の一部です。</td></tr>
+<tr><td>配色</td><td>頁の中の CSS の変数です。明るい側と暗い側の二組があります。2026-11-23 から、面に高さを付ける影と、左上からのごく薄い光も、同じ二組に置いています。ロゴの二色（墨 <code>#161a23</code>・金 <code>#c9a13b</code>）も変数に置いています。明暗どちらでも同じ値です。</td><td>それぞれの頁の一部です。</td></tr>
+<tr><td>飾り</td><td>頁の上端の帯、トップの頁の右肩の渦、見出しの下の小さな飾りです（2026-11-23 から）。researcher-profile の <code>golden-window-design.js</code> が、長方形と道（直線と円弧）だけで、数をどれも φ から計算して SVG に描きます。帯と飾りは、ロゴの作り方を繰り返したものです。区間の両端の二つを、長さの 1/φ² ずつ残します。飾りであって、集合 T_δ の図ではありません。この頁の帯と題の下の飾りは、トップの頁から写しています。</td><td>それぞれの頁の一部です。</td></tr>
 <tr><td>配置</td><td>頁の中の CSS です。</td><td>それぞれの頁の一部です。</td></tr>
 <tr><td>書体</td><td>書体のファイルを配っていません。頁は <code>@font-face</code> を持たず、<code>font-family</code> で書体の名を並べるだけです。どの書体で描かれるかは、閲覧者の端末が決めます。</td><td>このサイトは書体のファイルを持っていません。</td></tr>
 <tr><td>外から読む素材</td><td>ありません。頁は、外から画像・書体・台本・様式を読みません。頁の CSP は <code>default-src 'none'</code> から始まります。</td><td>他人の素材を使っていません。</td></tr>
