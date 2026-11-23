@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-EA2jgGG3fLhKcT8+UOjHHsRRalSo/q9PLzGgL8V8020='; img-src 'self'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-PCfsePUBs4WgPn2mCERTLUHLa2hQ3UPF2gE2F2uSmIk='; img-src 'self'; form-action 'none'; base-uri 'none'">
 <title>Legal handling of the design · The golden-window conjecture</title>
 <meta name="description" content="Who made each visual part of the golden-window conjecture site (logo, images, figure, colours, layout, fonts), where it came from, how it is licensed, and which Japanese statutes it touches.">
 <meta name="robots" content="index, follow">
@@ -93,6 +93,18 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 :where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: .3rem; }
 .skip-link { position: absolute; left: 1rem; top: -3rem; padding: .55rem 1rem; color: var(--bg); background: var(--text); font-size: var(--fs-sm); border-radius: .5rem; }
 .skip-link:focus { top: 1rem; box-shadow: var(--shadow-front); }
+/* 2026-11-23。予想のサイトの意匠。帯と題の下の飾りは、トップの頁（researcher-profile の golden-window-design.js が描く）から写す。
+   色はロゴの二色で、明暗どちらでも同じ。check_site.py が、トップの頁と一字一句同じかを見る。 */
+:root {
+  --gw-ink: #161a23;
+  --gw-gold: #c9a13b;
+}
+.gw-band { display: block; width: 100%; }
+.gw-band-ink { fill: var(--gw-ink); }
+.gw-band-gold { fill: var(--gw-gold); }
+.gw-orn-fill { fill: var(--accent); }
+.gw-orn-long { display: block; margin: -.25rem 0 1.5rem; }
+footer { border-top: 2px solid var(--gw-gold); }
 @media (max-width: 30rem) {
   .head-row { flex-wrap: wrap; }
   .wrap { padding: 0 1rem; }
@@ -103,6 +115,8 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 /* 2026-11-23。奥行き。光は左上から一方向で、影は右下へ落ちる。値はトップの頁の段と同じ。紙では影も濃淡も外す。 */
 @media print {
   *, *::before, *::after { box-shadow: none !important; background-image: none !important; }
+  .gw-band { display: none; }
+  :root { --gw-gold: #000; }
 }
 </style>
 </head>
@@ -111,6 +125,7 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header>
+  <svg class="gw-band" viewBox="0 0 1000 12" height="12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect width="1000" height="12" class="gw-band-ink"/><g class="gw-band-gold"><rect x="0" y="1.5" width="55.73" height="2"/><rect x="90.17" y="1.5" width="55.73" height="2"/><rect x="236.07" y="1.5" width="55.73" height="2"/><rect x="326.24" y="1.5" width="55.73" height="2"/><rect x="618.03" y="1.5" width="55.73" height="2"/><rect x="708.2" y="1.5" width="55.73" height="2"/><rect x="854.1" y="1.5" width="55.73" height="2"/><rect x="944.27" y="1.5" width="55.73" height="2"/><rect x="0" y="5" width="21.29" height="2"/><rect x="34.44" y="5" width="21.29" height="2"/><rect x="90.17" y="5" width="21.29" height="2"/><rect x="124.61" y="5" width="21.29" height="2"/><rect x="236.07" y="5" width="21.29" height="2"/><rect x="270.51" y="5" width="21.29" height="2"/><rect x="326.24" y="5" width="21.29" height="2"/><rect x="360.68" y="5" width="21.29" height="2"/><rect x="618.03" y="5" width="21.29" height="2"/><rect x="652.48" y="5" width="21.29" height="2"/><rect x="708.2" y="5" width="21.29" height="2"/><rect x="742.65" y="5" width="21.29" height="2"/><rect x="854.1" y="5" width="21.29" height="2"/><rect x="888.54" y="5" width="21.29" height="2"/><rect x="944.27" y="5" width="21.29" height="2"/><rect x="978.71" y="5" width="21.29" height="2"/><rect x="0" y="8.5" width="8.13" height="2"/><rect x="13.16" y="8.5" width="8.13" height="2"/><rect x="34.44" y="8.5" width="8.13" height="2"/><rect x="47.6" y="8.5" width="8.13" height="2"/><rect x="90.17" y="8.5" width="8.13" height="2"/><rect x="103.33" y="8.5" width="8.13" height="2"/><rect x="124.61" y="8.5" width="8.13" height="2"/><rect x="137.77" y="8.5" width="8.13" height="2"/><rect x="236.07" y="8.5" width="8.13" height="2"/><rect x="249.22" y="8.5" width="8.13" height="2"/><rect x="270.51" y="8.5" width="8.13" height="2"/><rect x="283.67" y="8.5" width="8.13" height="2"/><rect x="326.24" y="8.5" width="8.13" height="2"/><rect x="339.39" y="8.5" width="8.13" height="2"/><rect x="360.68" y="8.5" width="8.13" height="2"/><rect x="373.84" y="8.5" width="8.13" height="2"/><rect x="618.03" y="8.5" width="8.13" height="2"/><rect x="631.19" y="8.5" width="8.13" height="2"/><rect x="652.48" y="8.5" width="8.13" height="2"/><rect x="665.63" y="8.5" width="8.13" height="2"/><rect x="708.2" y="8.5" width="8.13" height="2"/><rect x="721.36" y="8.5" width="8.13" height="2"/><rect x="742.65" y="8.5" width="8.13" height="2"/><rect x="755.8" y="8.5" width="8.13" height="2"/><rect x="854.1" y="8.5" width="8.13" height="2"/><rect x="867.26" y="8.5" width="8.13" height="2"/><rect x="888.54" y="8.5" width="8.13" height="2"/><rect x="901.7" y="8.5" width="8.13" height="2"/><rect x="944.27" y="8.5" width="8.13" height="2"/><rect x="957.43" y="8.5" width="8.13" height="2"/><rect x="978.71" y="8.5" width="8.13" height="2"/><rect x="991.87" y="8.5" width="8.13" height="2"/></g></svg>
   <div class="wrap head-row">
     <a class="mark" href="./"><img src="./favicon.svg" alt="The golden-window conjecture" width="32" height="32"></a>
     <nav class="nav">
@@ -124,6 +139,7 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <div class="prose">
 
 <h1>Legal handling of the design</h1>
+<svg class="gw-orn gw-orn-long" viewBox="0 0 96 12.5" width="96" height="12.5" aria-hidden="true" focusable="false"><g class="gw-orn-fill"><rect x="0" y="0" width="96" height="2"/><rect x="0" y="3.5" width="36.67" height="2"/><rect x="59.33" y="3.5" width="36.67" height="2"/><rect x="0" y="7" width="14.01" height="2"/><rect x="22.66" y="7" width="14.01" height="2"/><rect x="59.33" y="7" width="14.01" height="2"/><rect x="81.99" y="7" width="14.01" height="2"/><rect x="0" y="10.5" width="5.35" height="2"/><rect x="8.66" y="10.5" width="5.35" height="2"/><rect x="22.66" y="10.5" width="5.35" height="2"/><rect x="31.32" y="10.5" width="5.35" height="2"/><rect x="59.33" y="10.5" width="5.35" height="2"/><rect x="67.99" y="10.5" width="5.35" height="2"/><rect x="81.99" y="10.5" width="5.35" height="2"/><rect x="90.65" y="10.5" width="5.35" height="2"/></g></svg>
 
 <h2 id="about">About this page</h2>
 <p>This page covers the visual parts of the golden-window conjecture site (golden-window-conjecture.vercel.app).</p>
@@ -157,7 +173,8 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <thead><tr><th>Part</th><th>How it was made, and where from</th><th>Rights and licence</th></tr></thead>
 <tbody>
 <tr><td>Figure</td><td>Drawn in the reader’s browser by the script in the top page, from the recursion of Propositions 5 and 6. It fetches nothing.</td><td>Part of the top page.</td></tr>
-<tr><td>Colours</td><td>CSS variables in each page, one set for light and one for dark. Since 2026-11-23, the same sets also hold the shadows, and a faint light from the upper left, that give surfaces height.</td><td>Part of each page.</td></tr>
+<tr><td>Colours</td><td>CSS variables in each page, one set for light and one for dark. Since 2026-11-23, the same sets also hold the shadows, and a faint light from the upper left, that give surfaces height. The two colours of the logo (ink <code>#161a23</code> and gold <code>#c9a13b</code>) are also variables, the same in light and dark.</td><td>Part of each page.</td></tr>
+<tr><td>Decoration</td><td>The band at the top of each page, the spiral at the upper right of the top page, and the small marks under the headings (since 2026-11-23). Drawn as SVG by <code>golden-window-design.js</code> in researcher-profile, from rectangles and paths only, with every number computed from φ. The band and the marks repeat the construction of the logo: each interval keeps its two outer pieces, each 1/φ² of its length. They are decoration, not a figure of the set T_δ. This page copies the band and the mark under the title from the top page.</td><td>Part of each page.</td></tr>
 <tr><td>Layout</td><td>CSS in each page.</td><td>Part of each page.</td></tr>
 <tr><td>Fonts</td><td>No font file is served. The pages have no <code>@font-face</code>. They only list font names in <code>font-family</code>, and the reader’s device decides which font is drawn.</td><td>The site holds no font file.</td></tr>
 <tr><td>Outside material</td><td>None. The pages load no image, font, script or style from elsewhere. Their CSP starts with <code>default-src 'none'</code>.</td><td>No one else’s material is used.</td></tr>

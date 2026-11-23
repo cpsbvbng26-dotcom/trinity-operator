@@ -398,6 +398,18 @@ case("サイトの明るい側の面の下の色を、地より暗くする", "s
 case("サイトの明るい側の地に重ねる光を、白から墨に替える", "site/index.html",
      "--glow: rgba(255, 255, 255, .72);", "--glow: rgba(23, 23, 26, .3);", CS)
 
+# 2026-11-23。予想のサイトの意匠（帯・渦・飾り・ロゴの二色）。形は φ の式から数え直し、色はロゴと突き合わせる。
+case("帯の区間の幅を一つだけ変える", "site/index.html",
+     '<rect x="90.17" y="1.5" width="55.73" height="2"/>', '<rect x="90.17" y="1.5" width="56.73" height="2"/>', CS)
+case("渦の二つ目の正方形の辺を、1/φ から外す", "site/index.html",
+     '<rect x="38.2" y="100" width="61.8" height="61.8" class="gw-seal-sq"', '<rect x="38.2" y="100" width="64" height="64" class="gw-seal-sq"', CS)
+case("意匠の金を、ロゴの金から外す", "site/index.html",
+     "  --gw-gold: #c9a13b;", "  --gw-gold: #262a33;", CS)
+case("日本語の法的な扱いの頁から、写した帯を外す", "site/design-legal.ja.html",
+     '<header>\n  <svg class="gw-band"', '<header>\n  <svg class="gw-band-x"', CS)
+case("紙で帯と渦を刷る", "site/index.html",
+     "  .gw-band, .hero .gw-seal, .hero::after { display: none; }", "  .hero::after { display: none; }", CS)
+
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
     BREAKS = len(re.findall(r"^case\(", fh.read(), re.M))

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qf7I/WaLgc6tJnp4LqEjGQJo6E/OCHOC9t3OItQBo0I=' 'sha256-tHd4qJ0R/vQfI0CbRTiL3XGSi+Tun7VhOcDbx08aLKA=' 'sha256-xEIumBm9hib706cHxKRcWJ5xUwqNwJIdRC/4mVeA9hE=' 'sha256-L1fe9dGihr+4yG1JJ8R6SYmSglM+P/uo9XZ1Ax/C4fk='; style-src 'sha256-e3c1n8C03F0hRdK1U+WtibXvazaaVHM02B0R4UUD2L8='; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qf7I/WaLgc6tJnp4LqEjGQJo6E/OCHOC9t3OItQBo0I=' 'sha256-tHd4qJ0R/vQfI0CbRTiL3XGSi+Tun7VhOcDbx08aLKA=' 'sha256-xEIumBm9hib706cHxKRcWJ5xUwqNwJIdRC/4mVeA9hE=' 'sha256-L1fe9dGihr+4yG1JJ8R6SYmSglM+P/uo9XZ1Ax/C4fk='; style-src 'sha256-ttanB5Bb5LSksKQbiRa1D/lfiyhYCCaAzPT+IxZobYQ='; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
 <title>The golden-window conjecture</title>
 <meta name="description" content="A conjecture on a three-player repeated game, and its proof: for discount factors in the window from 1/φ to 2/3, the payoffs that can be kept without randomization form a set of length zero, whose dimension is the root of an equation in δ. Both parts were resolved on 18 November 2026. Part (a) and the formula of part (b) are special cases of known theorems; continuity and strict increase in δ and the limits at both ends were not found in the texts read.">
 <meta name="robots" content="index, follow">
@@ -812,6 +812,47 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
   #gw-live { padding: var(--sp-2) var(--sp-3) var(--sp-3); }
   #gw-live svg { padding: var(--sp-2) 0; }
 }
+/* ---------- 予想のサイトの意匠（golden-window-design.js、2026-11-23） ---------- */
+:root {
+  --gw-ink: #161a23;
+  --gw-gold: #c9a13b;
+}
+.gw-band { display: block; width: 100%; }
+.gw-band-ink { fill: var(--gw-ink); }
+.gw-band-gold { fill: var(--gw-gold); }
+.hero { position: relative; }
+.hero .gw-orn-long { display: block; margin: var(--sp-3) 0 var(--sp-5); }
+.gw-seal { display: none; }
+.gw-seal-sq { fill: none; stroke: var(--line); }
+.gw-seal-arc { fill: none; stroke: var(--accent); stroke-linecap: round; }
+@media (min-width: 62rem) {
+  .hero { isolation: isolate; }
+  .hero .gw-seal { display: block; position: absolute; top: 4.5rem; right: 1.5rem; width: 7rem; height: auto; filter: drop-shadow(1px 1px 0 var(--card)); }
+  .hero::after { content: ''; position: absolute; z-index: -1; top: 2.5rem; right: -1rem; width: 12rem; height: 15rem; pointer-events: none; background-image: linear-gradient(var(--line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--line-soft) 1px, transparent 1px); background-size: .75rem .75rem; -webkit-mask-image: radial-gradient(closest-side, var(--text), transparent); mask-image: radial-gradient(closest-side, var(--text), transparent); }
+  .hero > .eyebrow, .hero > h1, .hero > .romaji { padding-right: 9rem; }
+}
+.gw-orn-fill { fill: var(--accent); }
+.sec-head h2::after { content: none; }
+.sec-head .gw-orn-short { display: block; margin-top: var(--sp-3); }
+.sec-head h2::before { color: var(--accent); }
+#state .notes-list > p.profile-core:first-child { margin: 0 0 var(--sp-5); padding: var(--sp-4) var(--sp-5); background: linear-gradient(180deg, var(--card), var(--card-lo)); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-md) var(--radius-md) 0; box-shadow: var(--shadow-float); }
+#state .notes-list > p:not(.profile-core) { margin: var(--sp-2) 0 0; padding: var(--sp-2) var(--sp-4) var(--sp-3); background: linear-gradient(180deg, var(--card), var(--card-lo)); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-face); }
+#state .notes-list > p.profile-core + p:not(.profile-core) { margin-top: var(--sp-5); }
+#state .notes-list > p:not(.profile-core) > b { display: block; padding-bottom: var(--sp-1); border-bottom: 1px solid var(--line-soft); }
+#state .notes-list > p:not(.profile-core) > span { margin-top: var(--sp-1); }
+#gw-live { border-top: 2px solid var(--accent); border-radius: 0 0 var(--radius-md) var(--radius-md); }
+#gw-live input[type="range"] { accent-color: var(--accent); }
+footer { border-top: 2px solid var(--gw-gold); }
+@media (max-width: 30rem) {
+  #state .notes-list > p.profile-core:first-child { padding: var(--sp-3) var(--sp-4); }
+  #state .notes-list > p:not(.profile-core) { padding: var(--sp-2) var(--sp-3); }
+}
+@media print {
+  :root, :root[data-theme="dark"] { --gw-ink: #000; --gw-gold: #000; }
+  .gw-band, .hero .gw-seal, .hero::after { display: none; }
+  #state .notes-list > p { break-inside: avoid; }
+  footer { border-top-width: 1px; }
+}
 </style>
 </head>
 <body>
@@ -819,6 +860,7 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header>
+  <svg class="gw-band" viewBox="0 0 1000 12" height="12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect width="1000" height="12" class="gw-band-ink"/><g class="gw-band-gold"><rect x="0" y="1.5" width="55.73" height="2"/><rect x="90.17" y="1.5" width="55.73" height="2"/><rect x="236.07" y="1.5" width="55.73" height="2"/><rect x="326.24" y="1.5" width="55.73" height="2"/><rect x="618.03" y="1.5" width="55.73" height="2"/><rect x="708.2" y="1.5" width="55.73" height="2"/><rect x="854.1" y="1.5" width="55.73" height="2"/><rect x="944.27" y="1.5" width="55.73" height="2"/><rect x="0" y="5" width="21.29" height="2"/><rect x="34.44" y="5" width="21.29" height="2"/><rect x="90.17" y="5" width="21.29" height="2"/><rect x="124.61" y="5" width="21.29" height="2"/><rect x="236.07" y="5" width="21.29" height="2"/><rect x="270.51" y="5" width="21.29" height="2"/><rect x="326.24" y="5" width="21.29" height="2"/><rect x="360.68" y="5" width="21.29" height="2"/><rect x="618.03" y="5" width="21.29" height="2"/><rect x="652.48" y="5" width="21.29" height="2"/><rect x="708.2" y="5" width="21.29" height="2"/><rect x="742.65" y="5" width="21.29" height="2"/><rect x="854.1" y="5" width="21.29" height="2"/><rect x="888.54" y="5" width="21.29" height="2"/><rect x="944.27" y="5" width="21.29" height="2"/><rect x="978.71" y="5" width="21.29" height="2"/><rect x="0" y="8.5" width="8.13" height="2"/><rect x="13.16" y="8.5" width="8.13" height="2"/><rect x="34.44" y="8.5" width="8.13" height="2"/><rect x="47.6" y="8.5" width="8.13" height="2"/><rect x="90.17" y="8.5" width="8.13" height="2"/><rect x="103.33" y="8.5" width="8.13" height="2"/><rect x="124.61" y="8.5" width="8.13" height="2"/><rect x="137.77" y="8.5" width="8.13" height="2"/><rect x="236.07" y="8.5" width="8.13" height="2"/><rect x="249.22" y="8.5" width="8.13" height="2"/><rect x="270.51" y="8.5" width="8.13" height="2"/><rect x="283.67" y="8.5" width="8.13" height="2"/><rect x="326.24" y="8.5" width="8.13" height="2"/><rect x="339.39" y="8.5" width="8.13" height="2"/><rect x="360.68" y="8.5" width="8.13" height="2"/><rect x="373.84" y="8.5" width="8.13" height="2"/><rect x="618.03" y="8.5" width="8.13" height="2"/><rect x="631.19" y="8.5" width="8.13" height="2"/><rect x="652.48" y="8.5" width="8.13" height="2"/><rect x="665.63" y="8.5" width="8.13" height="2"/><rect x="708.2" y="8.5" width="8.13" height="2"/><rect x="721.36" y="8.5" width="8.13" height="2"/><rect x="742.65" y="8.5" width="8.13" height="2"/><rect x="755.8" y="8.5" width="8.13" height="2"/><rect x="854.1" y="8.5" width="8.13" height="2"/><rect x="867.26" y="8.5" width="8.13" height="2"/><rect x="888.54" y="8.5" width="8.13" height="2"/><rect x="901.7" y="8.5" width="8.13" height="2"/><rect x="944.27" y="8.5" width="8.13" height="2"/><rect x="957.43" y="8.5" width="8.13" height="2"/><rect x="978.71" y="8.5" width="8.13" height="2"/><rect x="991.87" y="8.5" width="8.13" height="2"/></g></svg>
   <div class="wrap head-row">
     <a class="mark" href="#main"><img src="./favicon.svg" alt="The golden-window conjecture" width="32" height="32"></a>
     <nav class="nav">
@@ -837,9 +879,11 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
 <main id="main" tabindex="-1">
 
   <section class="wrap hero">
+    <svg class="gw-seal" viewBox="-0.5 -0.5 101 162.8" aria-hidden="true" focusable="false"><rect x="0" y="0" width="100" height="100" class="gw-seal-sq" stroke-width="1"/><rect x="38.2" y="100" width="61.8" height="61.8" class="gw-seal-sq" stroke-width="1"/><rect x="0" y="123.61" width="38.2" height="38.2" class="gw-seal-sq" stroke-width="1"/><rect x="0" y="100" width="23.61" height="23.61" class="gw-seal-sq" stroke-width="1"/><rect x="23.61" y="100" width="14.59" height="14.59" class="gw-seal-sq" stroke-width="1"/><rect x="29.18" y="114.59" width="9.02" height="9.02" class="gw-seal-sq" stroke-width="1"/><rect x="23.61" y="118.03" width="5.57" height="5.57" class="gw-seal-sq" stroke-width="1"/><rect x="23.61" y="114.59" width="3.44" height="3.44" class="gw-seal-sq" stroke-width="1"/><path d="M0 0A100 100 0 0 1 100 100A61.8 61.8 0 0 1 38.2 161.8A38.2 38.2 0 0 1 0 123.61A23.61 23.61 0 0 1 23.61 100A14.59 14.59 0 0 1 38.2 114.59A9.02 9.02 0 0 1 29.18 123.61A5.57 5.57 0 0 1 23.61 118.03A3.44 3.44 0 0 1 27.05 114.59" class="gw-seal-arc" stroke-width="1.5"/></svg>
     <p class="eyebrow reveal">Conjecture</p>
     <h1 class="serif reveal">The golden-window conjecture</h1>
     <p class="romaji reveal">黄金比の窓の予想</p>
+    <svg class="gw-orn gw-orn-long" viewBox="0 0 96 12.5" width="96" height="12.5" aria-hidden="true" focusable="false"><g class="gw-orn-fill"><rect x="0" y="0" width="96" height="2"/><rect x="0" y="3.5" width="36.67" height="2"/><rect x="59.33" y="3.5" width="36.67" height="2"/><rect x="0" y="7" width="14.01" height="2"/><rect x="22.66" y="7" width="14.01" height="2"/><rect x="59.33" y="7" width="14.01" height="2"/><rect x="81.99" y="7" width="14.01" height="2"/><rect x="0" y="10.5" width="5.35" height="2"/><rect x="8.66" y="10.5" width="5.35" height="2"/><rect x="22.66" y="10.5" width="5.35" height="2"/><rect x="31.32" y="10.5" width="5.35" height="2"/><rect x="59.33" y="10.5" width="5.35" height="2"/><rect x="67.99" y="10.5" width="5.35" height="2"/><rect x="81.99" y="10.5" width="5.35" height="2"/><rect x="90.65" y="10.5" width="5.35" height="2"/></g></svg>
 
     <p class="lead reveal">This page is about a conjecture on one segment of payoffs in one three-player game, and its proof. Proved: what happens below the window, at its lower end and from <code translate="no" class="notranslate">2/3</code> up, and, inside the window, that the set has positive dimension, that it has length zero, and how its dimension behaves. The proofs of the last two were written on 18 November 2026. Length zero and the dimension formula are special cases of known theorems; the behaviour of the dimension along this game’s curve was not found in the texts read.</p>
   </section>
@@ -849,6 +893,7 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
   <section id="state" class="wrap block">
     <div class="sec-head reveal">
       <h2 class="serif">Where it stands</h2>
+      <svg class="gw-orn gw-orn-short" viewBox="0 0 48 9" width="48" height="9" aria-hidden="true" focusable="false"><g class="gw-orn-fill"><rect x="0" y="0" width="48" height="2"/><rect x="0" y="3.5" width="18.33" height="2"/><rect x="29.67" y="3.5" width="18.33" height="2"/><rect x="0" y="7" width="7" height="2"/><rect x="11.33" y="7" width="7" height="2"/><rect x="29.67" y="7" width="7" height="2"/><rect x="41" y="7" width="7" height="2"/></g></svg>
       
     </div>
     <div class="notes-list reveal">
@@ -869,6 +914,7 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
   <section id="figure" class="wrap block">
     <div class="sec-head reveal">
       <h2 class="serif">Move δ</h2>
+      <svg class="gw-orn gw-orn-short" viewBox="0 0 48 9" width="48" height="9" aria-hidden="true" focusable="false"><g class="gw-orn-fill"><rect x="0" y="0" width="48" height="2"/><rect x="0" y="3.5" width="18.33" height="2"/><rect x="29.67" y="3.5" width="18.33" height="2"/><rect x="0" y="7" width="7" height="2"/><rect x="11.33" y="7" width="7" height="2"/><rect x="29.67" y="7" width="7" height="2"/><rect x="41" y="7" width="7" height="2"/></g></svg>
       
     </div>
     <div class="notes-list reveal">
@@ -887,6 +933,7 @@ footer { border-top: 1px solid var(--line); margin-top: 2rem; }
   <section id="conditions" class="wrap block">
     <div class="sec-head reveal">
       <h2 class="serif">What is claimed, and on what conditions</h2>
+      <svg class="gw-orn gw-orn-short" viewBox="0 0 48 9" width="48" height="9" aria-hidden="true" focusable="false"><g class="gw-orn-fill"><rect x="0" y="0" width="48" height="2"/><rect x="0" y="3.5" width="18.33" height="2"/><rect x="29.67" y="3.5" width="18.33" height="2"/><rect x="0" y="7" width="7" height="2"/><rect x="11.33" y="7" width="7" height="2"/><rect x="29.67" y="7" width="7" height="2"/><rect x="41" y="7" width="7" height="2"/></g></svg>
       
     </div>
     <div class="notes-list reveal">
