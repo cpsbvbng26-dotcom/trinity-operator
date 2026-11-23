@@ -250,12 +250,29 @@ dark = re.search(r':root\[data-theme="dark"\]\s*\{(.*?)\}', css, re.S)
 auto = re.search(r'@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{(.*?)\}', css, re.S)
 themes = [("ライト", tokens(light.group(1)) if light else {}),
           ("ダーク", tokens(dark.group(1)) if dark else {})]
+# 2026-11-23。面の下の色（--card-lo）。面は上から下へ --card から --card-lo へ暗くなるので、字はその両端に載る。
 for name, t in themes:
-    for base in ("bg", "card"):
+    for base in ("bg", "card", "card-lo"):
         for tok in ("text", "muted", "faint", "accent"):
             if t.get(base) and t.get(tok):
                 r = ratio(t[tok], t[base])
                 check("%s --%s / --%s が 4.5:1 以上" % (name, tok, base), r >= 4.5, "%.2f:1" % r)
+
+
+# 2026-11-23。地の左上に重ねる光（--glow、rgba）。光を最も濃く重ねた地の色で、本文の四色の比を測る。
+def glow_over(block, base):
+    m = re.search(r"--glow:\s*rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)", block)
+    if not m or not base:
+        return None
+    c, a = [int(m.group(i)) for i in (1, 2, 3)], float(m.group(4))
+    g = [int(base.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)]
+    return "#" + "".join("%02x" % int(round(c[k] * a + g[k] * (1 - a))) for k in range(3))
+
+
+for name, t, blk in (("ライト", themes[0][1], light), ("ダーク", themes[1][1], dark)):
+    lit = glow_over(blk.group(1) if blk else "", t.get("bg"))
+    low = min(ratio(t[tok], lit) for tok in ("text", "muted", "faint", "accent") if t.get(tok)) if lit else 0
+    check("%s 本文の四色が、光（--glow）を重ねた地 %s に対して 4.5:1 以上" % (name, lit), lit is not None and low >= 4.5, "%.2f:1" % low)
 check("配色の定義がライトとダークの両方にある（本文の四色と地の色）",
       all(t.get("bg") and t.get("text") and t.get("muted") and t.get("faint") and t.get("accent") for _, t in themes))
 

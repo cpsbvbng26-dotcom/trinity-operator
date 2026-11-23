@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-x9fSslgSzKI3ExCqtPWypzBKQJjptO1AhiCg0x3OlTE='; img-src 'self'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-EA2jgGG3fLhKcT8+UOjHHsRRalSo/q9PLzGgL8V8020='; img-src 'self'; form-action 'none'; base-uri 'none'">
 <title>Legal handling of the design · The golden-window conjecture</title>
 <meta name="description" content="Who made each visual part of the golden-window conjecture site (logo, images, figure, colours, layout, fonts), where it came from, how it is licensed, and which Japanese statutes it touches.">
 <meta name="robots" content="index, follow">
@@ -16,21 +16,31 @@
 :root {
   --bg: #faf9f7;
   --card: #ffffff;
+  --card-lo: #fcfbf9;
   --text: #17171a;
   --muted: #63636b;
   --faint: #727278;
   --line: #e6e4df;
   --accent: #8a6a3d;
+  --glow: rgba(255, 255, 255, .72);
+  --edge-hi: rgba(255, 255, 255, .9);
+  --shadow-face: inset 0 1px 0 rgba(255, 255, 255, .9), .5px 1px 1px rgba(23, 23, 26, .05), 1px 2px 6px -1px rgba(23, 23, 26, .07);
+  --shadow-front: inset 0 1px 0 rgba(255, 255, 255, .9), 1px 3px 6px rgba(23, 23, 26, .08), 6px 16px 36px -10px rgba(23, 23, 26, .22);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #121214;
     --card: #191919;
+    --card-lo: #161618;
     --text: #ececee;
     --muted: #9c9ca4;
     --faint: #81818b;
     --line: #2a2a2d;
     --accent: #b08d57;
+    --glow: rgba(176, 141, 87, .045);
+    --edge-hi: rgba(255, 255, 255, .04);
+    --shadow-face: inset 0 1px 0 rgba(255, 255, 255, .05), .5px 1px 1px rgba(0, 0, 0, .3), 1px 2px 6px -1px rgba(0, 0, 0, .28);
+    --shadow-front: inset 0 1px 0 rgba(255, 255, 255, .08), 1px 3px 6px rgba(0, 0, 0, .38), 6px 16px 36px -10px rgba(0, 0, 0, .52);
   }
 }
 :root {
@@ -49,20 +59,20 @@ html { color-scheme: light dark; }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  background: var(--bg);
+  background: radial-gradient(70rem 40rem at 8% -6%, var(--glow), transparent 70%) no-repeat, var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: var(--fs-md);
   line-height: 1.9;
 }
 .wrap { max-width: calc(var(--page) + 3rem); margin: 0 auto; padding: 0 1.5rem; }
-header { border-bottom: 1px solid var(--line); }
+header { border-bottom: 1px solid var(--line); box-shadow: var(--shadow-face); }
 .head-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding-top: .75rem; padding-bottom: .75rem; }
 .mark { display: inline-flex; line-height: 0; }
 .mark img { width: 2rem; height: 2rem; border-radius: .3rem; }
 .nav { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; }
 .nav a { font-size: var(--fs-sm); color: var(--muted); }
-h1, h2 { font-family: var(--font-serif); font-weight: 600; line-height: 1.4; }
+h1, h2 { font-family: var(--font-serif); font-weight: 600; line-height: 1.4; text-wrap: balance; }
 h1 { font-size: var(--fs-xl); margin: 3rem 0 1rem; }
 h2 { font-size: var(--fs-lg); margin: 2.5rem 0 .75rem; }
 .prose { max-width: var(--measure); }
@@ -70,25 +80,29 @@ h2 { font-size: var(--fs-lg); margin: 2.5rem 0 .75rem; }
 .prose .note { color: var(--muted); font-size: var(--fs-sm); }
 .prose a, .foot a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
 .prose code { font-family: var(--font-mono); font-size: var(--fs-sm); overflow-wrap: anywhere; }
-.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: var(--fs-sm); margin: 1rem 0; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: var(--fs-sm); margin: 1rem 0; background: linear-gradient(180deg, var(--card), var(--card-lo)); box-shadow: var(--shadow-face); }
 .prose th, .prose td { border: 1px solid var(--line); padding: .4rem .6rem; text-align: left; vertical-align: top; }
 .prose th { color: var(--muted); font-weight: 600; }
 .prose td, .prose th { min-width: 7rem; }
 .prose td code { overflow-wrap: normal; white-space: nowrap; }
-blockquote { margin: 1rem 0; padding: .6rem 1rem; background: var(--card); border-left: 3px solid var(--accent); }
+blockquote { margin: 1rem 0; padding: .6rem 1rem; background: linear-gradient(180deg, var(--card), var(--card-lo)); border-left: 3px solid var(--accent); border-radius: 0 .5rem .5rem 0; box-shadow: var(--shadow-face); }
 blockquote p { margin: 0; white-space: pre-line; font-family: var(--font-serif); font-size: var(--fs-sm); }
 .gist { color: var(--muted); font-size: var(--fs-sm); }
 footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 .foot { display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding-top: 1.5rem; padding-bottom: 2rem; font-size: var(--fs-xs); color: var(--faint); }
 :where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: .3rem; }
 .skip-link { position: absolute; left: 1rem; top: -3rem; padding: .55rem 1rem; color: var(--bg); background: var(--text); font-size: var(--fs-sm); border-radius: .5rem; }
-.skip-link:focus { top: 1rem; }
+.skip-link:focus { top: 1rem; box-shadow: var(--shadow-front); }
 @media (max-width: 30rem) {
   .head-row { flex-wrap: wrap; }
   .wrap { padding: 0 1rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+/* 2026-11-23。奥行き。光は左上から一方向で、影は右下へ落ちる。値はトップの頁の段と同じ。紙では影も濃淡も外す。 */
+@media print {
+  *, *::before, *::after { box-shadow: none !important; background-image: none !important; }
 }
 </style>
 </head>
@@ -143,7 +157,7 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <thead><tr><th>Part</th><th>How it was made, and where from</th><th>Rights and licence</th></tr></thead>
 <tbody>
 <tr><td>Figure</td><td>Drawn in the reader’s browser by the script in the top page, from the recursion of Propositions 5 and 6. It fetches nothing.</td><td>Part of the top page.</td></tr>
-<tr><td>Colours</td><td>CSS variables in each page, one set for light and one for dark.</td><td>Part of each page.</td></tr>
+<tr><td>Colours</td><td>CSS variables in each page, one set for light and one for dark. Since 2026-11-23, the same sets also hold the shadows, and a faint light from the upper left, that give surfaces height.</td><td>Part of each page.</td></tr>
 <tr><td>Layout</td><td>CSS in each page.</td><td>Part of each page.</td></tr>
 <tr><td>Fonts</td><td>No font file is served. The pages have no <code>@font-face</code>. They only list font names in <code>font-family</code>, and the reader’s device decides which font is drawn.</td><td>The site holds no font file.</td></tr>
 <tr><td>Outside material</td><td>None. The pages load no image, font, script or style from elsewhere. Their CSP starts with <code>default-src 'none'</code>.</td><td>No one else’s material is used.</td></tr>
@@ -265,7 +279,7 @@ footer { border-top: 1px solid var(--line); margin-top: 3rem; }
 <footer>
   <div class="wrap foot">
     <span>© 2026 Takuya Nemoto · CC BY 4.0</span>
-    <span class="foot-links"><a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/issues/new/choose">Contact</a> · <a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/blob/main/DISCLAIMER.en.md">Disclaimer</a> · <span class="updated">Last changed <time datetime="2026-11-22">2026-11-22</time></span></span>
+    <span class="foot-links"><a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/issues/new/choose">Contact</a> · <a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/blob/main/DISCLAIMER.en.md">Disclaimer</a> · <span class="updated">Last changed <time datetime="2026-11-23">2026-11-23</time></span></span>
   </div>
 </footer>
 
