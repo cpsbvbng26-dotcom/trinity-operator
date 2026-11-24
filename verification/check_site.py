@@ -658,6 +658,38 @@ for name in DESIGN_PAGES:
 check("デザインに関する法的な扱いの頁（英日）が、帯と題の下の飾りをトップの頁と一字一句同じに写し、同じ二色を置き、紙では帯を刷らない",
       not copies, ", ".join(copies))
 
+# 2026-11-24。IndexNow。鍵は site/<鍵>.txt で、Vercel はこれをサイトの根で配る。中身は鍵そのもので、秘密ではない。
+# 知らせるのは tools/indexnow.js で、.github/workflows/indexnow.yml が site/sitemap.xml の変わった push のあとに回す。
+# Google は IndexNow を読まず、sitemap を読む。
+print("\n15. IndexNow の鍵・ワークフロー・知らせる先")
+KEY_RE = re.compile(r"^[0-9a-f]{32}\.txt$")
+keys = sorted(f for f in os.listdir(SITE) if KEY_RE.match(f))
+key = keys[0][:-4] if len(keys) == 1 else ""
+check("site/ に、16 進 32 字の名の鍵のファイルが一つだけある", len(keys) == 1, repr(keys))
+check("鍵のファイルの中身が、名の鍵そのもの（改行も空白も持たない）", bool(key) and raw(keys[0]) == key.encode("ascii"))
+stray = []
+for dirpath, dirnames, filenames in os.walk(ROOT):
+    dirnames[:] = [d for d in dirnames if d not in (".git", "__pycache__", "node_modules")]
+    stray += [os.path.relpath(os.path.join(dirpath, f), ROOT) for f in filenames
+              if KEY_RE.match(f) and os.path.abspath(dirpath) != SITE]
+check("鍵のファイルは配られる根（site/）にあり、配られない場所にほかの鍵のファイルが無い", not stray, ", ".join(stray))
+INX = os.path.join(ROOT, ".github", "workflows", "indexnow.yml")
+inx = io.open(INX, encoding="utf-8").read() if os.path.isfile(INX) else ""
+check("ワークフロー indexnow.yml が、main への push の site/sitemap.xml だけで起き、手で起こすときに all を取る",
+      re.search(r"^on:\n  push:\n    branches: \[main\]\n    paths: \[site/sitemap\.xml\]\n  workflow_dispatch:\n    inputs:\n      all:\n", inx, re.M) is not None)
+check("ワークフローが tools/indexnow.js を回し、前の head と all を渡す",
+      re.search(r"^      - run: node tools/indexnow\.js\n        env:\n          BEFORE: \$\{\{ github\.event\.before \}\}\n          ALL: \$\{\{ inputs\.all \}\}\n", inx, re.M) is not None)
+TOOL = os.path.join(ROOT, "tools", "indexnow.js")
+tool = io.open(TOOL, encoding="utf-8").read() if os.path.isfile(TOOL) else ""
+tool_base = re.findall(r"^const BASE = '([^']+)';$", tool, re.M)
+check("tools/indexnow.js の知らせる先が一つで、配信先（canonical）と同じ", tool_base == [URL], repr(tool_base))
+check("tools/indexnow.js が site/ の鍵と site/sitemap.xml を読む",
+      "const SITE = path.join(ROOT, 'site');" in tool and "path.join(SITE, 'sitemap.xml')" in tool
+      and "at + ':site/sitemap.xml'" in tool and "fs.readdirSync(SITE)" in tool)
+hosts = sorted({re.sub(r"^https://([^/]+)/.*$", r"\1", u) for u in re.findall(r"<loc>([^<]+)</loc>", sitemap)})
+check("sitemap.xml の頁のホストが一つで、tools/indexnow.js の知らせる先のホストと同じ",
+      bool(tool_base) and hosts == [re.sub(r"^https://([^/]+)/$", r"\1", tool_base[0])], repr(hosts))
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))
