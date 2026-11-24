@@ -1,0 +1,88 @@
+name: Wayback Machine に写しを残す
+
+# 手で起こすときだけ動く。作業環境からは web.archive.org に届かないので、GitHub の実行環境から Save Page Now に頼む。
+# 頼むのは、予想のサイト（https://golden-window-conjecture.vercel.app/）の site/sitemap.xml の頁のうち、READ に挙げた頁だけである。
+# READ の頁は、2026-11-24 に一頁ずつ全文を読み、運営者のほかの人の個人の情報も、消す求めの掛かりうるものも無いと決めた。
+# Wayback Machine の写しは、こちらからは消せない。sitemap に READ に無い頁が入れば、その頁は頼まずに実行を落とす。
+# サイトの頁は PDF を張っていないので、PDF は頼まない（check_site.py が見る）。
+# 頼んだあと、その日付の写しが実際にあるかを確かめ、確かめられたものだけを「残った」として要約に出す。
+# 確かめられないものが一つでもあれば、実行を落とす。成功に見せないため（cpsbvbng26-dotcom の wayback.yml と同じ）。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  save:
+    name: 予想のサイトの頁の写しを頼み、残ったことを確かめる
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: 頼む
+        run: |
+          python3 - <<'EOF'
+          import json, os, re, time, urllib.error, urllib.parse, urllib.request
+
+          BASE = "https://golden-window-conjecture.vercel.app/"
+          READ = [
+              "https://golden-window-conjecture.vercel.app/",
+              "https://golden-window-conjecture.vercel.app/design-legal.html",
+              "https://golden-window-conjecture.vercel.app/design-legal.ja.html",
+          ]
+          locs = re.findall(r"<loc>([^<]+)</loc>", open("site/sitemap.xml", encoding="utf-8").read())
+          unread = [u for u in locs if u not in READ or not u.startswith(BASE)]
+          urls = [u for u in locs if u not in unread]
+          today = time.strftime("%Y%m%d", time.gmtime())
+          ua = {"User-Agent": "trinity-operator wayback workflow"}
+
+          def get(u, timeout=120):
+              with urllib.request.urlopen(urllib.request.Request(u, headers=ua), timeout=timeout) as r:
+                  return r.status, r.read()
+
+          def snapshot(u):
+              api = "https://archive.org/wayback/available?timestamp=%s&url=%s" % (today, urllib.parse.quote(u, safe=""))
+              try:
+                  c = json.loads(get(api, 60)[1]).get("archived_snapshots", {}).get("closest")
+              except Exception:
+                  return None
+              return c["url"] if c and c.get("available") and c["timestamp"].startswith(today) else None
+
+          done, failed = [], []
+          for u in urls:
+              for wait in (0, 60, 180):
+                  time.sleep(wait)
+                  try:
+                      get("https://web.archive.org/save/" + u)
+                      break
+                  except urllib.error.HTTPError as e:
+                      if e.code != 429:
+                          break
+                  except Exception:
+                      break
+              time.sleep(20)
+              s = snapshot(u)
+              (done if s else failed).append((u, s))
+              print(("残った  " if s else "見えない ") + u)
+          for u in unread:
+              print("読んでいない頁なので頼まない " + u)
+
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+              f.write("残ったもの %d / 頼んだもの %d\n\n" % (len(done), len(urls)))
+              for u, s in done:
+                  f.write("- %s\n  %s\n" % (u, s))
+              if failed:
+                  f.write("\n今日の写しが見えなかったもの（取り込みが遅れているだけのこともある）\n\n")
+                  for u, _ in failed:
+                      f.write("- %s\n" % u)
+              if unread:
+                  f.write("\n読んでいないので頼まなかった頁\n\n")
+                  for u in unread:
+                      f.write("- %s\n" % u)
+          if failed or unread:
+              raise SystemExit("今日の写しが見えないもの %d / 頼んだもの %d、読んでいない頁 %d" % (len(failed), len(urls), len(unread)))
+          EOF
