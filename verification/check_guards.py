@@ -410,6 +410,21 @@ case("日本語の法的な扱いの頁から、写した帯を外す", "site/de
 case("紙で帯と渦を刷る", "site/index.html",
      "  .gw-band, .hero .gw-seal, .hero::after { display: none; }", "  .hero::after { display: none; }", CS)
 
+# 2026-11-24。IndexNow。鍵のファイル、ワークフローが見る sitemap、知らせる先を壊す。
+INDEXNOW_KEY = "16529c1323fad834c26ee0393e5f50b8"
+case("IndexNow の鍵のファイルを消す", "site/%s.txt" % INDEXNOW_KEY, None, None, CS)
+case("IndexNow の鍵のファイルの中身を、名と一字違える", "site/%s.txt" % INDEXNOW_KEY,
+     INDEXNOW_KEY, INDEXNOW_KEY[:-1] + "9", CS)
+case("IndexNow のワークフローに、根の sitemap.xml を見させる", ".github/workflows/indexnow.yml",
+     "    paths: [site/sitemap.xml]\n", "    paths: [sitemap.xml]\n", CS)
+case("tools/indexnow.js の知らせる先を、ほかのホストにする", "tools/indexnow.js",
+     "const BASE = 'https://golden-window-conjecture.vercel.app/';", "const BASE = 'https://golden-window.vercel.app/';", CS)
+case("tools/indexnow.js に、前の head の根の sitemap.xml を読ませる", "tools/indexnow.js",
+     "at + ':site/sitemap.xml'", "at + ':sitemap.xml'", CS)
+case("sitemap.xml の頁を一つ、ほかのホストに替える", "site/sitemap.xml",
+     "<loc>https://golden-window-conjecture.vercel.app/design-legal.html</loc>",
+     "<loc>https://golden-window.vercel.app/design-legal.html</loc>", CS)
+
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
     BREAKS = len(re.findall(r"^case\(", fh.read(), re.M))

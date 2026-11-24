@@ -846,6 +846,12 @@ def _workflow_problems(text, names):
     bad += ["無いワークフローの行：" + n for n in named if n not in names]
     if "「" + _PURPOSE + "」" not in sec:
         bad.append("Actions の節の文を引いていない")
+    # 2026-11-24。表の下の一文が名乗る判定の数を、表の行から数え直す。
+    kinds = ("誤り", "根拠不足", "漏れ", "表現", "問題なし")
+    tally = "この表の判定は、" + "、".join("%s %d" % (k, sum(1 for r in rows if len(r) == 6 and r[4] == k))
+                                         for k in kinds if any(len(r) == 6 and r[4] == k for r in rows)) + " です。"
+    if tally not in sec:
+        bad.append("判定の数：" + tally)
     return bad
 
 
@@ -860,8 +866,9 @@ _broken = [
     _workflow_problems(re.sub(r"\n\| `\.github/workflows/" + re.escape(_WF[0]) + r"`[^\n]*", "", _AT), _WF),
     _workflow_problems(_AT.replace("publication of the software project", "promotion of the software project"), _WF),
     _workflow_problems(_AT.replace(_EIGHTH, "\n## 八度目\n"), _WF),
+    _workflow_problems(_AT.replace("この表の判定は、漏れ 2、問題なし 6 です。", "この表の判定は、漏れ 2、問題なし 5 です。"), _WF),
 ]
-check("壊して確かめる：新しいワークフロー・外したワークフロー・表から外した行・引いた文の一語・節の見出しのどれでも落ちる（%d / %d）"
+check("壊して確かめる：新しいワークフロー・外したワークフロー・表から外した行・引いた文の一語・節の見出し・判定の数のどれでも落ちる（%d / %d）"
       % (sum(1 for b in _broken if b), len(_broken)), all(_broken))
 
 print("\n" + "-" * 58)
