@@ -425,6 +425,19 @@ case("sitemap.xml の頁を一つ、ほかのホストに替える", "site/sitem
      "<loc>https://golden-window-conjecture.vercel.app/design-legal.html</loc>",
      "<loc>https://golden-window.vercel.app/design-legal.html</loc>", CS)
 
+# 2026-11-24。Wayback Machine。手で起こすときだけ、読むだけの権限、site/sitemap.xml、その日の写しの確かめ、読んだ頁だけ、を壊す。
+WB = ".github/workflows/wayback.yml"
+case("Wayback のワークフローを push でも動かす", WB, "on:\n  workflow_dispatch:\n", "on:\n  push:\n  workflow_dispatch:\n", CS)
+case("Wayback のワークフローに中身を書く権限を渡す", WB, "permissions:\n  contents: read\n", "permissions:\n  contents: write\n", CS)
+case("Wayback のワークフローに、根の sitemap.xml を読ませる", WB, 'open("site/sitemap.xml", encoding="utf-8")', 'open("sitemap.xml", encoding="utf-8")', CS)
+case("Wayback のワークフローが、その日の写しかを確かめない", WB, ' and c["timestamp"].startswith(today)', "", CS)
+case("Wayback のワークフローが、確かめられない写しがあっても落ちない", WB, "if failed or unread:\n", "if False:\n", CS)
+case("Wayback の読んだ頁から、日本語の法的な扱いの頁を外す", WB,
+     '              "https://golden-window-conjecture.vercel.app/design-legal.ja.html",\n', "", CS)
+case("英語の法的な扱いの頁に、PDF へのリンクを張る", "site/design-legal.html",
+     'href="https://github.com/cpsbvbng26-dotcom/trinity-operator/blob/main/verification/design-statutes.json"',
+     'href="https://github.com/cpsbvbng26-dotcom/trinity-operator/blob/main/verification/design-statutes.pdf"', CS)
+
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
     BREAKS = len(re.findall(r"^case\(", fh.read(), re.M))

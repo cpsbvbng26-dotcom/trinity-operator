@@ -220,6 +220,9 @@ PROFILE_CONFIG=./golden-window.en.json PROFILE_OVERLAY=./golden-window.site.json
 `tools/indexnow.js` が sitemap に入った頁と消えた頁を知らせ、`.github/workflows/indexnow.yml` が `site/sitemap.xml` の変わった push のあとに回す。
 手元で確かめるのは `node tools/indexnow.js --dry-run`（送らない）。鍵を替えるときは、`check_guards.py` の `INDEXNOW_KEY` と頁の部品の段落も直す。
 Google は IndexNow を読まず、sitemap を読む。
+`.github/workflows/wayback.yml` は、手で起こすときだけ、sitemap の頁を Wayback Machine に頼む（2026-11-24）。写しはこちらから消せない。
+頼むのはワークフローの `READ` に挙げた頁だけで、どれも全文を読み、ほかの人の個人の情報が無いことを確かめてある。
+sitemap に頁を足すときは、その頁を読んでから `READ` に足す。迷えば足さない。PDF を張るときも、頼むかを読んで決め直す。
 `vercel.json` は安全のヘッダーと、`main` 以外の枝を配信しない決まりだけを持つ（転送や書き換えは置かない）。
 `og.png` は共有したときのカードの画像で、`favicon.svg` の角を丸めずに 600px の正方形で描いたもの。
 `favicon.ico`（16・32・48 px）・`favicon-192.png`・`apple-touch-icon.png`（180 px、角を丸めない）も
