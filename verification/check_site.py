@@ -690,6 +690,32 @@ hosts = sorted({re.sub(r"^https://([^/]+)/.*$", r"\1", u) for u in re.findall(r"
 check("sitemap.xml の頁のホストが一つで、tools/indexnow.js の知らせる先のホストと同じ",
       bool(tool_base) and hosts == [re.sub(r"^https://([^/]+)/$", r"\1", tool_base[0])], repr(hosts))
 
+# 2026-11-24。Wayback Machine。写しはこちらから消せないので、頼むのは全文を読んだ頁（READ）だけにする。
+# 手で起こすときだけ動き、読むだけの権限で、site/sitemap.xml の頁を頼み、その日の写しを確かめる。
+print("\n16. Wayback Machine に写しを頼むワークフロー")
+WBY = os.path.join(ROOT, ".github", "workflows", "wayback.yml")
+wby = io.open(WBY, encoding="utf-8").read() if os.path.isfile(WBY) else ""
+wb_on = re.search(r"^on:\n((?:  .*\n|\s*\n)*)", wby, re.M)
+check("wayback.yml があり、手で起こすとき（workflow_dispatch）だけ動く",
+      bool(wby) and wb_on is not None and re.findall(r"^  (\w+):", wb_on.group(1), re.M) == ["workflow_dispatch"])
+wb_perm = re.search(r"^permissions:\n((?:  \S[^\n]*\n)+)", wby, re.M)
+check("wayback.yml の権限が contents: read だけで、仕事の単位で広げない",
+      wb_perm is not None and wb_perm.group(1) == "  contents: read\n"
+      and not re.search(r"^    permissions:", wby, re.M) and not re.search(r":\s*write\b|write-all", wby))
+check("wayback.yml が site/sitemap.xml の頁を読み、配信先の頁だけを頼む",
+      'open("site/sitemap.xml", encoding="utf-8")' in wby and ('BASE = "%s"' % URL) in wby
+      and "web.archive.org/save/" in wby and "if u not in READ or not u.startswith(BASE)" in wby)
+check("wayback.yml が、その日の写しを archive.org/wayback/available で確かめ、確かめられないものがあれば落ちる",
+      "https://archive.org/wayback/available?timestamp=%s&url=%s" in wby
+      and 'c["timestamp"].startswith(today)' in wby
+      and "if failed or unread:\n              raise SystemExit(" in wby)
+wb_read = re.search(r"^          READ = \[\n((?:              \"[^\"]+\",\n)+)          \]\n", wby, re.M)
+wb_read = re.findall(r'"([^"]+)"', wb_read.group(1)) if wb_read else []
+check("全文を読んだ頁（READ）が、sitemap.xml の頁とちょうど同じ（読んでいない頁は頼まない）",
+      wb_read == re.findall(r"<loc>([^<]+)</loc>", sitemap), repr(wb_read))
+pdf_links = [n for n in ["index.html"] + DESIGN_PAGES if re.search(r'href="[^"]*\.pdf(?:[#?][^"]*)?"', read(n), re.I)]
+check("サイトの頁が PDF を張っていない（張れば、Wayback に頼むかを読んで決め直す）", not pdf_links, ", ".join(pdf_links))
+
 print("\n" + "-" * 58)
 if failures:
     print("%d 件が通り、%d 件が通りませんでした。" % (passed, len(failures)))
