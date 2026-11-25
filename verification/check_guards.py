@@ -438,6 +438,25 @@ case("英語の法的な扱いの頁に、PDF へのリンクを張る", "site/d
      'href="https://github.com/cpsbvbng26-dotcom/trinity-operator/blob/main/verification/design-statutes.json"',
      'href="https://github.com/cpsbvbng26-dotcom/trinity-operator/blob/main/verification/design-statutes.pdf"', CS)
 
+# 2026-11-25。サイトに無い所在の頁（404.html）。消す、索引に載せる、つなぎを相対にする、創作の系列へつなぐ、
+# 配色をずらす、日本語の節を外す、sitemap に入れる、部品の表から落とす、を壊す。
+NF = "site/404.html"
+case("サイトに無い所在の頁を消す", NF, None, None, CS)
+case("サイトに無い所在の頁を、索引に載せる", NF,
+     '<meta name="robots" content="noindex">', '<meta name="robots" content="index, follow">', CS)
+case("サイトに無い所在の頁の、トップの頁へのつなぎを相対にする（入れ子の所在で切れる）", NF,
+     '<p><a href="/">Go to the top page</a></p>', '<p><a href="./">Go to the top page</a></p>', CS)
+case("サイトに無い所在の頁から、創作の系列へつなぐ", NF,
+     '<p><a href="/">トップの頁へ</a></p>', '<p><a href="/">トップの頁へ</a>（ヌスクァマ）</p>', CS)
+case("サイトに無い所在の頁で、暗い側の淡い文字の色をトップの頁と違える", NF,
+     "    --faint: #81818b;", "    --faint: #61616b;", CS)
+case("サイトに無い所在の頁から、日本語の節を外す", NF,
+     '<section lang="ja">', '<section>', CS)
+case("sitemap.xml に、サイトに無い所在の頁を入れる", "site/sitemap.xml",
+     "</urlset>", "  <url>\n    <loc>https://golden-window-conjecture.vercel.app/404.html</loc>\n  </url>\n</urlset>", CS)
+case("英語の法的な扱いの頁の部品の表から、サイトに無い所在の頁の行を落とす", "site/design-legal.html",
+     "<tr><td>Page for missing addresses</td><td><code>404.html</code></td>", "<tr><td>Page for missing addresses</td><td><code>missing.html</code></td>", CS)
+
 print("\n9. 名乗っている壊し方の数が、実際の数と合う")
 with io.open(os.path.abspath(__file__), encoding="utf-8") as fh:
     BREAKS = len(re.findall(r"^case\(", fh.read(), re.M))
