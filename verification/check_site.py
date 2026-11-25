@@ -59,10 +59,13 @@ og = re.findall(r'<meta property="og:url" content="([^"]+)">', html)
 check("og:url が canonical と同じ", og == [URL], repr(og))
 # 2026-11-22 から、デザインに関する法的な扱いの頁を二つ（英語と日本語）配る。site/ の頁は、どれも一度ずつ並べる。
 DESIGN_PAGES = ["design-legal.html", "design-legal.ja.html"]
+# 2026-11-25 から、サイトに無い所在に Vercel が返す頁（404.html）も配る。索引に載せない頁なので、sitemap には入れない。
+NOT_FOUND = "404.html"
 check("sitemap.xml の loc が、トップの canonical と、デザインの扱いの頁の二つだけ",
       re.findall(r"<loc>([^<]+)</loc>", sitemap) == [URL] + [URL + n for n in DESIGN_PAGES])
-check("site/ の頁（.html）が、どれも sitemap.xml にある",
-      sorted(f for f in os.listdir(SITE) if f.endswith(".html")) == sorted(["index.html"] + DESIGN_PAGES))
+check("site/ の頁（.html）が、404.html のほかはどれも sitemap.xml にあり、404.html は sitemap に無い",
+      sorted(f for f in os.listdir(SITE) if f.endswith(".html")) == sorted(["index.html"] + DESIGN_PAGES + [NOT_FOUND])
+      and "404" not in sitemap)
 check("robots.txt が sitemap.xml を指す",
       ("Sitemap: " + URL + "sitemap.xml") in robots)
 
@@ -310,7 +313,7 @@ foot = foot.group(1) if foot else ""
 check("頁の下の欄が、運営者の名とライセンスを書いている", "© 2026 Takuya Nemoto" in foot and "CC BY 4.0" in foot)
 check("研究の系列のサイトは、創作の系列へつながない（site/ の頁のどれも）",
       all(re.search(r"nusquama|ヌスクァマ|無何有|騎士王国", read(n), re.I) is None
-          for n in ["index.html"] + DESIGN_PAGES))
+          for n in ["index.html"] + DESIGN_PAGES + [NOT_FOUND]))
 
 print("\n13. デザインに関する法的な扱いの頁（design-legal.html・design-legal.ja.html）")
 # 2026-11-22。サイトの見た目の部品（ロゴ・画像・図・配色・配置・書体・外の素材）について、作り手と出所、
@@ -715,6 +718,73 @@ check("全文を読んだ頁（READ）が、sitemap.xml の頁とちょうど同
       wb_read == re.findall(r"<loc>([^<]+)</loc>", sitemap), repr(wb_read))
 pdf_links = [n for n in ["index.html"] + DESIGN_PAGES if re.search(r'href="[^"]*\.pdf(?:[#?][^"]*)?"', read(n), re.I)]
 check("サイトの頁が PDF を張っていない（張れば、Wayback に頼むかを読んで決め直す）", not pdf_links, ", ".join(pdf_links))
+
+# 2026-11-25。サイトに無い所在には、Vercel が site/404.html を状態 404 で返す（設定は置かない。Vercel の決まり）。
+# それまでは Vercel の素の NOT_FOUND が出ていた。頁は手で置いたもので、生成物ではない。
+# Vercel が返すのは 404.html の一つだけなので、英語と日本語を一つの頁に置く（言語ごとに頁を分けると、片方は 404 の答えに出ない）。
+# 書くのは、頁が無いことと、トップの頁へのつなぎだけ。入れ子の所在（/a/b/c）でも切れないよう、つなぎと素材は根から書く。
+print("\n17. サイトに無い所在の頁（404.html）")
+nf = read(NOT_FOUND)
+check("404.html がある", bool(nf))
+check("404.html の言語が en で、日本語の節を lang=\"ja\" で一つ持つ",
+      '<html lang="en">' in nf and nf.count('<section lang="ja">') == 1)
+check("404.html を索引に載せず（noindex が一つ）、canonical も言語の版も名乗らない",
+      re.findall(r'<meta name="robots" content="([^"]+)">', nf) == ["noindex"]
+      and 'rel="canonical"' not in nf and 'rel="alternate"' not in nf)
+nmain = re.search(r'<main id="main"[^>]*>(.*?)</main>', nf, re.S)
+nmain = nmain.group(1) if nmain else ""
+check("404.html の本文が、頁が無いことと、トップの頁へのつなぎだけを書く（英語と日本語）",
+      [inner(x).strip() for x in re.findall(r"<(?:h1|h2|p)>(.*?)</(?:h1|h2|p)>", nmain, re.S)]
+      == ["Page not found", "There is no page at this address.", "Go to the top page",
+          "頁が見つかりません", "このアドレスに頁はありません。", "トップの頁へ"])
+nhref = re.findall(r'\bhref="([^"]*)"', nf)
+nsrc = re.findall(r'\bsrc="([^"]*)"', nf)
+check("404.html のつなぎはトップの頁（/）と本文へ飛ぶリンクだけで、素材は根から読む（入れ子の所在でも切れない）",
+      sorted(set(nhref)) == ["#main", "/", "/favicon.ico", "/favicon.svg"]
+      and nmain.count('<a href="/">') == 2 and nsrc == ["/favicon.svg"], repr(sorted(set(nhref))))
+ncsp = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]+)">', nf)
+ncsp = ncsp.group(1) if ncsp else ""
+nstyles = re.findall(r"<style[^>]*>(.*?)</style>", nf, re.S)
+ncss = "\n".join(nstyles)
+check("404.html の CSP が default-src 'none' から始まり、'unsafe-inline' を使わず、一つのスタイルをハッシュで許す",
+      ncsp.startswith("default-src 'none'") and "'unsafe-inline'" not in ncsp
+      and len(nstyles) == 1 and sha(nstyles[0]) in ncsp)
+check("404.html が台本を持たず、外のスタイルシートも読まず、外へつながない",
+      "<script" not in nf and not re.search(r'<link[^>]+rel="stylesheet"', nf) and "http://" not in nf
+      and not re.search(r'(?:href|src)="https?:', nf))
+nvp = re.findall(r'<meta name="viewport" content="([^"]+)">', nf)
+check("404.html の viewport が拡大を止めず、文字の大きさを px で決めず、320px を超える px の幅も持たない",
+      len(nvp) == 1 and "user-scalable=no" not in nvp[0].replace(" ", "") and "maximum-scale" not in nvp[0]
+      and not re.findall(r"font-size:\s*[\d.]+px", ncss)
+      and not [w for w in re.findall(r"(?<![-\w])(?:min-)?width:\s*([\d.]+)px", ncss) if float(w) > 320])
+nl = re.search(r":root\s*\{(.*?)\}", ncss, re.S)
+nd = re.search(r'@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{(.*?)\}', ncss, re.S)
+nl, nd = (tokens_all(nl.group(1)) if nl else {}), (tokens_all(nd.group(1)) if nd else {})
+check("404.html の配色の値が、明るい側も暗い側もトップの頁と同じ",
+      all(k in nl and k in nd for k in ("bg", "card", "text", "muted", "faint", "accent"))
+      and all(index_light.get(k) == v for k, v in nl.items()) and all(index_dark.get(k) == v for k, v in nd.items()),
+      "明 %s / 暗 %s" % (sorted(k for k, v in nl.items() if index_light.get(k) != v),
+                       sorted(k for k, v in nd.items() if index_dark.get(k) != v)))
+check("404.html の書体の名の並びがトップの頁と同じで、@font-face も url( も持たない",
+      font_vars(ncss) == index_fonts and "@font-face" not in ncss and "url(" not in ncss)
+check("404.html が、帯と題の下の飾りをトップの頁と一字一句同じに写し、同じ二色を置き、紙では帯を刷らない",
+      bool(band) and bool(orn_long) and nf.count(band[0]) == 1 and re.search(r'<header>\n  <svg class="gw-band"', nf) is not None
+      and nf.count(orn_long[0]) == 1 and re.search(r'</h1>\n<svg class="gw-orn gw-orn-long"', nf) is not None
+      and sorted(re.findall(r"--gw-(ink|gold):\s*(#[0-9a-fA-F]{6});", ncss)) == sorted(gw_tok)
+      and re.search(r"@media print \{[^@]*\.gw-band \{ display: none; \}", ncss) is not None)
+nimgs = re.findall(r"<img\b[^>]*>", nf)
+check("404.html の画像の要素はロゴの一つだけで、代替文を持つ",
+      len(nimgs) == 1 and 'alt="The golden-window conjecture"' in nimgs[0])
+check("404.html に、本文へ飛ぶリンクと焦点の輪郭があり、動きを減らす設定で動きを止める",
+      '<a class="skip-link" href="#main">' in nf and '<main id="main"' in nf
+      and re.search(r":focus-visible\s*\{[^}]*outline:\s*2px solid", ncss) is not None
+      and "@media (prefers-reduced-motion: reduce)" in ncss
+      and re.search(r"\.prose a, \.foot a\s*\{[^}]*text-decoration:\s*underline", ncss) is not None)
+nfoot = re.search(r"<footer>(.*?)</footer>", nf, re.S)
+check("404.html の頁の下の欄が、運営者の名と CC BY 4.0 を書く",
+      nfoot is not None and "© 2026 Takuya Nemoto · CC BY 4.0" in nfoot.group(1))
+check("vercel.json が 404 の頁を経路で指さない（Vercel の決まりで、根の 404.html を返す）",
+      "404" not in read("vercel.json") and "routes" not in vcfg and "rewrites" not in vcfg)
 
 print("\n" + "-" * 58)
 if failures:
