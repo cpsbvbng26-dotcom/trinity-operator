@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'sha256-4D77evsINovrzVlWyyOjKYndt6zHinImbgH0g2OPrtM='; img-src 'self'; form-action 'none'; base-uri 'none'">
+<title>Page not found · The golden-window conjecture</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<style>
+:root {
+  --bg: #faf9f7;
+  --card: #ffffff;
+  --card-lo: #fcfbf9;
+  --text: #17171a;
+  --muted: #63636b;
+  --faint: #727278;
+  --line: #e6e4df;
+  --accent: #8a6a3d;
+  --glow: rgba(255, 255, 255, .72);
+  --edge-hi: rgba(255, 255, 255, .9);
+  --shadow-face: inset 0 1px 0 rgba(255, 255, 255, .9), .5px 1px 1px rgba(23, 23, 26, .05), 1px 2px 6px -1px rgba(23, 23, 26, .07);
+  --shadow-front: inset 0 1px 0 rgba(255, 255, 255, .9), 1px 3px 6px rgba(23, 23, 26, .08), 6px 16px 36px -10px rgba(23, 23, 26, .22);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121214;
+    --card: #191919;
+    --card-lo: #161618;
+    --text: #ececee;
+    --muted: #9c9ca4;
+    --faint: #81818b;
+    --line: #2a2a2d;
+    --accent: #b08d57;
+    --glow: rgba(176, 141, 87, .045);
+    --edge-hi: rgba(255, 255, 255, .04);
+    --shadow-face: inset 0 1px 0 rgba(255, 255, 255, .05), .5px 1px 1px rgba(0, 0, 0, .3), 1px 2px 6px -1px rgba(0, 0, 0, .28);
+    --shadow-front: inset 0 1px 0 rgba(255, 255, 255, .08), 1px 3px 6px rgba(0, 0, 0, .38), 6px 16px 36px -10px rgba(0, 0, 0, .52);
+  }
+}
+:root {
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-xs: .75rem;
+  --fs-sm: .875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.5rem;
+  --measure: 40rem;
+  --page: 48rem;
+}
+html { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(70rem 40rem at 8% -6%, var(--glow), transparent 70%) no-repeat, var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: 1.9;
+}
+.wrap { max-width: calc(var(--page) + 3rem); margin: 0 auto; padding: 0 1.5rem; }
+header { border-bottom: 1px solid var(--line); box-shadow: var(--shadow-face); }
+.head-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding-top: .75rem; padding-bottom: .75rem; }
+.mark { display: inline-flex; line-height: 0; }
+.mark img { width: 2rem; height: 2rem; border-radius: .3rem; }
+h1, h2 { font-family: var(--font-serif); font-weight: 600; line-height: 1.4; text-wrap: balance; }
+h1 { font-size: var(--fs-xl); margin: 3rem 0 1rem; }
+h2 { font-size: var(--fs-lg); margin: 2.5rem 0 .75rem; }
+.prose { max-width: var(--measure); }
+.prose p { color: var(--text); }
+.prose a, .foot a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
+footer { border-top: 1px solid var(--line); margin-top: 3rem; }
+.foot { display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding-top: 1.5rem; padding-bottom: 2rem; font-size: var(--fs-xs); color: var(--faint); }
+:where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: .3rem; }
+.skip-link { position: absolute; left: 1rem; top: -3rem; padding: .55rem 1rem; color: var(--bg); background: var(--text); font-size: var(--fs-sm); border-radius: .5rem; }
+.skip-link:focus { top: 1rem; box-shadow: var(--shadow-front); }
+/* 2026-11-25。見つからない頁。帯と題の下の飾りは、トップの頁（researcher-profile の golden-window-design.js が描く）から写す。
+   色はロゴの二色で、明暗どちらでも同じ。check_site.py が、トップの頁と一字一句同じかを見る。 */
+:root {
+  --gw-ink: #161a23;
+  --gw-gold: #c9a13b;
+}
+.gw-band { display: block; width: 100%; }
+.gw-band-ink { fill: var(--gw-ink); }
+.gw-band-gold { fill: var(--gw-gold); }
+.gw-orn-fill { fill: var(--accent); }
+.gw-orn-long { display: block; margin: -.25rem 0 1.5rem; }
+footer { border-top: 2px solid var(--gw-gold); }
+@media (max-width: 30rem) {
+  .head-row { flex-wrap: wrap; }
+  .wrap { padding: 0 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+@media print {
+  *, *::before, *::after { box-shadow: none !important; background-image: none !important; }
+  .gw-band { display: none; }
+  :root { --gw-gold: #000; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header>
+  <svg class="gw-band" viewBox="0 0 1000 12" height="12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect width="1000" height="12" class="gw-band-ink"/><g class="gw-band-gold"><rect x="0" y="1.5" width="55.73" height="2"/><rect x="90.17" y="1.5" width="55.73" height="2"/><rect x="236.07" y="1.5" width="55.73" height="2"/><rect x="326.24" y="1.5" width="55.73" height="2"/><rect x="618.03" y="1.5" width="55.73" height="2"/><rect x="708.2" y="1.5" width="55.73" height="2"/><rect x="854.1" y="1.5" width="55.73" height="2"/><rect x="944.27" y="1.5" width="55.73" height="2"/><rect x="0" y="5" width="21.29" height="2"/><rect x="34.44" y="5" width="21.29" height="2"/><rect x="90.17" y="5" width="21.29" height="2"/><rect x="124.61" y="5" width="21.29" height="2"/><rect x="236.07" y="5" width="21.29" height="2"/><rect x="270.51" y="5" width="21.29" height="2"/><rect x="326.24" y="5" width="21.29" height="2"/><rect x="360.68" y="5" width="21.29" height="2"/><rect x="618.03" y="5" width="21.29" height="2"/><rect x="652.48" y="5" width="21.29" height="2"/><rect x="708.2" y="5" width="21.29" height="2"/><rect x="742.65" y="5" width="21.29" height="2"/><rect x="854.1" y="5" width="21.29" height="2"/><rect x="888.54" y="5" width="21.29" height="2"/><rect x="944.27" y="5" width="21.29" height="2"/><rect x="978.71" y="5" width="21.29" height="2"/><rect x="0" y="8.5" width="8.13" height="2"/><rect x="13.16" y="8.5" width="8.13" height="2"/><rect x="34.44" y="8.5" width="8.13" height="2"/><rect x="47.6" y="8.5" width="8.13" height="2"/><rect x="90.17" y="8.5" width="8.13" height="2"/><rect x="103.33" y="8.5" width="8.13" height="2"/><rect x="124.61" y="8.5" width="8.13" height="2"/><rect x="137.77" y="8.5" width="8.13" height="2"/><rect x="236.07" y="8.5" width="8.13" height="2"/><rect x="249.22" y="8.5" width="8.13" height="2"/><rect x="270.51" y="8.5" width="8.13" height="2"/><rect x="283.67" y="8.5" width="8.13" height="2"/><rect x="326.24" y="8.5" width="8.13" height="2"/><rect x="339.39" y="8.5" width="8.13" height="2"/><rect x="360.68" y="8.5" width="8.13" height="2"/><rect x="373.84" y="8.5" width="8.13" height="2"/><rect x="618.03" y="8.5" width="8.13" height="2"/><rect x="631.19" y="8.5" width="8.13" height="2"/><rect x="652.48" y="8.5" width="8.13" height="2"/><rect x="665.63" y="8.5" width="8.13" height="2"/><rect x="708.2" y="8.5" width="8.13" height="2"/><rect x="721.36" y="8.5" width="8.13" height="2"/><rect x="742.65" y="8.5" width="8.13" height="2"/><rect x="755.8" y="8.5" width="8.13" height="2"/><rect x="854.1" y="8.5" width="8.13" height="2"/><rect x="867.26" y="8.5" width="8.13" height="2"/><rect x="888.54" y="8.5" width="8.13" height="2"/><rect x="901.7" y="8.5" width="8.13" height="2"/><rect x="944.27" y="8.5" width="8.13" height="2"/><rect x="957.43" y="8.5" width="8.13" height="2"/><rect x="978.71" y="8.5" width="8.13" height="2"/><rect x="991.87" y="8.5" width="8.13" height="2"/></g></svg>
+  <div class="wrap head-row">
+    <a class="mark" href="/"><img src="/favicon.svg" alt="The golden-window conjecture" width="32" height="32"></a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1" class="wrap">
+<div class="prose">
+
+<h1>Page not found</h1>
+<svg class="gw-orn gw-orn-long" viewBox="0 0 96 12.5" width="96" height="12.5" aria-hidden="true" focusable="false"><g class="gw-orn-fill"><rect x="0" y="0" width="96" height="2"/><rect x="0" y="3.5" width="36.67" height="2"/><rect x="59.33" y="3.5" width="36.67" height="2"/><rect x="0" y="7" width="14.01" height="2"/><rect x="22.66" y="7" width="14.01" height="2"/><rect x="59.33" y="7" width="14.01" height="2"/><rect x="81.99" y="7" width="14.01" height="2"/><rect x="0" y="10.5" width="5.35" height="2"/><rect x="8.66" y="10.5" width="5.35" height="2"/><rect x="22.66" y="10.5" width="5.35" height="2"/><rect x="31.32" y="10.5" width="5.35" height="2"/><rect x="59.33" y="10.5" width="5.35" height="2"/><rect x="67.99" y="10.5" width="5.35" height="2"/><rect x="81.99" y="10.5" width="5.35" height="2"/><rect x="90.65" y="10.5" width="5.35" height="2"/></g></svg>
+<p>There is no page at this address.</p>
+<p><a href="/">Go to the top page</a></p>
+
+<section lang="ja">
+<h2>頁が見つかりません</h2>
+<p>このアドレスに頁はありません。</p>
+<p><a href="/">トップの頁へ</a></p>
+</section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Takuya Nemoto · CC BY 4.0</span>
+  </div>
+</footer>
+
+</body>
+</html>
