@@ -159,6 +159,7 @@ footer { border-top: 2px solid var(--gw-gold); }
 <tr><td>トップの頁</td><td><code>index.html</code></td><td>researcher-profile の設定（<code>golden-window.en.json</code> と <code>golden-window.site.json</code>）から <code>build.js</code> で生成し、ここへ写したものです。配色・配置・字の決めは、その生成もとにあります。</td><td>頁の末尾の表示により CC BY 4.0</td><td><code>check_site.py</code> が配色の比・拡大・代替文などを見ます。横断の検査が、生成し直したものと一字一句同じかを見ます。</td></tr>
 <tr><td>この頁（英語）</td><td><code>design-legal.html</code></td><td>手で置いた頁です。2026-11-22 に Claude Code（Anthropic）が書きました。配色の値は、トップの頁の値を写しています。</td><td>頁の末尾の表示により CC BY 4.0</td><td><code>check_site.py</code> が、配色の値がトップの頁と同じことと、引いた条の文を見ます。</td></tr>
 <tr><td>この頁（日本語）</td><td><code>design-legal.ja.html</code></td><td>英語の頁と同じ日に、同じ作り方で置きました。</td><td>頁の末尾の表示により CC BY 4.0</td><td>英語の頁と同じです。</td></tr>
+<tr><td>見つからない所在の頁</td><td><code>404.html</code></td><td>手で置いた頁です。2026-11-25 に Claude Code（Anthropic）が書きました。サイトに無い所在には、Vercel がこの頁を状態 404 で返します。頁がないことだけを英語と日本語で書き、トップの頁へつなぎます。配色の値と帯と飾りは、トップの頁から写しています。</td><td>頁の末尾の表示により CC BY 4.0</td><td><code>check_site.py</code> が、配色の値と帯と飾りがトップの頁と同じことと、索引に載せないことと、トップの頁にだけつなぐことを見ます。</td></tr>
 <tr><td>ロゴ</td><td><code>favicon.svg</code></td><td>2026-10-26 に Claude Code（Anthropic）が描きました。窓の枠の中に、穴を挟んで二つに分かれる帯を三段重ねた図です。長方形 <span id="logo-rects">9</span> 個だけで組み、文字も書体も使っていません。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が、中身が題と長方形だけであることと、長方形の数と、外から何も読まないことを見ます。</td></tr>
 <tr><td>ロゴの画素の版</td><td><code>favicon.ico</code></td><td>同じロゴを、ブラウザで 960 px に描き、半分ずつ縮めて作りました（2026-10-30）。<span id="ico-sizes">16・32・48</span> px の三枚が入っています。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が三枚の大きさを見ます。</td></tr>
 <tr><td>ロゴの画素の版</td><td><code>favicon-192.png</code></td><td>同じ作り方で、<span id="size-favicon-192.png">192</span> px の正方形です。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が大きさを見ます。</td></tr>
@@ -166,7 +167,7 @@ footer { border-top: 2px solid var(--gw-gold); }
 <tr><td>共有したときのカードの画像</td><td><code>og.png</code></td><td><code>favicon.svg</code> を、角を丸めずに <span id="size-og.png">600</span> px の正方形で描いた PNG です（2026-10-26）。</td><td>リポジトリの LICENSE により MIT</td><td><code>check_site.py</code> が大きさを見ます。</td></tr>
 </tbody>
 </table>
-<p id="others"><code>site/</code> にあるファイルは <span id="file-count">12</span> 個です。表に挙げた <span id="part-count">8</span> 個のほかは、<code>robots.txt</code>・<code>sitemap.xml</code>・<code>vercel.json</code>・<code>16529c1323fad834c26ee0393e5f50b8.txt</code>（IndexNow の鍵）で、見た目の部品ではありません。</p>
+<p id="others"><code>site/</code> にあるファイルは <span id="file-count">13</span> 個です。表に挙げた <span id="part-count">9</span> 個のほかは、<code>robots.txt</code>・<code>sitemap.xml</code>・<code>vercel.json</code>・<code>16529c1323fad834c26ee0393e5f50b8.txt</code>（IndexNow の鍵）で、見た目の部品ではありません。</p>
 <table id="nonfile-table">
 <thead><tr><th>部品</th><th>作り方と出所</th><th>権利と許諾</th></tr></thead>
 <tbody>
@@ -283,7 +284,7 @@ footer { border-top: 2px solid var(--gw-gold); }
 <footer>
   <div class="wrap foot">
     <span>© 2026 Takuya Nemoto · CC BY 4.0</span>
-    <span class="foot-links"><a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/issues/new/choose">連絡</a> · <a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/blob/main/DISCLAIMER.md">免責事項</a> · <span class="updated">最終更新 <time datetime="2026-11-24">2026-11-24</time></span></span>
+    <span class="foot-links"><a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/issues/new/choose">連絡</a> · <a href="https://github.com/cpsbvbng26-dotcom/cpsbvbng26-dotcom/blob/main/DISCLAIMER.md">免責事項</a> · <span class="updated">最終更新 <time datetime="2026-11-26">2026-11-26</time></span></span>
   </div>
 </footer>
 
